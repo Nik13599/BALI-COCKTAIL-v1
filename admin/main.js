@@ -1,5 +1,6 @@
 const { app, BrowserWindow, shell } = require('electron');
 const path = require('path');
+const fs = require('fs');
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -17,6 +18,12 @@ function createWindow() {
     }
   });
   win.loadFile('index.html');
+  win.webContents.on('did-finish-load', () => {
+    try {
+      const printTools = fs.readFileSync(path.join(__dirname, 'print-tools.js'), 'utf8');
+      win.webContents.executeJavaScript(printTools).catch(() => {});
+    } catch (_) {}
+  });
   win.webContents.setWindowOpenHandler(({ url }) => {
     shell.openExternal(url);
     return { action: 'deny' };
