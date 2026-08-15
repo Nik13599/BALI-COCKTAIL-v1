@@ -1,0 +1,43 @@
+name: Build BALI COCKTAIL ADMIN Windows
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'admin/**'
+      - '.github/workflows/admin-windows.yml'
+  workflow_dispatch:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: admin/package-lock.json
+      - name: Install dependencies
+        working-directory: admin
+        shell: pwsh
+        run: npm install
+      - name: Build portable EXE
+        working-directory: admin
+        shell: pwsh
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: npm run dist
+      - name: Collect EXE
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path out | Out-Null
+          Copy-Item "admin/dist/BALI-COCKTAIL-ADMIN.exe" "out/BALI-COCKTAIL-ADMIN.exe"
+      - name: Upload Windows admin
+        uses: actions/upload-artifact@v4
+        with:
+          name: BALI-COCKTAIL-ADMIN-Windows
+          path: out/BALI-COCKTAIL-ADMIN.exe
+          if-no-files-found: error
+          retention-days: 30
