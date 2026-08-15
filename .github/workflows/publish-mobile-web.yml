@@ -34,9 +34,17 @@ jobs:
           mkdir -p /tmp/bali-mobile/images
           cp web-template/index.html /tmp/bali-mobile/index.html
           cp web-template/sw.js /tmp/bali-mobile/sw.js
+          cp web-template/ingredient-zoom.js /tmp/bali-mobile/ingredient-zoom.js
           cp web-template/manifest.webmanifest /tmp/bali-mobile/manifest.webmanifest
           cp data/cocktails.json /tmp/bali-mobile/cocktails.json
           cp generated/android/app/src/main/res/drawable/ic_launcher.jpg /tmp/bali-mobile/images/ic_launcher.jpg
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('/tmp/bali-mobile/index.html')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('</body>','<script src="ingredient-zoom.js"></script>\n</body>')
+          p.write_text(s,encoding='utf-8')
+          PY
           touch /tmp/bali-mobile/.nojekyll
 
       - name: Publish mobile-web branch
