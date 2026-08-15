@@ -1,7 +1,42 @@
 (() => {
   const style = document.createElement('style');
-  style.textContent = '.photo-actions,.photo-delete,.privacy{display:none!important}';
+  style.textContent = `
+    .photo-actions,.photo-delete,.privacy{display:none!important}
+    #floatingAllCocktails{
+      position:fixed;
+      left:12px;
+      top:calc(env(safe-area-inset-top) + 10px);
+      z-index:120;
+      display:none;
+      border:1px solid rgba(255,255,255,.14);
+      background:rgba(20,20,24,.92);
+      color:#fff;
+      padding:10px 13px;
+      border-radius:14px;
+      font-weight:800;
+      font-size:13px;
+      line-height:1;
+      box-shadow:0 8px 26px rgba(0,0,0,.32);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+    }
+  `;
   document.head.appendChild(style);
+
+  const floatingBack = document.createElement('button');
+  floatingBack.id = 'floatingAllCocktails';
+  floatingBack.type = 'button';
+  floatingBack.textContent = '‹ Все коктейли';
+  floatingBack.onclick = () => goHome(true);
+  document.body.appendChild(floatingBack);
+
+  const syncFloatingBack = () => {
+    floatingBack.style.display = detail?.classList.contains('show') ? 'block' : 'none';
+  };
+  const detailObserver = new MutationObserver(syncFloatingBack);
+  if (detail) detailObserver.observe(detail, { attributes: true, attributeFilter: ['class'] });
+  window.addEventListener('popstate', () => setTimeout(syncFloatingBack, 0));
+  syncFloatingBack();
 
   window.refreshPhoto = async function() {
     const c = all.find(x => x.id === currentId);
