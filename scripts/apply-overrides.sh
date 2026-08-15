@@ -19,6 +19,8 @@ if [ -d "$IOS" ]; then
   cp overrides/ios/ContentView.swift "$IOS/BALI_COCKTAIL/ContentView.swift"
   cp overrides/ios/DetailView.swift "$IOS/BALI_COCKTAIL/DetailView.swift"
   cp overrides/ios/PhotoStore.swift "$IOS/BALI_COCKTAIL/PhotoStore.swift"
+  cp overrides/ios/Models.swift "$IOS/BALI_COCKTAIL/Models.swift"
+  cp overrides/ios/OfficialMediaStore.swift "$IOS/BALI_COCKTAIL/OfficialMediaStore.swift"
   cp overrides/ios/project.yml "$IOS/project.yml"
   cp data/cocktails.json "$IOS/BALI_COCKTAIL/cocktails.json"
 fi
