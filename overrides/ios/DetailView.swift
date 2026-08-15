@@ -3,86 +3,105 @@ import SwiftUI
 struct DetailView: View {
     let cocktail: Cocktail
     let catalogIngredients: [CatalogIngredient]
+    @Environment(\.dismiss) private var dismiss
     @State private var selectedIngredient: CatalogIngredient?
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                officialPhoto
+        ZStack(alignment: .topLeading) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    officialPhoto
 
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(cocktail.name).font(.system(size: 30, weight: .bold))
-                    Text(cocktail.category.uppercased()).font(.system(size: 12, weight: .bold)).foregroundStyle(Color(red: 203/255, green: 143/255, blue: 160/255))
-                    Text(cocktail.taste).font(.body).foregroundStyle(secondaryText)
-                }
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(cocktail.name).font(.system(size: 30, weight: .bold))
+                        Text(cocktail.category.uppercased()).font(.system(size: 12, weight: .bold)).foregroundStyle(Color(red: 203/255, green: 143/255, blue: 160/255))
+                        Text(cocktail.taste).font(.body).foregroundStyle(secondaryText)
+                    }
 
-                HStack(spacing: 10) {
-                    StatChip(title: "Выход", value: cocktail.yieldText)
-                    StatChip(title: "Метод", value: cocktail.method)
-                    StatChip(title: "Бокал", value: cocktail.glass)
-                }
-                InfoBlock(title: "Лёд", text: cocktail.ice)
+                    HStack(spacing: 10) {
+                        StatChip(title: "Выход", value: cocktail.yieldText)
+                        StatChip(title: "Метод", value: cocktail.method)
+                        StatChip(title: "Бокал", value: cocktail.glass)
+                    }
+                    InfoBlock(title: "Лёд", text: cocktail.ice)
 
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Ингредиенты").font(.title3.weight(.bold))
-                    ForEach(cocktail.ingredients) { ingredient in
-                        let catalogItem = catalogIngredient(for: ingredient)
-                        Button {
-                            if let catalogItem { selectedIngredient = catalogItem }
-                        } label: {
-                            HStack(spacing: 11) {
-                                if let imagePath = catalogItem?.officialImage, !imagePath.isEmpty {
-                                    OfficialCatalogImage(path: imagePath)
-                                        .frame(width: 46, height: 46)
-                                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                                } else {
-                                    RoundedRectangle(cornerRadius: 10)
-                                        .fill(Color.white.opacity(0.035))
-                                        .frame(width: 46, height: 46)
-                                        .overlay(Image(systemName: "shippingbox").foregroundStyle(.white.opacity(0.25)))
-                                }
-                                VStack(alignment: .leading, spacing: 3) {
-                                    Text(ingredient.name).foregroundStyle(.white).multilineTextAlignment(.leading)
-                                    if catalogItem?.officialImage != nil {
-                                        Text("Нажмите, чтобы рассмотреть").font(.caption2).foregroundStyle(.white.opacity(0.35))
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Ингредиенты").font(.title3.weight(.bold))
+                        ForEach(cocktail.ingredients) { ingredient in
+                            let catalogItem = catalogIngredient(for: ingredient)
+                            Button {
+                                if let catalogItem { selectedIngredient = catalogItem }
+                            } label: {
+                                HStack(spacing: 11) {
+                                    if let imagePath = catalogItem?.officialImage, !imagePath.isEmpty {
+                                        OfficialCatalogImage(path: imagePath)
+                                            .frame(width: 46, height: 46)
+                                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                                    } else {
+                                        RoundedRectangle(cornerRadius: 10)
+                                            .fill(Color.white.opacity(0.035))
+                                            .frame(width: 46, height: 46)
+                                            .overlay(Image(systemName: "shippingbox").foregroundStyle(.white.opacity(0.25)))
                                     }
+                                    VStack(alignment: .leading, spacing: 3) {
+                                        Text(ingredient.name).foregroundStyle(.white).multilineTextAlignment(.leading)
+                                        if catalogItem?.officialImage != nil {
+                                            Text("Нажмите, чтобы рассмотреть").font(.caption2).foregroundStyle(.white.opacity(0.35))
+                                        }
+                                    }
+                                    Spacer()
+                                    Text("\(ingredient.amountText) \(ingredient.unit)").foregroundStyle(secondaryText)
+                                    if catalogItem != nil { Image(systemName: "chevron.right").font(.caption).foregroundStyle(.white.opacity(0.25)) }
                                 }
-                                Spacer()
-                                Text("\(ingredient.amountText) \(ingredient.unit)").foregroundStyle(secondaryText)
-                                if catalogItem != nil { Image(systemName: "chevron.right").font(.caption).foregroundStyle(.white.opacity(0.25)) }
+                                .font(.body)
+                                .contentShape(Rectangle())
                             }
-                            .font(.body)
-                            .contentShape(Rectangle())
-                        }
-                        .buttonStyle(.plain)
-                        Divider().overlay(.white.opacity(0.08))
-                    }
-                }
-                .padding(14).background(cardColor).clipShape(RoundedRectangle(cornerRadius: 18))
-                .overlay(RoundedRectangle(cornerRadius: 18).stroke(cardBorder, lineWidth: 1))
-
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Приготовление").font(.title3.weight(.bold))
-                    ForEach(Array(cocktail.steps.enumerated()), id: \.offset) { index, step in
-                        HStack(alignment: .top, spacing: 10) {
-                            Text("\(index + 1)").font(.system(size: 12, weight: .bold)).foregroundStyle(.white)
-                                .frame(width: 24, height: 24).background(accentColorBali).clipShape(Circle())
-                            Text(step).font(.body).fixedSize(horizontal: false, vertical: true)
-                            Spacer(minLength: 0)
+                            .buttonStyle(.plain)
+                            Divider().overlay(.white.opacity(0.08))
                         }
                     }
-                }
-                .padding(14).background(cardColor).clipShape(RoundedRectangle(cornerRadius: 18))
-                .overlay(RoundedRectangle(cornerRadius: 18).stroke(cardBorder, lineWidth: 1))
+                    .padding(14).background(cardColor).clipShape(RoundedRectangle(cornerRadius: 18))
+                    .overlay(RoundedRectangle(cornerRadius: 18).stroke(cardBorder, lineWidth: 1))
 
-                Text("Техкарты и фотографии изменяются только через BALI COCKTAIL ADMIN. Мобильное приложение работает только в режиме просмотра.")
-                    .font(.footnote).foregroundStyle(.white.opacity(0.42)).padding(.top, 4)
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Приготовление").font(.title3.weight(.bold))
+                        ForEach(Array(cocktail.steps.enumerated()), id: \.offset) { index, step in
+                            HStack(alignment: .top, spacing: 10) {
+                                Text("\(index + 1)").font(.system(size: 12, weight: .bold)).foregroundStyle(.white)
+                                    .frame(width: 24, height: 24).background(accentColorBali).clipShape(Circle())
+                                Text(step).font(.body).fixedSize(horizontal: false, vertical: true)
+                                Spacer(minLength: 0)
+                            }
+                        }
+                    }
+                    .padding(14).background(cardColor).clipShape(RoundedRectangle(cornerRadius: 18))
+                    .overlay(RoundedRectangle(cornerRadius: 18).stroke(cardBorder, lineWidth: 1))
+
+                    Text("Техкарты и фотографии изменяются только через BALI COCKTAIL ADMIN. Мобильное приложение работает только в режиме просмотра.")
+                        .font(.footnote).foregroundStyle(.white.opacity(0.42)).padding(.top, 4)
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 64)
+                .padding(.bottom, 16)
             }
-            .padding(16)
+
+            Button { dismiss() } label: {
+                Label("Все коктейли", systemImage: "chevron.left")
+                    .font(.system(size: 13, weight: .bold))
+                    .padding(.horizontal, 13)
+                    .padding(.vertical, 10)
+                    .background(.ultraThinMaterial)
+                    .foregroundStyle(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                    .overlay(RoundedRectangle(cornerRadius: 14).stroke(.white.opacity(0.14), lineWidth: 1))
+                    .shadow(color: .black.opacity(0.28), radius: 14, y: 6)
+            }
+            .padding(.leading, 12)
+            .padding(.top, 10)
+            .zIndex(20)
         }
         .background(backgroundColor.ignoresSafeArea())
-        .navigationTitle(cocktail.name)
-        .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .navigationBar)
         .sheet(item: $selectedIngredient) { ingredient in
             IngredientDetailSheet(ingredient: ingredient)
         }
