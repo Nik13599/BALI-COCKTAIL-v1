@@ -19,6 +19,14 @@ jobs:
           set -euo pipefail
           mkdir -p out/BALI-COCKTAIL-ADMIN
           cp admin/index.html out/BALI-COCKTAIL-ADMIN/index.html
+          cp admin/print-tools.js out/BALI-COCKTAIL-ADMIN/print-tools.js
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('out/BALI-COCKTAIL-ADMIN/index.html')
+          s=p.read_text(encoding='utf-8')
+          s=s.replace('</body>','<script src="print-tools.js"></script>\n</body>')
+          p.write_text(s,encoding='utf-8')
+          PY
           cat > out/BALI-COCKTAIL-ADMIN/README.txt <<'TXT'
           BALI COCKTAIL ADMIN
 
@@ -26,7 +34,8 @@ jobs:
           2. Введите fine-grained GitHub Personal Access Token для репозитория Nik13599/BALI-COCKTAIL-v1.
           3. Для token достаточно Repository permissions -> Contents: Read and write.
           4. Изменяйте коктейли, ингредиенты и фотографии.
-          5. Нажмите «Опубликовать». Мобильные приложения увидят новую версию каталога при синхронизации.
+          5. Раздел «Печать техкарт» создаёт квадратные карточки 120/150/180/200 мм и позволяет печатать их или сохранять в PDF.
+          6. Нажмите «Опубликовать». Мобильные приложения увидят новую версию каталога при синхронизации.
 
           Token хранится только на компьютере, если включена галочка «Запомнить».
           TXT
