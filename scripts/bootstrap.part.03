@@ -1,0 +1,6 @@
+o=format&fit=crop&w=900&q=78'
+download_img classic_dark 'https://images.unsplash.com/photo-1774921676768-d89b18e32c3c?auto=format&fit=crop&w=900&q=78'
+download_img classic_clear 'https://images.unsplash.com/photo-1575023782549-62ca0d244b39?auto=format&fit=crop&w=900&q=78'
+download_img classic_creamy 'https://images.unsplash.com/photo-1617728273800-1e615ab03037?auto=format&fit=crop&w=900&q=78'
+download_img classic_red 'https://images.unsplash.com/photo-1772466431721-cac7edd3a0b8?auto=format&fit=crop&w=900&q=78'
+echo 'BALI COCKTAIL sources generated in' "$ROOT"

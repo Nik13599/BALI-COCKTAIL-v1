@@ -1,0 +1,426 @@
+[
+  {
+    "id": "item-539852004450158089",
+    "name": "Ангостура Биттер",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-8843481272699335594",
+    "name": "Апельсин",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-2439379686806395429",
+    "name": "Бадьян",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-2583973214022561171",
+    "name": "Базилик",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-2801670206194608693",
+    "name": "Биттер Ангостура",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "rosso-martini",
+    "name": "Вермут Rosso “Martini”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "martini",
+    "name": "Вермут Бьянко “Martini”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "martini-rosso",
+    "name": "Вермут “Martini Rosso”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "jim-beam",
+    "name": "Виски “Jim Beam”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "bonaqua",
+    "name": "Вода сильно газированная “Bonaqua”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-550479881196021692",
+    "name": "Водка “Сябры”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-1034450724347275410",
+    "name": "Гвоздика",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-6850846035667279229",
+    "name": "Гранатовый сок",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-986179106394320058",
+    "name": "Грейпфрут",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "bickens",
+    "name": "Джин “Bickens”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-6590723016669712469",
+    "name": "Душистый перец горошек",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-1087961559091119526",
+    "name": "Игристое “Барон д`Арньяк”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-8622428876326118119",
+    "name": "Кардамон",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-8371002996241621517",
+    "name": "Клюква",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-5904083384581358579",
+    "name": "Кокосовая стружка",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "napitki",
+    "name": "Кордиал Киви-Фисташка “Napitki”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-4489786869873076486",
+    "name": "Корица",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-4830221076390273291",
+    "name": "Кофе Эспрессо",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "triple-sec-volare",
+    "name": "Ликер Triple Sec “Volare”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "ramazotti",
+    "name": "Ликер Амаретто “Ramazotti”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "volare",
+    "name": "Ликер кофейный “Volare”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "bumby",
+    "name": "Ликер сливочный “Bumby”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "aperol",
+    "name": "Ликер “Aperol”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "campari",
+    "name": "Ликер “Campari”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "frangelico",
+    "name": "Ликер “Frangelico”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "maraschino",
+    "name": "Ликер “Maraschino”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-670529702604910898",
+    "name": "Малина",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-6730101478200522403",
+    "name": "Молочный Кордиал",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-136957411381451620",
+    "name": "Морс Клюквенный “Сочный”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-791201347993421369",
+    "name": "Морс клюквенный “Сочный”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-2108679991956257856",
+    "name": "Мята",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "moon-berry",
+    "name": "Напиток Алоэ вера “Moon Berry”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-1977240990649287455",
+    "name": "Наршараб",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-5325511345531246001",
+    "name": "Настойка “Вишня”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-2131772114039232830",
+    "name": "Настойка “Кафирского Лайма”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-2332375043392595738",
+    "name": "Перец чили",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "negrita",
+    "name": "Ром “Negrita”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-5052205649094645332",
+    "name": "Сахар песок",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-6015883883595337781",
+    "name": "Сахар тростниковый",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-4020456252462178681",
+    "name": "Сахарный сироп",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "richeza",
+    "name": "Сироп Ананас “Richeza”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "20-milkavita",
+    "name": "Сливки 20% “Milkavita”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "villa-dina",
+    "name": "Сок Грейпфрут “Villa Dina”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-3645362827299557583",
+    "name": "Соус Кимчи",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-2751805162961066529",
+    "name": "Соус соевый",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "siera",
+    "name": "Текила “Siera”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-5170597353474199256",
+    "name": "Цедра апельсина",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "item-8670667683935999926",
+    "name": "Черный перец горошек",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  }
+]
