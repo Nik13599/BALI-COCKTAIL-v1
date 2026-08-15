@@ -1,0 +1,128 @@
+name: Build signed BALI COCKTAIL v1 IPA
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  ios-signed:
+    name: Signed iPhone IPA
+    runs-on: macos-latest
+    timeout-minutes: 35
+    env:
+      IOS_CERTIFICATE_BASE64: ${{ secrets.IOS_CERTIFICATE_BASE64 }}
+      IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
+      IOS_PROVISIONING_PROFILE_BASE64: ${{ secrets.IOS_PROVISIONING_PROFILE_BASE64 }}
+    steps:
+      - name: Check signing credentials
+        id: signing
+        shell: bash
+        run: |
+          if [ -n "$IOS_CERTIFICATE_BASE64" ] && [ -n "$IOS_CERTIFICATE_PASSWORD" ] && [ -n "$IOS_PROVISIONING_PROFILE_BASE64" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "Apple signing secrets are not configured yet."
+          fi
+
+      - name: Checkout
+        if: steps.signing.outputs.ready == 'true'
+        uses: actions/checkout@v4
+
+      - name: Generate application sources
+        if: steps.signing.outputs.ready == 'true'
+        shell: bash
+        run: |
+          cat scripts/bootstrap.part.* > /tmp/bootstrap.sh
+          chmod +x /tmp/bootstrap.sh
+          /tmp/bootstrap.sh generated
+          chmod +x scripts/apply-overrides.sh
+          scripts/apply-overrides.sh generated
+
+      - name: Prepare assets
+        if: steps.signing.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          IOS_DIR="generated/ios/BALI_COCKTAIL"
+          ASSETS="$IOS_DIR/Assets.xcassets"
+          rm -rf "$ASSETS"/cocktail_*.imageset "$ASSETS"/classic_*.imageset "$ASSETS"/tiki_*.imageset
+          mkdir -p "$ASSETS/AppIcon.appiconset"
+          printf '%s\n' '{"info":{"author":"xcode","version":1}}' > "$ASSETS/Contents.json"
+          cp data/cocktails.json "$IOS_DIR/cocktails.json"
+          sips -s format png -z 1024 1024 generated/android/app/src/main/res/drawable/ic_launcher.jpg --out "$ASSETS/AppIcon.appiconset/appicon-1024.png" >/dev/null
+          sips -z 120 120 "$ASSETS/AppIcon.appiconset/appicon-1024.png" --out "$ASSETS/AppIcon.appiconset/appicon-120.png" >/dev/null
+          sips -z 180 180 "$ASSETS/AppIcon.appiconset/appicon-1024.png" --out "$ASSETS/AppIcon.appiconset/appicon-180.png" >/dev/null
+          sips -z 152 152 "$ASSETS/AppIcon.appiconset/appicon-1024.png" --out "$ASSETS/AppIcon.appiconset/appicon-152.png" >/dev/null
+          sips -z 167 167 "$ASSETS/AppIcon.appiconset/appicon-1024.png" --out "$ASSETS/AppIcon.appiconset/appicon-167.png" >/dev/null
+          cat > "$ASSETS/AppIcon.appiconset/Contents.json" <<'JSON'
+          {"images":[
+            {"filename":"appicon-120.png","idiom":"iphone","scale":"2x","size":"60x60"},
+            {"filename":"appicon-180.png","idiom":"iphone","scale":"3x","size":"60x60"},
+            {"filename":"appicon-152.png","idiom":"ipad","scale":"2x","size":"76x76"},
+            {"filename":"appicon-167.png","idiom":"ipad","scale":"2x","size":"83.5x83.5"},
+            {"filename":"appicon-1024.png","idiom":"ios-marketing","scale":"1x","size":"1024x1024"}
+          ],"info":{"author":"xcode","version":1}}
+          JSON
+
+      - name: Install signing certificate and provisioning profile
+        if: steps.signing.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          CERT_PATH="$RUNNER_TEMP/signing.p12"
+          PROFILE_PATH="$RUNNER_TEMP/profile.mobileprovision"
+          KEYCHAIN_PATH="$RUNNER_TEMP/bali-signing.keychain-db"
+          KEYCHAIN_PASSWORD="$(openssl rand -hex 16)"
+          printf '%s' "$IOS_CERTIFICATE_BASE64" | base64 --decode > "$CERT_PATH"
+          printf '%s' "$IOS_PROVISIONING_PROFILE_BASE64" | base64 --decode > "$PROFILE_PATH"
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -lut 21600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security import "$CERT_PATH" -P "$IOS_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k "$KEYCHAIN_PATH"
+          security list-keychain -d user -s "$KEYCHAIN_PATH"
+          security set-key-partition-list -S apple-tool:,apple: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security cms -D -i "$PROFILE_PATH" > "$RUNNER_TEMP/profile.plist"
+          UUID=$(/usr/libexec/PlistBuddy -c 'Print :UUID' "$RUNNER_TEMP/profile.plist")
+          PROFILE_NAME=$(/usr/libexec/PlistBuddy -c 'Print :Name' "$RUNNER_TEMP/profile.plist")
+          TEAM_ID=$(/usr/libexec/PlistBuddy -c 'Print :TeamIdentifier:0' "$RUNNER_TEMP/profile.plist")
+          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+          cp "$PROFILE_PATH" "$HOME/Library/MobileDevice/Provisioning Profiles/$UUID.mobileprovision"
+          IDENTITY=$(security find-identity -v -p codesigning "$KEYCHAIN_PATH" | sed -n 's/.*"\(.*\)"/\1/p' | head -n 1)
+          test -n "$IDENTITY"
+          echo "PROFILE_NAME=$PROFILE_NAME" >> "$GITHUB_ENV"
+          echo "TEAM_ID=$TEAM_ID" >> "$GITHUB_ENV"
+          echo "CODE_SIGN_IDENTITY_NAME=$IDENTITY" >> "$GITHUB_ENV"
+
+      - name: Install XcodeGen
+        if: steps.signing.outputs.ready == 'true'
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        if: steps.signing.outputs.ready == 'true'
+        run: |
+          cd generated/ios
+          xcodegen generate
+
+      - name: Archive signed iPhone app
+        if: steps.signing.outputs.ready == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodebuild archive -project generated/ios/BALI_COCKTAIL.xcodeproj -scheme BALI_COCKTAIL -configuration Release -destination 'generic/platform=iOS' -archivePath generated/ios/BALI-COCKTAIL-v1.xcarchive DEVELOPMENT_TEAM="$TEAM_ID" CODE_SIGN_STYLE=Manual PROVISIONING_PROFILE_SPECIFIER="$PROFILE_NAME" CODE_SIGN_IDENTITY="$CODE_SIGN_IDENTITY_NAME"
+          APP="generated/ios/BALI-COCKTAIL-v1.xcarchive/Products/Applications/BALI COCKTAIL.app"
+          test -d "$APP"
+          mkdir -p out/Payload
+          cp -R "$APP" out/Payload/
+          cd out
+          zip -qry BALI-COCKTAIL-v1.ipa Payload
+
+      - name: Upload signed IPA
+        if: steps.signing.outputs.ready == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: BALI-COCKTAIL-v1-iPhone-Signed-IPA
+          path: out/BALI-COCKTAIL-v1.ipa
+          if-no-files-found: error
+          retention-days: 30
