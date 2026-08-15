@@ -17,6 +17,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Validate admin JavaScript
+        working-directory: admin
+        shell: pwsh
+        run: |
+          node --check main.js
+          node --check print-tools.js
+          node --check bar-menu.js
+          node --check publish-fix.js
       - name: Install dependencies
         working-directory: admin
         shell: pwsh
