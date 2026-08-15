@@ -1,6 +1,6 @@
 {
   "name": "bali-cocktail-admin",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "BALI COCKTAIL administrator application",
   "main": "main.js",
   "author": "BALI",
@@ -20,6 +20,8 @@
       "index.html",
       "main.js",
       "print-tools.js",
+      "bar-menu.js",
+      "publish-fix.js",
       "package.json"
     ],
     "win": {
