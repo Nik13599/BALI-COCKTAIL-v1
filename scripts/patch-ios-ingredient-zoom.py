@@ -6,9 +6,9 @@ path=Path(sys.argv[1])
 text=path.read_text(encoding='utf-8')
 start=text.index('struct IngredientDetailSheet: View {')
 end=text.index('\nstruct StatChip: View {', start)
-replacement=r'''struct IngredientDetailSheet: View {
+replacement='''struct IngredientDetailSheet: View {
     let ingredient: CatalogIngredient
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\\.dismiss) private var dismiss
     @State private var showFullImage = false
 
     var body: some View {
