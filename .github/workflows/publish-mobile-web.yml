@@ -1,0 +1,54 @@
+name: Publish BALI COCKTAIL v1 iPhone Web App
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Generate app icon and fallback catalogue
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat scripts/bootstrap.part.* > /tmp/bootstrap.sh
+          chmod +x /tmp/bootstrap.sh
+          /tmp/bootstrap.sh generated
+          chmod +x scripts/apply-overrides.sh
+          scripts/apply-overrides.sh generated
+
+      - name: Prepare static iPhone app
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/bali-mobile
+          mkdir -p /tmp/bali-mobile/images
+          cp web-template/index.html /tmp/bali-mobile/index.html
+          cp web-template/sw.js /tmp/bali-mobile/sw.js
+          cp web-template/manifest.webmanifest /tmp/bali-mobile/manifest.webmanifest
+          cp data/cocktails.json /tmp/bali-mobile/cocktails.json
+          cp generated/android/app/src/main/res/drawable/ic_launcher.jpg /tmp/bali-mobile/images/ic_launcher.jpg
+          touch /tmp/bali-mobile/.nojekyll
+
+      - name: Publish mobile-web branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan mobile-web
+          git rm -rf .
+          git clean -fdx
+          cp -R /tmp/bali-mobile/. .
+          git add -A
+          git commit -m "Publish BALI COCKTAIL v1 iPhone web app"
+          git push --force origin mobile-web
