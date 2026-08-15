@@ -64,6 +64,29 @@ jobs:
           git push --force origin mobile-web
           echo "sha=$WEB_SHA" >> "$GITHUB_OUTPUT"
 
+      - name: Verify iPhone app is served as HTML
+        shell: bash
+        env:
+          WEB_SHA: ${{ steps.publish.outputs.sha }}
+        run: |
+          set -euo pipefail
+          URL="https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/${WEB_SHA}/index.html"
+          echo "Checking $URL"
+          ok=0
+          for attempt in $(seq 1 12); do
+            headers="$(curl -fsSI "$URL" 2>/dev/null || true)"
+            echo "$headers"
+            if printf '%s\n' "$headers" | tr -d '\r' | grep -Eqi '^content-type:[[:space:]]*text/html'; then
+              ok=1
+              break
+            fi
+            sleep 5
+          done
+          if [ "$ok" -ne 1 ]; then
+            echo "iPhone app host did not return Content-Type text/html" >&2
+            exit 1
+          fi
+
       - name: Build iPhone installation profile
         shell: bash
         env:
@@ -76,12 +99,12 @@ jobs:
           from pathlib import Path
 
           sha=os.environ['WEB_SHA']
-          app_url=f'https://cdn.statically.io/gh/Nik13599/BALI-COCKTAIL-v1@{sha}/index.html'
+          app_url=f'https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/{sha}/index.html'
           icon=Path('/tmp/bali-mobile/images/ic_launcher.jpg').read_bytes()
           webclip={
               'PayloadType':'com.apple.webClip.managed',
               'PayloadVersion':1,
-              'PayloadIdentifier':'by.bali.cocktail.v1.webclip',
+              'PayloadIdentifier':'by.bali.cocktail.v1.webclip.htmlfix',
               'PayloadUUID':str(uuid.uuid4()).upper(),
               'PayloadDisplayName':'BALI COCKTAIL',
               'PayloadDescription':'BALI COCKTAIL v1',
@@ -96,10 +119,10 @@ jobs:
           profile={
               'PayloadType':'Configuration',
               'PayloadVersion':1,
-              'PayloadIdentifier':'by.bali.cocktail.v1.profile',
+              'PayloadIdentifier':'by.bali.cocktail.v1.profile.htmlfix',
               'PayloadUUID':str(uuid.uuid4()).upper(),
               'PayloadDisplayName':'BALI COCKTAIL',
-              'PayloadDescription':'Устанавливает BALI COCKTAIL v1 на iPhone.',
+              'PayloadDescription':'Устанавливает BALI COCKTAIL v1 на iPhone. Исправлена HTML-доставка приложения.',
               'PayloadOrganization':'BALI',
               'PayloadRemovalDisallowed':False,
               'PayloadContent':[webclip],
