@@ -1,19 +1,14 @@
 import SwiftUI
-import PhotosUI
-import UIKit
 
 struct DetailView: View {
     let cocktail: Cocktail
     let catalogIngredients: [CatalogIngredient]
-    @State private var photo: UIImage?
-    @State private var selectedPhotoItem: PhotosPickerItem?
-    @State private var showCamera = false
     @State private var selectedIngredient: CatalogIngredient?
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                photoEditor
+                officialPhoto
 
                 VStack(alignment: .leading, spacing: 8) {
                     Text(cocktail.name).font(.system(size: 30, weight: .bold))
@@ -49,7 +44,7 @@ struct DetailView: View {
                                 VStack(alignment: .leading, spacing: 3) {
                                     Text(ingredient.name).foregroundStyle(.white).multilineTextAlignment(.leading)
                                     if catalogItem?.officialImage != nil {
-                                        Text("Фото ингредиента BALI").font(.caption2).foregroundStyle(.white.opacity(0.35))
+                                        Text("Нажмите, чтобы рассмотреть").font(.caption2).foregroundStyle(.white.opacity(0.35))
                                     }
                                 }
                                 Spacer()
@@ -80,7 +75,7 @@ struct DetailView: View {
                 .padding(14).background(cardColor).clipShape(RoundedRectangle(cornerRadius: 18))
                 .overlay(RoundedRectangle(cornerRadius: 18).stroke(cardBorder, lineWidth: 1))
 
-                Text("Техкарта и эталонные фотографии обновляются из BALI COCKTAIL ADMIN. Личное фото хранится только на этом iPhone и не отправляется на сервер.")
+                Text("Техкарты и фотографии изменяются только через BALI COCKTAIL ADMIN. Мобильное приложение работает только в режиме просмотра.")
                     .font(.footnote).foregroundStyle(.white.opacity(0.42)).padding(.top, 4)
             }
             .padding(16)
@@ -88,25 +83,6 @@ struct DetailView: View {
         .background(backgroundColor.ignoresSafeArea())
         .navigationTitle(cocktail.name)
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear { photo = CocktailPhotoStore.load(id: cocktail.id) }
-        .onChange(of: selectedPhotoItem) { item in
-            guard let item else { return }
-            Task {
-                if let data = try? await item.loadTransferable(type: Data.self), let image = UIImage(data: data) {
-                    let normalized = image.normalizedForStorage(maxDimension: 2200)
-                    if CocktailPhotoStore.save(normalized, id: cocktail.id) {
-                        await MainActor.run { photo = normalized }
-                    }
-                }
-            }
-        }
-        .sheet(isPresented: $showCamera) {
-            CameraPicker { image in
-                let normalized = image.normalizedForStorage(maxDimension: 2200)
-                if CocktailPhotoStore.save(normalized, id: cocktail.id) { photo = normalized }
-            }
-            .ignoresSafeArea()
-        }
         .sheet(item: $selectedIngredient) { ingredient in
             IngredientDetailSheet(ingredient: ingredient)
         }
@@ -117,54 +93,35 @@ struct DetailView: View {
         return catalogIngredients.first { $0.name.caseInsensitiveCompare(ingredient.name) == .orderedSame }
     }
 
-    private var photoEditor: some View {
-        VStack(spacing: 10) {
-            VStack(spacing: 0) {
-                Group {
-                    if let photo {
-                        Image(uiImage: photo).resizable().scaledToFill().frame(maxWidth: .infinity).frame(height: 280).clipped()
-                    } else if let path = cocktail.officialImage, !path.isEmpty {
-                        OfficialCatalogImage(path: path).frame(maxWidth: .infinity).frame(height: 280).clipped()
-                    } else {
-                        VStack(spacing: 8) {
-                            Image(systemName: "camera.fill").font(.system(size: 34)).foregroundStyle(Color(red: 203/255, green: 143/255, blue: 160/255))
-                            Text("Фото коктейля не добавлено").font(.headline)
-                            Text("Администратор может загрузить эталонное фото, а вы можете добавить личное фото подачи.")
-                                .font(.subheadline).foregroundStyle(secondaryText).multilineTextAlignment(.center)
-                        }
-                        .frame(maxWidth: .infinity).frame(height: 220).padding(.horizontal, 24)
-                    }
+    private var officialPhoto: some View {
+        Group {
+            if let path = cocktail.officialImage, !path.isEmpty {
+                VStack(spacing: 0) {
+                    OfficialCatalogImage(path: path)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 280)
+                        .clipped()
+                    Text("ЭТАЛОН BALI")
+                        .font(.caption2.bold()).tracking(1)
+                        .foregroundStyle(.white.opacity(0.55))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 14).padding(.vertical, 9)
+                        .background(Color.black.opacity(0.18))
                 }
-                if photo != nil {
-                    Text("МОЁ ФОТО").font(.caption2.bold()).tracking(1).foregroundStyle(Color(red: 203/255, green: 143/255, blue: 160/255))
-                        .frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 14).padding(.vertical, 9).background(Color.black.opacity(0.18))
-                } else if cocktail.officialImage != nil {
-                    Text("ЭТАЛОН BALI").font(.caption2.bold()).tracking(1).foregroundStyle(.white.opacity(0.55))
-                        .frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 14).padding(.vertical, 9).background(Color.black.opacity(0.18))
+                .background(cardColor)
+                .clipShape(RoundedRectangle(cornerRadius: 22))
+                .overlay(RoundedRectangle(cornerRadius: 22).stroke(cardBorder, lineWidth: 1))
+            } else {
+                VStack(spacing: 8) {
+                    Image(systemName: "wineglass").font(.system(size: 34)).foregroundStyle(Color(red: 203/255, green: 143/255, blue: 160/255))
+                    Text("Эталонное фото не загружено").font(.headline)
+                    Text("Фотография добавляется администратором через BALI COCKTAIL ADMIN.")
+                        .font(.subheadline).foregroundStyle(secondaryText).multilineTextAlignment(.center)
                 }
-            }
-            .background(cardColor).clipShape(RoundedRectangle(cornerRadius: 22))
-            .overlay(RoundedRectangle(cornerRadius: 22).stroke(cardBorder, lineWidth: 1))
-
-            HStack(spacing: 10) {
-                Button { showCamera = true } label: {
-                    Label(photo == nil ? "Сфотографировать" : "Новое фото", systemImage: "camera")
-                        .font(.subheadline.weight(.semibold)).frame(maxWidth: .infinity).padding(.vertical, 12)
-                        .background(accentColorBali).foregroundStyle(.white).clipShape(RoundedRectangle(cornerRadius: 14))
-                }
-                PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
-                    Label("Из галереи", systemImage: "photo").font(.subheadline.weight(.semibold))
-                        .frame(maxWidth: .infinity).padding(.vertical, 12).background(cardColor).foregroundStyle(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 14)).overlay(RoundedRectangle(cornerRadius: 14).stroke(cardBorder, lineWidth: 1))
-                }
-            }
-
-            if photo != nil {
-                Button(role: .destructive) {
-                    CocktailPhotoStore.delete(id: cocktail.id)
-                    photo = nil
-                } label: { Text("Удалить моё фото").font(.subheadline.weight(.semibold)) }
-                .frame(maxWidth: .infinity, alignment: .trailing)
+                .frame(maxWidth: .infinity).frame(height: 220).padding(.horizontal, 24)
+                .background(cardColor)
+                .clipShape(RoundedRectangle(cornerRadius: 22))
+                .overlay(RoundedRectangle(cornerRadius: 22).stroke(cardBorder, lineWidth: 1))
             }
         }
     }
@@ -223,29 +180,4 @@ struct InfoBlock: View {
         .frame(maxWidth: .infinity, alignment: .leading).padding(14).background(cardColor)
         .clipShape(RoundedRectangle(cornerRadius: 18)).overlay(RoundedRectangle(cornerRadius: 18).stroke(cardBorder, lineWidth: 1))
     }
-}
-
-struct CameraPicker: UIViewControllerRepresentable {
-    let onImage: (UIImage) -> Void
-    @Environment(\.dismiss) private var dismiss
-
-    final class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-        let parent: CameraPicker
-        init(parent: CameraPicker) { self.parent = parent }
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-            if let image = info[.originalImage] as? UIImage { parent.onImage(image) }
-            parent.dismiss()
-        }
-        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) { parent.dismiss() }
-    }
-
-    func makeCoordinator() -> Coordinator { Coordinator(parent: self) }
-    func makeUIViewController(context: Context) -> UIImagePickerController {
-        let picker = UIImagePickerController()
-        picker.delegate = context.coordinator
-        picker.sourceType = UIImagePickerController.isSourceTypeAvailable(.camera) ? .camera : .photoLibrary
-        picker.cameraCaptureMode = .photo
-        return picker
-    }
-    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
 }
