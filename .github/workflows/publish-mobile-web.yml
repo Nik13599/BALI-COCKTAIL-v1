@@ -35,6 +35,7 @@ jobs:
           cp web-template/index.html /tmp/bali-mobile/index.html
           cp web-template/sw.js /tmp/bali-mobile/sw.js
           cp web-template/ingredient-zoom.js /tmp/bali-mobile/ingredient-zoom.js
+          cp web-template/readonly-mobile.js /tmp/bali-mobile/readonly-mobile.js
           cp web-template/manifest.webmanifest /tmp/bali-mobile/manifest.webmanifest
           cp data/cocktails.json /tmp/bali-mobile/cocktails.json
           cp generated/android/app/src/main/res/drawable/ic_launcher.jpg /tmp/bali-mobile/images/ic_launcher.jpg
@@ -42,7 +43,7 @@ jobs:
           from pathlib import Path
           p=Path('/tmp/bali-mobile/index.html')
           s=p.read_text(encoding='utf-8')
-          s=s.replace('</body>','<script src="ingredient-zoom.js"></script>\n</body>')
+          s=s.replace('</body>','<script src="ingredient-zoom.js"></script>\n<script src="readonly-mobile.js"></script>\n</body>')
           p.write_text(s,encoding='utf-8')
           PY
           touch /tmp/bali-mobile/.nojekyll
@@ -104,10 +105,10 @@ jobs:
           webclip={
               'PayloadType':'com.apple.webClip.managed',
               'PayloadVersion':1,
-              'PayloadIdentifier':'by.bali.cocktail.v1.webclip.htmlfix',
+              'PayloadIdentifier':'by.bali.cocktail.v1.webclip.readonly',
               'PayloadUUID':str(uuid.uuid4()).upper(),
               'PayloadDisplayName':'BALI COCKTAIL',
-              'PayloadDescription':'BALI COCKTAIL v1',
+              'PayloadDescription':'BALI COCKTAIL v1 — режим просмотра',
               'Label':'BALI COCKTAIL',
               'URL':app_url,
               'IsRemovable':True,
@@ -119,10 +120,10 @@ jobs:
           profile={
               'PayloadType':'Configuration',
               'PayloadVersion':1,
-              'PayloadIdentifier':'by.bali.cocktail.v1.profile.htmlfix',
+              'PayloadIdentifier':'by.bali.cocktail.v1.profile.readonly',
               'PayloadUUID':str(uuid.uuid4()).upper(),
               'PayloadDisplayName':'BALI COCKTAIL',
-              'PayloadDescription':'Устанавливает BALI COCKTAIL v1 на iPhone. Исправлена HTML-доставка приложения.',
+              'PayloadDescription':'Устанавливает BALI COCKTAIL v1 на iPhone в режиме просмотра. Изменения выполняются только через BALI COCKTAIL ADMIN.',
               'PayloadOrganization':'BALI',
               'PayloadRemovalDisallowed':False,
               'PayloadContent':[webclip],
