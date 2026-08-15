@@ -27,10 +27,12 @@ struct ContentView: View {
             ZStack {
                 backgroundColor.ignoresSafeArea()
                 VStack(spacing: 12) {
-                    VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 8) {
                         Text("BALI COCKTAIL").font(.system(size: 28, weight: .bold))
-                        Text("\(store.cocktails.count) техкарт · фото хранятся только на этом устройстве")
+                        Text("\(store.cocktails.count) техкарт · эталонные данные синхронизируются автоматически")
                             .font(.subheadline).foregroundStyle(secondaryText)
+                        Text(store.syncStatus)
+                            .font(.caption).foregroundStyle(.white.opacity(0.42))
                         TextField("Поиск коктейля или ингредиента", text: $searchText)
                             .textFieldStyle(.plain).padding(12).background(cardColor)
                             .overlay(RoundedRectangle(cornerRadius: 14).stroke(cardBorder, lineWidth: 1))
@@ -61,9 +63,12 @@ struct ContentView: View {
                     }
                 }
             }
-            .navigationDestination(for: Cocktail.self) { cocktail in DetailView(cocktail: cocktail) }
+            .navigationDestination(for: Cocktail.self) { cocktail in
+                DetailView(cocktail: cocktail, catalogIngredients: store.ingredients)
+            }
             .navigationBarHidden(true)
         }
+        .onAppear { store.sync() }
     }
 }
 
