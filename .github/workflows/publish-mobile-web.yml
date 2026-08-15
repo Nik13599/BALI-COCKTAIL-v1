@@ -68,7 +68,7 @@ jobs:
           from pathlib import Path
 
           sha=os.environ['WEB_SHA']
-          app_url=f'https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/{sha}/index.html'
+          app_url=f'https://cdn.statically.io/gh/Nik13599/BALI-COCKTAIL-v1@{sha}/index.html'
           icon=Path('/tmp/bali-mobile/images/ic_launcher.jpg').read_bytes()
           webclip={
               'PayloadType':'com.apple.webClip.managed',
