@@ -1,0 +1,122 @@
+name: Bootstrap BALI COCKTAIL v1
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bootstrap:
+    if: ${{ !contains(github.event.head_commit.message || '', '[skip bootstrap]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout new repository
+        uses: actions/checkout@v4
+
+      - name: Stop if bootstrap is already complete
+        id: check
+        shell: bash
+        run: |
+          if [ -f .bootstrap-complete ]; then
+            echo "done=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "done=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Copy stable mobile application read-only
+        if: steps.check.outputs.done != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/bali-stable /tmp/bali.tar.gz
+          curl -L --fail --retry 3 \
+            https://github.com/Nik13599/BALI-COCKTAIL/archive/refs/heads/main.tar.gz \
+            -o /tmp/bali.tar.gz
+          mkdir -p /tmp/bali-stable
+          tar -xzf /tmp/bali.tar.gz -C /tmp/bali-stable --strip-components=1
+
+          cp -R /tmp/bali-stable/scripts ./scripts
+          cp -R /tmp/bali-stable/overrides ./overrides
+          cp -R /tmp/bali-stable/web-template ./web-template
+
+          mkdir -p .github/workflows
+          for f in build.yml ios-device.yml ios-signed.yml; do
+            if [ -f "/tmp/bali-stable/.github/workflows/$f" ]; then
+              cp "/tmp/bali-stable/.github/workflows/$f" ".github/workflows/$f"
+            fi
+          done
+
+      - name: Seed file catalog from stable application
+        if: steps.check.outputs.done != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p data media/cocktails media/ingredients
+          curl -L --fail --retry 3 \
+            https://raw.githubusercontent.com/Nik13599/BALI-COCKTAIL/webapp/cocktails.json \
+            -o /tmp/cocktails.json
+
+          python3 - <<'PY'
+          import json, re, unicodedata, datetime
+          from pathlib import Path
+
+          src = json.load(open('/tmp/cocktails.json', encoding='utf-8'))
+
+          def slug(text):
+              s = unicodedata.normalize('NFKD', text).encode('ascii','ignore').decode('ascii').lower()
+              s = re.sub(r'[^a-z0-9]+','-',s).strip('-')
+              return s or ('item-' + str(abs(hash(text))))
+
+          # Keep the user catalogue intact, but images now come from admin-controlled media.
+          for c in src:
+              c.pop('image', None)
+              c['officialImage'] = None
+              for ing in c.get('ingredients', []):
+                  ing['ingredientId'] = slug(ing['name'])
+
+          ingredients = {}
+          for c in src:
+              for ing in c.get('ingredients', []):
+                  iid = ing['ingredientId']
+                  ingredients.setdefault(iid, {
+                      'id': iid,
+                      'name': ing['name'],
+                      'category': 'Не указано',
+                      'description': '',
+                      'officialImage': None,
+                      'active': True
+                  })
+
+          now = datetime.datetime.now(datetime.timezone.utc).isoformat()
+          manifest = {
+              'schemaVersion': 1,
+              'catalogVersion': 1,
+              'updatedAt': now,
+              'cocktails': 'data/cocktails.json',
+              'ingredients': 'data/ingredients.json',
+              'mediaBase': 'media/'
+          }
+
+          Path('data/cocktails.json').write_text(json.dumps(src, ensure_ascii=False, indent=2), encoding='utf-8')
+          Path('data/ingredients.json').write_text(json.dumps(sorted(ingredients.values(), key=lambda x:x['name']), ensure_ascii=False, indent=2), encoding='utf-8')
+          Path('data/manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding='utf-8')
+          Path('data/categories.json').write_text(json.dumps(['Авторские','Классика','Заготовки'], ensure_ascii=False, indent=2), encoding='utf-8')
+          Path('data/glassware.json').write_text(json.dumps(['Тики','Рокс','Хайбол','Купе','Мартини','Флюте','Шот','Заготовка / бутылка'], ensure_ascii=False, indent=2), encoding='utf-8')
+          PY
+
+          touch media/cocktails/.gitkeep media/ingredients/.gitkeep
+          echo "stable-source=read-only" > .bootstrap-complete
+
+      - name: Commit bootstrap
+        if: steps.check.outputs.done != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Bootstrap stable mobile apps and seed file catalog [skip bootstrap]"
+          git push origin main
