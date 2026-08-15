@@ -4,9 +4,11 @@ import UIKit
 
 struct DetailView: View {
     let cocktail: Cocktail
+    let catalogIngredients: [CatalogIngredient]
     @State private var photo: UIImage?
     @State private var selectedPhotoItem: PhotosPickerItem?
     @State private var showCamera = false
+    @State private var selectedIngredient: CatalogIngredient?
 
     var body: some View {
         ScrollView {
@@ -29,12 +31,35 @@ struct DetailView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Ингредиенты").font(.title3.weight(.bold))
                     ForEach(cocktail.ingredients) { ingredient in
-                        HStack {
-                            Text(ingredient.name)
-                            Spacer()
-                            Text("\(ingredient.amountText) \(ingredient.unit)").foregroundStyle(secondaryText)
+                        let catalogItem = catalogIngredient(for: ingredient)
+                        Button {
+                            if let catalogItem { selectedIngredient = catalogItem }
+                        } label: {
+                            HStack(spacing: 11) {
+                                if let imagePath = catalogItem?.officialImage, !imagePath.isEmpty {
+                                    OfficialCatalogImage(path: imagePath)
+                                        .frame(width: 46, height: 46)
+                                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                                } else {
+                                    RoundedRectangle(cornerRadius: 10)
+                                        .fill(Color.white.opacity(0.035))
+                                        .frame(width: 46, height: 46)
+                                        .overlay(Image(systemName: "shippingbox").foregroundStyle(.white.opacity(0.25)))
+                                }
+                                VStack(alignment: .leading, spacing: 3) {
+                                    Text(ingredient.name).foregroundStyle(.white).multilineTextAlignment(.leading)
+                                    if catalogItem?.officialImage != nil {
+                                        Text("Фото ингредиента BALI").font(.caption2).foregroundStyle(.white.opacity(0.35))
+                                    }
+                                }
+                                Spacer()
+                                Text("\(ingredient.amountText) \(ingredient.unit)").foregroundStyle(secondaryText)
+                                if catalogItem != nil { Image(systemName: "chevron.right").font(.caption).foregroundStyle(.white.opacity(0.25)) }
+                            }
+                            .font(.body)
+                            .contentShape(Rectangle())
                         }
-                        .font(.body)
+                        .buttonStyle(.plain)
                         Divider().overlay(.white.opacity(0.08))
                     }
                 }
@@ -55,7 +80,7 @@ struct DetailView: View {
                 .padding(14).background(cardColor).clipShape(RoundedRectangle(cornerRadius: 18))
                 .overlay(RoundedRectangle(cornerRadius: 18).stroke(cardBorder, lineWidth: 1))
 
-                Text("Фото добавляет сам пользователь. Оно хранится только во внутренней памяти этого iPhone и не отправляется на сервер.")
+                Text("Техкарта и эталонные фотографии обновляются из BALI COCKTAIL ADMIN. Личное фото хранится только на этом iPhone и не отправляется на сервер.")
                     .font(.footnote).foregroundStyle(.white.opacity(0.42)).padding(.top, 4)
             }
             .padding(16)
@@ -82,21 +107,40 @@ struct DetailView: View {
             }
             .ignoresSafeArea()
         }
+        .sheet(item: $selectedIngredient) { ingredient in
+            IngredientDetailSheet(ingredient: ingredient)
+        }
+    }
+
+    private func catalogIngredient(for ingredient: Ingredient) -> CatalogIngredient? {
+        if let id = ingredient.ingredientId, let exact = catalogIngredients.first(where: { $0.id == id }) { return exact }
+        return catalogIngredients.first { $0.name.caseInsensitiveCompare(ingredient.name) == .orderedSame }
     }
 
     private var photoEditor: some View {
         VStack(spacing: 10) {
-            Group {
-                if let photo {
-                    Image(uiImage: photo).resizable().scaledToFill().frame(maxWidth: .infinity).frame(height: 280).clipped()
-                } else {
-                    VStack(spacing: 8) {
-                        Image(systemName: "camera.fill").font(.system(size: 34)).foregroundStyle(Color(red: 203/255, green: 143/255, blue: 160/255))
-                        Text("Фото коктейля не добавлено").font(.headline)
-                        Text("Сфотографируйте готовую подачу или выберите фото из медиатеки.")
-                            .font(.subheadline).foregroundStyle(secondaryText).multilineTextAlignment(.center)
+            VStack(spacing: 0) {
+                Group {
+                    if let photo {
+                        Image(uiImage: photo).resizable().scaledToFill().frame(maxWidth: .infinity).frame(height: 280).clipped()
+                    } else if let path = cocktail.officialImage, !path.isEmpty {
+                        OfficialCatalogImage(path: path).frame(maxWidth: .infinity).frame(height: 280).clipped()
+                    } else {
+                        VStack(spacing: 8) {
+                            Image(systemName: "camera.fill").font(.system(size: 34)).foregroundStyle(Color(red: 203/255, green: 143/255, blue: 160/255))
+                            Text("Фото коктейля не добавлено").font(.headline)
+                            Text("Администратор может загрузить эталонное фото, а вы можете добавить личное фото подачи.")
+                                .font(.subheadline).foregroundStyle(secondaryText).multilineTextAlignment(.center)
+                        }
+                        .frame(maxWidth: .infinity).frame(height: 220).padding(.horizontal, 24)
                     }
-                    .frame(maxWidth: .infinity).frame(height: 220).padding(.horizontal, 24)
+                }
+                if photo != nil {
+                    Text("МОЁ ФОТО").font(.caption2.bold()).tracking(1).foregroundStyle(Color(red: 203/255, green: 143/255, blue: 160/255))
+                        .frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 14).padding(.vertical, 9).background(Color.black.opacity(0.18))
+                } else if cocktail.officialImage != nil {
+                    Text("ЭТАЛОН BALI").font(.caption2.bold()).tracking(1).foregroundStyle(.white.opacity(0.55))
+                        .frame(maxWidth: .infinity, alignment: .leading).padding(.horizontal, 14).padding(.vertical, 9).background(Color.black.opacity(0.18))
                 }
             }
             .background(cardColor).clipShape(RoundedRectangle(cornerRadius: 22))
@@ -119,10 +163,39 @@ struct DetailView: View {
                 Button(role: .destructive) {
                     CocktailPhotoStore.delete(id: cocktail.id)
                     photo = nil
-                } label: { Text("Удалить фото").font(.subheadline.weight(.semibold)) }
+                } label: { Text("Удалить моё фото").font(.subheadline.weight(.semibold)) }
                 .frame(maxWidth: .infinity, alignment: .trailing)
             }
         }
+    }
+}
+
+struct IngredientDetailSheet: View {
+    let ingredient: CatalogIngredient
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 14) {
+                    if let path = ingredient.officialImage, !path.isEmpty {
+                        OfficialCatalogImage(path: path, contentMode: .fit)
+                            .frame(maxWidth: .infinity).frame(minHeight: 240, maxHeight: 380)
+                            .background(cardColor).clipShape(RoundedRectangle(cornerRadius: 20))
+                    }
+                    Text(ingredient.name).font(.system(size: 28, weight: .bold))
+                    if let category = ingredient.category, !category.isEmpty {
+                        Text(category.uppercased()).font(.caption.bold()).tracking(1).foregroundStyle(Color(red: 203/255, green: 143/255, blue: 160/255))
+                    }
+                    Text((ingredient.description?.isEmpty == false ? ingredient.description! : "Описание пока не добавлено администратором."))
+                        .foregroundStyle(secondaryText).fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(16)
+            }
+            .background(backgroundColor.ignoresSafeArea())
+            .toolbar { ToolbarItem(placement: .topBarTrailing) { Button("Закрыть") { dismiss() } } }
+        }
+        .preferredColorScheme(.dark)
     }
 }
 
