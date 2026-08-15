@@ -40,6 +40,7 @@ jobs:
           touch /tmp/bali-mobile/.nojekyll
 
       - name: Publish mobile-web branch
+        id: publish
         shell: bash
         run: |
           set -euo pipefail
@@ -51,4 +52,59 @@ jobs:
           cp -R /tmp/bali-mobile/. .
           git add -A
           git commit -m "Publish BALI COCKTAIL v1 iPhone web app"
+          WEB_SHA=$(git rev-parse HEAD)
           git push --force origin mobile-web
+          echo "sha=$WEB_SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Build iPhone installation profile
+        shell: bash
+        env:
+          WEB_SHA: ${{ steps.publish.outputs.sha }}
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          python3 - <<'PY'
+          import plistlib, uuid, os
+          from pathlib import Path
+
+          sha=os.environ['WEB_SHA']
+          app_url=f'https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/{sha}/index.html'
+          icon=Path('/tmp/bali-mobile/images/ic_launcher.jpg').read_bytes()
+          webclip={
+              'PayloadType':'com.apple.webClip.managed',
+              'PayloadVersion':1,
+              'PayloadIdentifier':'by.bali.cocktail.v1.webclip',
+              'PayloadUUID':str(uuid.uuid4()).upper(),
+              'PayloadDisplayName':'BALI COCKTAIL',
+              'PayloadDescription':'BALI COCKTAIL v1',
+              'Label':'BALI COCKTAIL',
+              'URL':app_url,
+              'IsRemovable':True,
+              'Precomposed':True,
+              'FullScreen':True,
+              'IgnoreManifestScope':True,
+              'Icon':icon,
+          }
+          profile={
+              'PayloadType':'Configuration',
+              'PayloadVersion':1,
+              'PayloadIdentifier':'by.bali.cocktail.v1.profile',
+              'PayloadUUID':str(uuid.uuid4()).upper(),
+              'PayloadDisplayName':'BALI COCKTAIL',
+              'PayloadDescription':'Устанавливает BALI COCKTAIL v1 на iPhone.',
+              'PayloadOrganization':'BALI',
+              'PayloadRemovalDisallowed':False,
+              'PayloadContent':[webclip],
+          }
+          with open('out/BALI-COCKTAIL-v1-iPhone.mobileconfig','wb') as f:
+              plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
+          print(app_url)
+          PY
+
+      - name: Upload iPhone profile
+        uses: actions/upload-artifact@v4
+        with:
+          name: BALI-COCKTAIL-v1-iPhone-Mobileconfig
+          path: out/BALI-COCKTAIL-v1-iPhone.mobileconfig
+          if-no-files-found: error
+          retention-days: 30
