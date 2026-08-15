@@ -18,11 +18,13 @@ function createWindow() {
     }
   });
   win.loadFile('index.html');
-  win.webContents.on('did-finish-load', () => {
-    try {
-      const printTools = fs.readFileSync(path.join(__dirname, 'print-tools.js'), 'utf8');
-      win.webContents.executeJavaScript(printTools).catch(() => {});
-    } catch (_) {}
+  win.webContents.on('did-finish-load', async () => {
+    for (const name of ['print-tools.js', 'bar-menu.js', 'publish-fix.js']) {
+      try {
+        const code = fs.readFileSync(path.join(__dirname, name), 'utf8');
+        await win.webContents.executeJavaScript(code);
+      } catch (_) {}
+    }
   });
   win.webContents.setWindowOpenHandler(({ url }) => {
     shell.openExternal(url);
