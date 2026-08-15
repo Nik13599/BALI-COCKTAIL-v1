@@ -11,6 +11,7 @@ if [ -d "$ANDROID" ]; then
   cp data/cocktails.json "$ANDROID/app/src/main/assets/cocktails.json"
   python3 scripts/patch-android-sync.py "$ANDROID/app/src/main/java/by/bali/cocktails/MainActivity.kt"
   python3 scripts/patch-android-ingredient-zoom.py "$ANDROID/app/src/main/java/by/bali/cocktails/MainActivity.kt"
+  python3 scripts/patch-android-readonly.py "$ANDROID/app/src/main/java/by/bali/cocktails/MainActivity.kt"
   rm -f "$ANDROID/app/src/main/res/drawable"/cocktail_*.jpg
   rm -f "$ANDROID/app/src/main/res/drawable"/classic_*.jpg
   rm -f "$ANDROID/app/src/main/res/drawable"/tiki_*.jpg
