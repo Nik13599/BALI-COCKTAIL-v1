@@ -20,22 +20,28 @@ jobs:
           mkdir -p out/BALI-COCKTAIL-ADMIN
           cp admin/index.html out/BALI-COCKTAIL-ADMIN/index.html
           cp admin/print-tools.js out/BALI-COCKTAIL-ADMIN/print-tools.js
+          cp admin/bar-menu.js out/BALI-COCKTAIL-ADMIN/bar-menu.js
+          cp admin/publish-fix.js out/BALI-COCKTAIL-ADMIN/publish-fix.js
           python3 - <<'PY'
           from pathlib import Path
           p=Path('out/BALI-COCKTAIL-ADMIN/index.html')
           s=p.read_text(encoding='utf-8')
-          s=s.replace('</body>','<script src="print-tools.js"></script>\n</body>')
+          inject='''<script src="print-tools.js"></script>\n<script src="bar-menu.js"></script>\n<script src="publish-fix.js"></script>\n'''
+          s=s.replace('</body>',inject+'</body>')
           p.write_text(s,encoding='utf-8')
           PY
           cat > out/BALI-COCKTAIL-ADMIN/README.txt <<'TXT'
-          BALI COCKTAIL ADMIN
+          BALI COCKTAIL ADMIN v1.2
 
           1. Откройте index.html в Chrome или Edge на компьютере.
-          2. Введите fine-grained GitHub Personal Access Token для репозитория Nik13599/BALI-COCKTAIL-v1.
+          2. Введите fine-grained GitHub Personal Access Token для Nik13599/BALI-COCKTAIL-v1.
           3. Для token достаточно Repository permissions -> Contents: Read and write.
-          4. Изменяйте коктейли, ингредиенты и фотографии.
-          5. Раздел «Печать техкарт» создаёт квадратные карточки 120/150/180/200 мм и позволяет печатать их или сохранять в PDF.
-          6. Нажмите «Опубликовать». Мобильные приложения увидят новую версию каталога при синхронизации.
+          4. Публикация использует GitHub Contents API и не требует доступа к Git Blobs API.
+          5. Разделы «Коктейли» и «Ингредиенты» управляют мобильным каталогом и официальными фотографиями.
+          6. «Продукция» — отдельный список алкогольной/безалкогольной продукции, цен и объёмов.
+          7. «Меню A3» формирует двусторонний A3 tri-fold макет, позволяет менять шрифт, проверять переполнение и сохранять через печать в PDF.
+          8. «Печать техкарт» создаёт квадратные карточки 120/150/180/200 мм.
+          9. После «Опубликовать» manifest обновляется последним — мобильные приложения получают только полностью опубликованную версию.
 
           Token хранится только на компьютере, если включена галочка «Запомнить».
           TXT
