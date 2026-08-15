@@ -42,13 +42,6 @@ jobs:
           cp -R /tmp/bali-stable/overrides ./overrides
           cp -R /tmp/bali-stable/web-template ./web-template
 
-          mkdir -p .github/workflows
-          for f in build.yml ios-device.yml ios-signed.yml; do
-            if [ -f "/tmp/bali-stable/.github/workflows/$f" ]; then
-              cp "/tmp/bali-stable/.github/workflows/$f" ".github/workflows/$f"
-            fi
-          done
-
       - name: Seed file catalog from stable application
         if: steps.check.outputs.done != 'true'
         shell: bash
@@ -70,7 +63,6 @@ jobs:
               s = re.sub(r'[^a-z0-9]+','-',s).strip('-')
               return s or ('item-' + str(abs(hash(text))))
 
-          # Keep the user catalogue intact, but images now come from admin-controlled media.
           for c in src:
               c.pop('image', None)
               c['officialImage'] = None
