@@ -10,6 +10,7 @@ if [ -d "$ANDROID" ]; then
   cp overrides/android/AndroidManifest.xml "$ANDROID/app/src/main/AndroidManifest.xml"
   cp data/cocktails.json "$ANDROID/app/src/main/assets/cocktails.json"
   python3 scripts/patch-android-sync.py "$ANDROID/app/src/main/java/by/bali/cocktails/MainActivity.kt"
+  python3 scripts/patch-android-ingredient-zoom.py "$ANDROID/app/src/main/java/by/bali/cocktails/MainActivity.kt"
   rm -f "$ANDROID/app/src/main/res/drawable"/cocktail_*.jpg
   rm -f "$ANDROID/app/src/main/res/drawable"/classic_*.jpg
   rm -f "$ANDROID/app/src/main/res/drawable"/tiki_*.jpg
@@ -23,6 +24,7 @@ if [ -d "$IOS" ]; then
   cp overrides/ios/OfficialMediaStore.swift "$IOS/BALI_COCKTAIL/OfficialMediaStore.swift"
   cp overrides/ios/project.yml "$IOS/project.yml"
   cp data/cocktails.json "$IOS/BALI_COCKTAIL/cocktails.json"
+  python3 scripts/patch-ios-ingredient-zoom.py "$IOS/BALI_COCKTAIL/DetailView.swift"
 fi
 
 echo "BALI COCKTAIL v1 overrides applied"
