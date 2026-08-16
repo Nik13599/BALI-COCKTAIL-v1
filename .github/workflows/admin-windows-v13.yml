@@ -19,59 +19,69 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Prepare Windows icon if needed
+      - name: Prepare BALI Windows icon
         shell: pwsh
         run: |
           if (Test-Path 'admin/icon.ico') {
             Write-Host 'Using committed admin/icon.ico'
             exit 0
           }
-          $candidates = @(
-            'web-template/icon.png',
-            'web-template/app-icon.png',
-            'web-template/assets/icon.png',
-            'assets/icon.png',
-            'assets/app-icon.png'
-          )
-          $source = $null
-          foreach ($p in $candidates) { if (Test-Path $p) { $source = $p; break } }
-          if (-not $source) {
-            $source = (Get-ChildItem -Path . -Recurse -File -Include *.png | Where-Object { $_.Name -match 'icon|logo' } | Select-Object -First 1).FullName
-          }
-          if (-not $source) { throw 'No PNG icon source found in repository' }
-          Write-Host "Using PNG source: $source"
-          npm install --no-save png-to-ico@2.1.8
-          $env:ICON_SOURCE = $source
+          python -m pip install --quiet pillow
           @'
-          const fs=require('fs');
-          const pngToIco=require('png-to-ico');
-          (async()=>{
-            const out=await pngToIco(process.env.ICON_SOURCE);
-            fs.writeFileSync('admin/icon.ico',out);
-          })().catch(e=>{console.error(e);process.exit(1)});
-          '@ | Set-Content -Encoding UTF8 make-icon.js
-          node make-icon.js
+          from PIL import Image, ImageDraw, ImageFont
+          from pathlib import Path
+
+          size=512
+          im=Image.new('RGBA',(size,size),(11,11,13,255))
+          d=ImageDraw.Draw(im)
+          d.rounded_rectangle((42,42,470,470),88,fill=(21,21,25,255),outline=(75,41,52,255),width=8)
+          d.ellipse((112,94,400,382),fill=(112,31,57,255))
+          d.ellipse((142,124,370,352),outline=(205,143,160,210),width=4)
+          def font(path,size):
+              try:return ImageFont.truetype(path,size)
+              except:return ImageFont.load_default()
+          bold='C:/Windows/Fonts/arialbd.ttf'
+          regular='C:/Windows/Fonts/arial.ttf'
+          f1=font(bold,72); f2=font(bold,29); f3=font(regular,18)
+          def centered(text,y,f,fill):
+              box=d.textbbox((0,0),text,font=f)
+              w=box[2]-box[0]
+              d.text(((size-w)/2,y),text,font=f,fill=fill)
+          centered('BALI',186,f1,(255,255,255,255))
+          centered('COCKTAIL',274,f2,(255,255,255,255))
+          centered('ADMIN',407,f3,(203,143,160,255))
+          out=Path('admin/icon.ico')
+          im.save(out,format='ICO',sizes=[(16,16),(24,24),(32,32),(48,48),(64,64),(128,128),(256,256)])
+          print('Generated',out,out.stat().st_size,'bytes')
+          '@ | Set-Content -Encoding UTF8 make_icon.py
+          python make_icon.py
+          if (-not (Test-Path 'admin/icon.ico')) { throw 'BALI icon was not generated' }
       - name: Validate admin JavaScript
         working-directory: admin
         run: |
+          node --check v13-core.js
+          node --check products.js
           node --check print-tools.js
-          node --check bar-menu.js
-          node --check products-a4.js
-          node --check document-print.js
           node --check publish-fix.js
+          node --check main.js
       - name: Install dependencies
         working-directory: admin
         run: npm install
       - name: Build portable EXE
         working-directory: admin
         run: npm run dist
-      - name: Collect executable
+      - name: Collect and verify executable
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path out | Out-Null
-          $exe = Get-ChildItem -Path admin/dist -Filter '*.exe' -File | Select-Object -First 1
+          $exe = Get-ChildItem -Path admin/dist -Filter '*.exe' -File | Sort-Object Length -Descending | Select-Object -First 1
           if (-not $exe) { throw 'Windows executable not found' }
+          if ($exe.Length -lt 1000000) { throw "Windows executable is unexpectedly small: $($exe.Length)" }
           Copy-Item $exe.FullName 'out/BALI-COCKTAIL-ADMIN-v1.3.exe'
+          $bytes=[System.IO.File]::ReadAllBytes('out/BALI-COCKTAIL-ADMIN-v1.3.exe')
+          if ($bytes[0] -ne 0x4D -or $bytes[1] -ne 0x5A) { throw 'EXE does not have an MZ header' }
+          $hash=(Get-FileHash 'out/BALI-COCKTAIL-ADMIN-v1.3.exe' -Algorithm SHA256).Hash
+          Write-Host "BALI ADMIN EXE verified. Size=$($bytes.Length), SHA256=$hash"
       - name: Upload Windows admin
         uses: actions/upload-artifact@v4
         with:
