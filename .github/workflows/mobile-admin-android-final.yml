@@ -1,0 +1,83 @@
+name: Build BALI COCKTAIL ADMIN Android FINAL
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'mobile-admin/admin-v3.html'
+      - 'mobile-admin-android/**'
+      - 'branding/app-icon.png'
+      - '.github/workflows/mobile-admin-android-final.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package full mobile editor and BALI icon
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p mobile-admin-android/app/src/main/assets/mobile-admin mobile-admin-android/app/src/main/res/drawable
+          cp mobile-admin/admin-v3.html mobile-admin/manifest.webmanifest mobile-admin/sw.js mobile-admin-android/app/src/main/assets/mobile-admin/
+          cp branding/app-icon.png mobile-admin-android/app/src/main/assets/mobile-admin/app-icon.png
+          cp branding/app-icon.png mobile-admin-android/app/src/main/res/drawable/bali_app_icon.png
+          grep -q 'admin-v3.html' mobile-admin-android/app/src/main/java/by/bali/cocktails/admin/mobile/MainActivity.java
+          grep -q 'versionCode 3' mobile-admin-android/app/build.gradle
+      - uses: actions/setup-java@v4
+        with: {distribution: temurin, java-version: '17'}
+      - uses: android-actions/setup-android@v3
+        with: {packages: platform-tools}
+      - run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
+      - uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: bali-cocktail-mobile-admin-debug-keystore-v2
+      - name: Reuse stable signing key or create once
+        shell: bash
+        run: |
+          mkdir -p "$HOME/.android"
+          if [ ! -f "$HOME/.android/debug.keystore" ]; then
+            keytool -genkeypair -v -keystore "$HOME/.android/debug.keystore" -storepass android -alias androiddebugkey -keypass android -dname "CN=Android Debug,O=BALI ADMIN,C=BY" -keyalg RSA -keysize 2048 -validity 10000
+          fi
+      - uses: gradle/actions/setup-gradle@v4
+        with: {gradle-version: '9.1.0'}
+      - name: Build APK
+        run: gradle -p mobile-admin-android :app:assembleDebug --stacktrace
+      - name: Verify package
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK=mobile-admin-android/app/build/outputs/apk/debug/app-debug.apk
+          test -f "$APK"
+          unzip -l "$APK" >/tmp/apk.txt
+          grep -q 'assets/mobile-admin/admin-v3.html' /tmp/apk.txt
+          grep -q 'res/drawable/bali_app_icon.png' /tmp/apk.txt
+          mkdir -p out
+          cp "$APK" out/BALI-COCKTAIL-ADMIN-Android-FINAL-v3.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BALI-COCKTAIL-ADMIN-Android-FINAL-v3
+          path: out/BALI-COCKTAIL-ADMIN-Android-FINAL-v3.apk
+          if-no-files-found: error
+          retention-days: 30
+      - name: Emulator smoke test
+        continue-on-error: true
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          target: google_apis
+          profile: pixel_7
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: |
+            adb install -r mobile-admin-android/app/build/outputs/apk/debug/app-debug.apk
+            adb shell am start -W -n by.bali.cocktails.admin.mobile/.MainActivity
+            sleep 4
+            adb shell pidof by.bali.cocktails.admin.mobile
