@@ -5,13 +5,31 @@
   "main": "main.js",
   "author": "BALI",
   "license": "UNLICENSED",
-  "scripts": {"dist": "electron-builder --win portable"},
-  "devDependencies": {"electron": "^37.2.6", "electron-builder": "^26.0.12"},
+  "scripts": {
+    "dist": "electron-builder --win portable"
+  },
+  "devDependencies": {
+    "electron": "^37.2.6",
+    "electron-builder": "^26.0.12"
+  },
   "build": {
     "appId": "by.bali.cocktail.admin",
     "productName": "BALI COCKTAIL ADMIN",
     "asar": true,
-    "files": ["index.html","main.js","v13-core.js","products.js","print-tools.js","publish-fix.js","app-icon.jpg","icon.ico","package.json"],
-    "win": {"target": ["portable"], "icon": "icon.ico", "artifactName": "BALI-COCKTAIL-ADMIN.exe"}
+    "files": [
+      "index.html",
+      "main.js",
+      "v13-core.js",
+      "products.js",
+      "print-tools.js",
+      "publish-fix.js",
+      "icon.ico",
+      "package.json"
+    ],
+    "win": {
+      "target": ["portable"],
+      "icon": "icon.ico",
+      "artifactName": "BALI-COCKTAIL-ADMIN.exe"
+    }
   }
 }
