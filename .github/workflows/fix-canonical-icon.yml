@@ -1,0 +1,44 @@
+name: Prepare canonical BALI application icon
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'mobile-admin/icon.b64'
+      - '.github/workflows/fix-canonical-icon.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Reconstruct exact logo as valid PNG
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p branding
+          base64 -D -i mobile-admin/icon.b64 -o /tmp/bali-source.jpg
+          sips -s format png -z 1024 1024 /tmp/bali-source.jpg --out branding/app-icon.png >/dev/null
+          file branding/app-icon.png
+          sips -g pixelWidth -g pixelHeight branding/app-icon.png
+          test "$(stat -f%z branding/app-icon.png)" -gt 100000
+      - name: Commit canonical icon
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add branding/app-icon.png
+          if git diff --cached --quiet; then
+            echo 'Canonical icon unchanged'
+          else
+            git commit -m 'Store canonical exact BALI application icon'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
