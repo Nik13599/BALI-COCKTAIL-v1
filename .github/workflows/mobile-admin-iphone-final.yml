@@ -1,0 +1,52 @@
+name: Build BALI COCKTAIL ADMIN iPhone FINAL
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/mobile-admin-iphone-final.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  profile:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify commit-pinned admin page is served as HTML
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/${GITHUB_SHA}/mobile-admin/admin-v2.html"
+          ok=0
+          for attempt in $(seq 1 12); do
+            headers="$(curl -fsSI "$URL" 2>/dev/null || true)"
+            if printf '%s\n' "$headers" | tr -d '\r' | grep -Eqi '^content-type:[[:space:]]*text/html'; then ok=1; break; fi
+            sleep 4
+          done
+          test "$ok" -eq 1
+          echo "ADMIN_URL=$URL" >> "$GITHUB_ENV"
+      - name: Build profile with canonical BALI icon
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          sips -z 180 180 branding/app-icon.png --out /tmp/bali-admin-180.png >/dev/null
+          python3 - <<'PY'
+          import plistlib,uuid,os
+          from pathlib import Path
+          icon=Path('/tmp/bali-admin-180.png').read_bytes()
+          url=os.environ['ADMIN_URL']
+          clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.webclip.final','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'BALI COCKTAIL administrator','Label':'BALI COCKTAIL ADMIN','URL':url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
+          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.profile.final','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'Устанавливает BALI COCKTAIL ADMIN на экран Домой iPhone.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
+          with open('out/BALI-COCKTAIL-ADMIN-iPhone-FINAL.mobileconfig','wb') as f: plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
+          PY
+          plutil -lint out/BALI-COCKTAIL-ADMIN-iPhone-FINAL.mobileconfig
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BALI-COCKTAIL-ADMIN-iPhone-FINAL
+          path: out/BALI-COCKTAIL-ADMIN-iPhone-FINAL.mobileconfig
+          if-no-files-found: error
+          retention-days: 30
