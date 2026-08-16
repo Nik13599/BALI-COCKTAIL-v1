@@ -1,0 +1,151 @@
+name: Generate default ingredient visuals
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/generate-default-ingredient-visuals.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install Pillow
+        run: python3 -m pip install --quiet pillow
+      - name: Generate transparent fallback visuals and link ingredients
+        run: |
+          python3 - <<'PY'
+          from PIL import Image, ImageDraw, ImageFont
+          from pathlib import Path
+          import json, re, hashlib, datetime, os
+
+          ROOT=Path('.')
+          data_path=ROOT/'data'/'ingredients.json'
+          ingredients=json.loads(data_path.read_text(encoding='utf-8'))
+          out=ROOT/'images'/'ingredients'/'default'
+          out.mkdir(parents=True,exist_ok=True)
+
+          def font(size,bold=False):
+              candidates=[
+                  '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf' if bold else '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf',
+                  '/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf' if bold else '/usr/share/fonts/truetype/liberation2/LiberationSans-Regular.ttf'
+              ]
+              for p in candidates:
+                  if os.path.exists(p): return ImageFont.truetype(p,size)
+              return ImageFont.load_default()
+
+          F18=font(18,True); F15=font(15,True); F12=font(12,False); F10=font(10,False)
+
+          def slug(s):
+              h=hashlib.sha1(str(s).encode('utf-8')).hexdigest()[:12]
+              return 'ingredient-'+h+'.png'
+
+          def wrap(draw,text,f,maxw):
+              words=str(text).split(); lines=[]; cur=''
+              for w in words:
+                  test=(cur+' '+w).strip()
+                  if draw.textbbox((0,0),test,font=f)[2] <= maxw: cur=test
+                  else:
+                      if cur: lines.append(cur)
+                      cur=w
+              if cur: lines.append(cur)
+              return lines[:3]
+
+          def kind(name):
+              n=name.lower().replace('ё','е')
+              if any(x in n for x in ['грейпфрут','малина','клюква','апельсин','базилик','мята','чили','цедра','кокосовая стружка','бадьян','корица','кардамон','гвоздика','перец горошек']): return 'natural'
+              if any(x in n for x in ['сахар песок','сахар тростниковый']): return 'dry'
+              if any(x in n for x in ['пюре','наршараб','соус кимчи','соус соевый','кофе эспрессо']): return 'jar'
+              return 'bottle'
+
+          def palette(name):
+              n=name.lower().replace('ё','е')
+              if any(x in n for x in ['малина','клюква','вишн','кампари','наршараб','томат']): return (155,26,50,255),(245,218,224,255)
+              if any(x in n for x in ['апероль','апельс','ананас','персик','маракуй','карамел','виски','ром','текил']): return (205,88,22,255),(255,235,208,255)
+              if any(x in n for x in ['киви','базилик','мята','яблок','алоэ','фисташ','лайм']): return (58,120,62,255),(225,244,225,255)
+              if any(x in n for x in ['кокос','сливк','молоч','сахар','водка','джин','содовая','вода']): return (210,216,221,235),(38,44,52,255)
+              return (92,57,40,255),(245,232,218,255)
+
+          def draw_visual(item,path):
+              name=item.get('name','Ингредиент')
+              img=Image.new('RGBA',(320,320),(0,0,0,0)); d=ImageDraw.Draw(img)
+              main,light=palette(name); k=kind(name)
+              # soft contact shadow only; transparent canvas otherwise
+              d.ellipse((62,278,258,296),fill=(0,0,0,34))
+              if k=='bottle':
+                  # recognizable bottle silhouette with transparent glass highlight
+                  d.rounded_rectangle((104,62,216,274),radius=24,fill=main,outline=(235,235,235,170),width=3)
+                  d.rounded_rectangle((127,24,193,78),radius=12,fill=main,outline=(235,235,235,170),width=3)
+                  d.rectangle((132,10,188,34),fill=(28,28,30,255))
+                  d.rounded_rectangle((116,118,204,218),radius=10,fill=(248,246,240,242),outline=(40,40,40,180),width=2)
+                  d.line((120,76,120,112),fill=(255,255,255,95),width=5)
+                  label=name.replace('“','').replace('”','').replace('«','').replace('»','')
+                  lines=wrap(d,label,F15,78)
+                  y=132
+                  for line in lines:
+                      bb=d.textbbox((0,0),line,font=F15); d.text(((320-(bb[2]-bb[0]))/2,y),line,font=F15,fill=(20,20,22,255)); y+=20
+              elif k=='jar':
+                  d.rounded_rectangle((72,118,248,266),radius=28,fill=main,outline=(235,235,235,170),width=3)
+                  d.rounded_rectangle((86,88,234,132),radius=12,fill=(48,48,50,255))
+                  d.rounded_rectangle((88,158,232,232),radius=12,fill=(248,246,240,238),outline=(50,50,50,160),width=2)
+                  lines=wrap(d,name,F15,128); y=170
+                  for line in lines:
+                      bb=d.textbbox((0,0),line,font=F15); d.text(((320-(bb[2]-bb[0]))/2,y),line,font=F15,fill=(20,20,22,255)); y+=20
+              elif k=='dry':
+                  d.ellipse((72,132,248,266),fill=(40,40,42,255))
+                  d.polygon([(95,200),(160,86),(225,200)],fill=light,outline=(255,255,255,120))
+                  lines=wrap(d,name,F15,210); y=236
+                  for line in lines:
+                      bb=d.textbbox((0,0),line,font=F15); d.text(((320-(bb[2]-bb[0]))/2,y),line,font=F15,fill=(248,248,248,255)); y+=18
+              else:
+                  # natural ingredient: large colorful cluster + leaves/pieces
+                  d.ellipse((86,90,234,238),fill=main,outline=(255,255,255,160),width=3)
+                  d.ellipse((55,150,145,238),fill=light,outline=(255,255,255,150),width=2)
+                  d.ellipse((178,154,265,238),fill=light,outline=(255,255,255,150),width=2)
+                  d.polygon([(148,95),(116,46),(154,58)],fill=(44,113,54,255)); d.polygon([(172,94),(211,45),(177,58)],fill=(49,126,57,255))
+                  lines=wrap(d,name,F15,250); y=247
+                  for line in lines:
+                      bb=d.textbbox((0,0),line,font=F15); d.text(((320-(bb[2]-bb[0]))/2,y),line,font=F15,fill=(248,248,248,255),stroke_width=2,stroke_fill=(0,0,0,150)); y+=18
+              img.save(path,'PNG',optimize=True)
+
+          changed=False; generated=0; preserved=0
+          for item in ingredients:
+              current=item.get('officialImage') or ''
+              if current and (ROOT/current).is_file():
+                  preserved+=1
+                  continue
+              filename=slug(item.get('id') or item.get('name'))
+              rel=f'images/ingredients/default/{filename}'
+              target=ROOT/rel
+              draw_visual(item,target)
+              item['officialImage']=rel
+              item['imageSource']='BALI default visual; administrator can replace'
+              generated+=1; changed=True
+
+          if changed:
+              data_path.write_text(json.dumps(ingredients,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+              mp=ROOT/'data'/'manifest.json'
+              m=json.loads(mp.read_text(encoding='utf-8'))
+              m['catalogVersion']=int(m.get('catalogVersion',0))+1
+              m['updatedAt']=datetime.datetime.now(datetime.timezone.utc).isoformat().replace('+00:00','Z')
+              mp.write_text(json.dumps(m,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print('generated',generated,'preserved',preserved,'total',len(ingredients))
+          PY
+      - name: Commit generated visuals
+        run: |
+          if git status --porcelain | grep -q .; then
+            git config user.name "BALI COCKTAIL automation"
+            git config user.email "actions@users.noreply.github.com"
+            git add data/ingredients.json data/manifest.json images/ingredients/default
+            git commit -m "Generate default ingredient visuals"
+            git push origin HEAD:main
+          else
+            echo "No visual changes required"
+          fi
