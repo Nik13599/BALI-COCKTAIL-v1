@@ -22,6 +22,7 @@
       "v13-core.js",
       "products.js",
       "print-tools.js",
+      "print-bartender-tweaks.js",
       "publish-fix.js",
       "icon.ico",
       "package.json"
