@@ -36,6 +36,7 @@ jobs:
           node --check v13-core.js
           node --check products.js
           node --check print-tools.js
+          node --check print-bartender-tweaks.js
           node --check publish-fix.js
           node --check main.js
       - name: Install dependencies
