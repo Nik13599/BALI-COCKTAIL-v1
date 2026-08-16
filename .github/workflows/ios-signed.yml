@@ -42,8 +42,7 @@ jobs:
           mkdir -p "$ASSETS/AppIcon.appiconset"
           printf '%s\n' '{"info":{"author":"xcode","version":1}}' > "$ASSETS/Contents.json"
           cp data/cocktails.json "$IOS_DIR/cocktails.json"
-          base64 -D -i mobile-admin/icon.b64 -o /tmp/bali-icon.jpg
-          sips -s format png -z 1024 1024 /tmp/bali-icon.jpg --out "$ASSETS/AppIcon.appiconset/appicon-1024.png" >/dev/null
+          cp branding/app-icon.png "$ASSETS/AppIcon.appiconset/appicon-1024.png"
           sips -z 120 120 "$ASSETS/AppIcon.appiconset/appicon-1024.png" --out "$ASSETS/AppIcon.appiconset/appicon-120.png" >/dev/null
           sips -z 180 180 "$ASSETS/AppIcon.appiconset/appicon-1024.png" --out "$ASSETS/AppIcon.appiconset/appicon-180.png" >/dev/null
           sips -z 152 152 "$ASSETS/AppIcon.appiconset/appicon-1024.png" --out "$ASSETS/AppIcon.appiconset/appicon-152.png" >/dev/null
