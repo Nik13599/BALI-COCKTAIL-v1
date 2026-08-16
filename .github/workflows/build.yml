@@ -26,7 +26,12 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p generated/android/app/src/main/res/drawable
-          base64 -d mobile-admin/icon.b64 > generated/android/app/src/main/res/drawable/ic_launcher.jpg
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64
+          raw=''.join(Path('mobile-admin/icon.b64').read_text(encoding='utf-8-sig').split())
+          Path('generated/android/app/src/main/res/drawable/ic_launcher.jpg').write_bytes(base64.b64decode(raw))
+          PY
       - name: Set up Java 17
         uses: actions/setup-java@v4
         with: {distribution: temurin, java-version: '17'}
