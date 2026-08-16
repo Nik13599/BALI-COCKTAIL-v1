@@ -1,6 +1,6 @@
 [
   {
-    "id": "whisky-001",
+    "id": "product-виски-0",
     "category": "Виски",
     "name": "Laphroaig Selekt",
     "country": "Scotland",
@@ -9,10 +9,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 1500,
     "active": true,
-    "order": 1
+    "order": 1,
+    "comment": ""
   },
   {
-    "id": "whisky-002",
+    "id": "product-виски-1",
     "category": "Виски",
     "name": "Macallan 12",
     "country": "Scotland",
@@ -21,10 +22,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 1575,
     "active": true,
-    "order": 2
+    "order": 2,
+    "comment": ""
   },
   {
-    "id": "whisky-003",
+    "id": "product-виски-2",
     "category": "Виски",
     "name": "Macallan 15",
     "country": "Scotland",
@@ -33,10 +35,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 2500,
     "active": true,
-    "order": 3
+    "order": 3,
+    "comment": ""
   },
   {
-    "id": "whisky-004",
+    "id": "product-виски-3",
     "category": "Виски",
     "name": "Macallan 18",
     "country": "Scotland",
@@ -45,10 +48,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 5000,
     "active": true,
-    "order": 4
+    "order": 4,
+    "comment": ""
   },
   {
-    "id": "whisky-005",
+    "id": "product-виски-4",
     "category": "Виски",
     "name": "Glenfiddich 12",
     "country": "Scotland",
@@ -57,10 +61,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 595,
     "active": true,
-    "order": 5
+    "order": 5,
+    "comment": ""
   },
   {
-    "id": "whisky-006",
+    "id": "product-виски-5",
     "category": "Виски",
     "name": "Glenfiddich 15",
     "country": "Scotland",
@@ -69,10 +74,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 1505,
     "active": true,
-    "order": 6
+    "order": 6,
+    "comment": ""
   },
   {
-    "id": "whisky-007",
+    "id": "product-виски-6",
     "category": "Виски",
     "name": "Johnnie Walker RED Label",
     "country": "Scotland",
@@ -81,10 +87,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 550,
     "active": true,
-    "order": 7
+    "order": 7,
+    "comment": ""
   },
   {
-    "id": "whisky-008",
+    "id": "product-виски-7",
     "category": "Виски",
     "name": "Johnnie Walker BLACK Label",
     "country": "Scotland",
@@ -93,10 +100,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 900,
     "active": true,
-    "order": 8
+    "order": 8,
+    "comment": ""
   },
   {
-    "id": "whisky-009",
+    "id": "product-виски-8",
     "category": "Виски",
     "name": "Johnnie Walker BLUE Label",
     "country": "Scotland",
@@ -105,10 +113,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 3000,
     "active": true,
-    "order": 9
+    "order": 9,
+    "comment": ""
   },
   {
-    "id": "whisky-010",
+    "id": "product-виски-9",
     "category": "Виски",
     "name": "Tullamore D.E.W.",
     "country": "Ireland",
@@ -117,10 +126,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 525,
     "active": true,
-    "order": 10
+    "order": 10,
+    "comment": ""
   },
   {
-    "id": "whisky-011",
+    "id": "product-виски-10",
     "category": "Виски",
     "name": "Jack Daniel's",
     "country": "USA",
@@ -129,10 +139,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 750,
     "active": true,
-    "order": 11
+    "order": 11,
+    "comment": ""
   },
   {
-    "id": "whisky-012",
+    "id": "product-виски-11",
     "category": "Виски",
     "name": "Jack Daniel's Fire",
     "country": "USA",
@@ -141,10 +152,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 665,
     "active": true,
-    "order": 12
+    "order": 12,
+    "comment": ""
   },
   {
-    "id": "whisky-013",
+    "id": "product-виски-12",
     "category": "Виски",
     "name": "The Deacon",
     "country": "Scotland",
@@ -153,10 +165,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 595,
     "active": true,
-    "order": 13
+    "order": 13,
+    "comment": ""
   },
   {
-    "id": "whisky-014",
+    "id": "product-виски-13",
     "category": "Виски",
     "name": "Monkey Shoulder",
     "country": "Scotland",
@@ -165,10 +178,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 850,
     "active": true,
-    "order": 14
+    "order": 14,
+    "comment": ""
   },
   {
-    "id": "whisky-015",
+    "id": "product-виски-14",
     "category": "Виски",
     "name": "Maker's Mark",
     "country": "USA",
@@ -177,10 +191,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 900,
     "active": true,
-    "order": 15
+    "order": 15,
+    "comment": ""
   },
   {
-    "id": "whisky-016",
+    "id": "product-виски-15",
     "category": "Виски",
     "name": "Jack Daniel's Honey",
     "country": "USA",
@@ -189,10 +204,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 560,
     "active": true,
-    "order": 16
+    "order": 16,
+    "comment": ""
   },
   {
-    "id": "whisky-017",
+    "id": "product-виски-16",
     "category": "Виски",
     "name": "Bushmills",
     "country": "Ireland",
@@ -201,10 +217,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 450,
     "active": true,
-    "order": 17
+    "order": 17,
+    "comment": ""
   },
   {
-    "id": "whisky-018",
+    "id": "product-виски-17",
     "category": "Виски",
     "name": "Chivas Regal 12",
     "country": "Scotland",
@@ -213,10 +230,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 800,
     "active": true,
-    "order": 18
+    "order": 18,
+    "comment": ""
   },
   {
-    "id": "whisky-019",
+    "id": "product-виски-18",
     "category": "Виски",
     "name": "Chivas Regal 18",
     "country": "Scotland",
@@ -225,10 +243,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 1500,
     "active": true,
-    "order": 19
+    "order": 19,
+    "comment": ""
   },
   {
-    "id": "whisky-020",
+    "id": "product-виски-19",
     "category": "Виски",
     "name": "Chivas Regal 21",
     "country": "Scotland",
@@ -237,10 +256,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 2200,
     "active": true,
-    "order": 20
+    "order": 20,
+    "comment": ""
   },
   {
-    "id": "whisky-021",
+    "id": "product-виски-20",
     "category": "Виски",
     "name": "Jameson",
     "country": "Ireland",
@@ -249,10 +269,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 575,
     "active": true,
-    "order": 21
+    "order": 21,
+    "comment": ""
   },
   {
-    "id": "whisky-022",
+    "id": "product-виски-21",
     "category": "Виски",
     "name": "Jameson Crested",
     "country": "Ireland",
@@ -261,10 +282,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 560,
     "active": true,
-    "order": 22
+    "order": 22,
+    "comment": ""
   },
   {
-    "id": "whisky-023",
+    "id": "product-виски-22",
     "category": "Виски",
     "name": "Jameson Stout Edition",
     "country": "Ireland",
@@ -273,10 +295,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 490,
     "active": true,
-    "order": 23
+    "order": 23,
+    "comment": ""
   },
   {
-    "id": "rum-001",
+    "id": "product-ром-0",
     "category": "Ром",
     "name": "Bumbu The Original",
     "country": "Barbados",
@@ -285,10 +308,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 560,
     "active": true,
-    "order": 1
+    "order": 1,
+    "comment": ""
   },
   {
-    "id": "rum-002",
+    "id": "product-ром-1",
     "category": "Ром",
     "name": "Bumbu XO",
     "country": "Barbados",
@@ -297,10 +321,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 700,
     "active": true,
-    "order": 2
+    "order": 2,
+    "comment": ""
   },
   {
-    "id": "rum-003",
+    "id": "product-ром-2",
     "category": "Ром",
     "name": "Matusalem Gran Reserva 15",
     "country": "Dominican",
@@ -309,10 +334,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 595,
     "active": true,
-    "order": 3
+    "order": 3,
+    "comment": ""
   },
   {
-    "id": "rum-004",
+    "id": "product-ром-3",
     "category": "Ром",
     "name": "Matusalem Gran Reserva 23",
     "country": "Dominican",
@@ -321,10 +347,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 1300,
     "active": true,
-    "order": 4
+    "order": 4,
+    "comment": ""
   },
   {
-    "id": "rum-005",
+    "id": "product-ром-4",
     "category": "Ром",
     "name": "Plantation Original Dark",
     "country": "France",
@@ -333,10 +360,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 420,
     "active": true,
-    "order": 5
+    "order": 5,
+    "comment": ""
   },
   {
-    "id": "rum-006",
+    "id": "product-ром-5",
     "category": "Ром",
     "name": "Plantation Pineapple",
     "country": "France",
@@ -345,10 +373,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 595,
     "active": true,
-    "order": 6
+    "order": 6,
+    "comment": ""
   },
   {
-    "id": "rum-007",
+    "id": "product-ром-6",
     "category": "Ром",
     "name": "Plantation XO",
     "country": "France",
@@ -357,10 +386,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 770,
     "active": true,
-    "order": 7
+    "order": 7,
+    "comment": ""
   },
   {
-    "id": "rum-008",
+    "id": "product-ром-7",
     "category": "Ром",
     "name": "Dictador 12",
     "country": "Columbia",
@@ -369,10 +399,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 595,
     "active": true,
-    "order": 8
+    "order": 8,
+    "comment": ""
   },
   {
-    "id": "rum-009",
+    "id": "product-ром-8",
     "category": "Ром",
     "name": "Bacardi Negra",
     "country": "Cuba",
@@ -381,10 +412,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 500,
     "active": true,
-    "order": 9
+    "order": 9,
+    "comment": ""
   },
   {
-    "id": "rum-010",
+    "id": "product-ром-9",
     "category": "Ром",
     "name": "Bacardi Spiced",
     "country": "Cuba",
@@ -393,10 +425,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 550,
     "active": true,
-    "order": 10
+    "order": 10,
+    "comment": ""
   },
   {
-    "id": "rum-011",
+    "id": "product-ром-10",
     "category": "Ром",
     "name": "Captain Morgan Dark",
     "country": "Jamaica",
@@ -405,10 +438,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 500,
     "active": true,
-    "order": 11
+    "order": 11,
+    "comment": ""
   },
   {
-    "id": "rum-012",
+    "id": "product-ром-11",
     "category": "Ром",
     "name": "Captain Morgan Spiced",
     "country": "Jamaica",
@@ -417,10 +451,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 550,
     "active": true,
-    "order": 12
+    "order": 12,
+    "comment": ""
   },
   {
-    "id": "rum-013",
+    "id": "product-ром-12",
     "category": "Ром",
     "name": "Kraken",
     "country": "London",
@@ -429,10 +464,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 650,
     "active": true,
-    "order": 13
+    "order": 13,
+    "comment": ""
   },
   {
-    "id": "gin-001",
+    "id": "product-джин-0",
     "category": "Джин",
     "name": "Bulldog",
     "country": "London",
@@ -441,10 +477,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 595,
     "active": true,
-    "order": 1
+    "order": 1,
+    "comment": ""
   },
   {
-    "id": "gin-002",
+    "id": "product-джин-1",
     "category": "Джин",
     "name": "Bombay",
     "country": "London",
@@ -453,10 +490,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 600,
     "active": true,
-    "order": 2
+    "order": 2,
+    "comment": ""
   },
   {
-    "id": "gin-003",
+    "id": "product-джин-2",
     "category": "Джин",
     "name": "Hendrick's",
     "country": "Scotland",
@@ -465,10 +503,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 665,
     "active": true,
-    "order": 3
+    "order": 3,
+    "comment": ""
   },
   {
-    "id": "gin-004",
+    "id": "product-джин-3",
     "category": "Джин",
     "name": "Monkey 47",
     "country": "Germany",
@@ -477,10 +516,11 @@
     "bottleVolume": "500 мл",
     "bottlePrice": 400,
     "active": true,
-    "order": 4
+    "order": 4,
+    "comment": ""
   },
   {
-    "id": "gin-005",
+    "id": "product-джин-4",
     "category": "Джин",
     "name": "Beefeater",
     "country": "London",
@@ -489,10 +529,11 @@
     "bottleVolume": "500 мл",
     "bottlePrice": 275,
     "active": true,
-    "order": 5
+    "order": 5,
+    "comment": ""
   },
   {
-    "id": "tequila-001",
+    "id": "product-текила-0",
     "category": "Текила",
     "name": "Espolon Blanco",
     "country": "Mexico",
@@ -501,10 +542,11 @@
     "bottleVolume": "750 мл",
     "bottlePrice": 450,
     "active": true,
-    "order": 1
+    "order": 1,
+    "comment": ""
   },
   {
-    "id": "tequila-002",
+    "id": "product-текила-1",
     "category": "Текила",
     "name": "Espolon Reposado",
     "country": "Mexico",
@@ -513,10 +555,11 @@
     "bottleVolume": "750 мл",
     "bottlePrice": 450,
     "active": true,
-    "order": 2
+    "order": 2,
+    "comment": ""
   },
   {
-    "id": "tequila-003",
+    "id": "product-текила-2",
     "category": "Текила",
     "name": "Patron Reposado",
     "country": "Mexico",
@@ -525,10 +568,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 1050,
     "active": true,
-    "order": 3
+    "order": 3,
+    "comment": ""
   },
   {
-    "id": "tequila-004",
+    "id": "product-текила-3",
     "category": "Текила",
     "name": "Patron Silver",
     "country": "Mexico",
@@ -537,10 +581,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 1050,
     "active": true,
-    "order": 4
+    "order": 4,
+    "comment": ""
   },
   {
-    "id": "tequila-005",
+    "id": "product-текила-4",
     "category": "Текила",
     "name": "Clase Azul Reposado",
     "country": "Mexico",
@@ -549,10 +594,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 3000,
     "active": true,
-    "order": 5
+    "order": 5,
+    "comment": ""
   },
   {
-    "id": "vodka-001",
+    "id": "product-водка-0",
     "category": "Водка",
     "name": "Grey Goose",
     "country": "France",
@@ -561,10 +607,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 950,
     "active": true,
-    "order": 1
+    "order": 1,
+    "comment": ""
   },
   {
-    "id": "vodka-002",
+    "id": "product-водка-1",
     "category": "Водка",
     "name": "Finlandia",
     "country": "Finland",
@@ -573,10 +620,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 500,
     "active": true,
-    "order": 2
+    "order": 2,
+    "comment": ""
   },
   {
-    "id": "vodka-003",
+    "id": "product-водка-2",
     "category": "Водка",
     "name": "Absolut",
     "country": "Sweden",
@@ -585,10 +633,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 350,
     "active": true,
-    "order": 3
+    "order": 3,
+    "comment": ""
   },
   {
-    "id": "vodka-004",
+    "id": "product-водка-3",
     "category": "Водка",
     "name": "Vseslav Charodey",
     "country": "Belarus",
@@ -597,10 +646,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 315,
     "active": true,
-    "order": 4
+    "order": 4,
+    "comment": ""
   },
   {
-    "id": "liqueurs-001",
+    "id": "product-лик-ры-0",
     "category": "Ликёры",
     "name": "Campari",
     "country": "Italy",
@@ -609,10 +659,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 500,
     "active": true,
-    "order": 1
+    "order": 1,
+    "comment": ""
   },
   {
-    "id": "liqueurs-002",
+    "id": "product-лик-ры-1",
     "category": "Ликёры",
     "name": "Cynar",
     "country": "Italy",
@@ -621,10 +672,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 420,
     "active": true,
-    "order": 2
+    "order": 2,
+    "comment": ""
   },
   {
-    "id": "liqueurs-003",
+    "id": "product-лик-ры-2",
     "category": "Ликёры",
     "name": "Frangelico",
     "country": "Italy",
@@ -633,10 +685,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 525,
     "active": true,
-    "order": 3
+    "order": 3,
+    "comment": ""
   },
   {
-    "id": "liqueurs-004",
+    "id": "product-лик-ры-3",
     "category": "Ликёры",
     "name": "Aperol",
     "country": "Italy",
@@ -645,10 +698,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 500,
     "active": true,
-    "order": 4
+    "order": 4,
+    "comment": ""
   },
   {
-    "id": "liqueurs-005",
+    "id": "product-лик-ры-4",
     "category": "Ликёры",
     "name": "Sarti Rosa",
     "country": "Italy",
@@ -657,10 +711,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 385,
     "active": true,
-    "order": 5
+    "order": 5,
+    "comment": ""
   },
   {
-    "id": "liqueurs-006",
+    "id": "product-лик-ры-5",
     "category": "Ликёры",
     "name": "Bumbu Cream",
     "country": "Barbados",
@@ -669,10 +724,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 455,
     "active": true,
-    "order": 6
+    "order": 6,
+    "comment": ""
   },
   {
-    "id": "liqueurs-007",
+    "id": "product-лик-ры-6",
     "category": "Ликёры",
     "name": "Jagermeister",
     "country": "Germany",
@@ -681,10 +737,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 550,
     "active": true,
-    "order": 7
+    "order": 7,
+    "comment": ""
   },
   {
-    "id": "liqueurs-008",
+    "id": "product-лик-ры-7",
     "category": "Ликёры",
     "name": "Jagermeister Manifest",
     "country": "Germany",
@@ -693,10 +750,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 800,
     "active": true,
-    "order": 8
+    "order": 8,
+    "comment": ""
   },
   {
-    "id": "liqueurs-009",
+    "id": "product-лик-ры-8",
     "category": "Ликёры",
     "name": "Jagermeister Orange",
     "country": "Germany",
@@ -705,10 +763,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 750,
     "active": true,
-    "order": 9
+    "order": 9,
+    "comment": ""
   },
   {
-    "id": "liqueurs-010",
+    "id": "product-лик-ры-9",
     "category": "Ликёры",
     "name": "Becherovka",
     "country": "Czech Republic",
@@ -717,10 +776,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 350,
     "active": true,
-    "order": 10
+    "order": 10,
+    "comment": ""
   },
   {
-    "id": "liqueurs-011",
+    "id": "product-лик-ры-10",
     "category": "Ликёры",
     "name": "Fireball",
     "country": "Canada",
@@ -729,10 +789,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 500,
     "active": true,
-    "order": 11
+    "order": 11,
+    "comment": ""
   },
   {
-    "id": "liqueurs-012",
+    "id": "product-лик-ры-11",
     "category": "Ликёры",
     "name": "Absent Pernod",
     "country": "France",
@@ -741,10 +802,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 525,
     "active": true,
-    "order": 12
+    "order": 12,
+    "comment": ""
   },
   {
-    "id": "vermouth-001",
+    "id": "product-вермуты-0",
     "category": "Вермуты",
     "name": "Martini Extra Dry",
     "country": "Italy",
@@ -753,10 +815,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 350,
     "active": true,
-    "order": 1
+    "order": 1,
+    "comment": ""
   },
   {
-    "id": "vermouth-002",
+    "id": "product-вермуты-1",
     "category": "Вермуты",
     "name": "Martini Rosso",
     "country": "Italy",
@@ -765,10 +828,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 350,
     "active": true,
-    "order": 2
+    "order": 2,
+    "comment": ""
   },
   {
-    "id": "vermouth-003",
+    "id": "product-вермуты-2",
     "category": "Вермуты",
     "name": "Martini Bianco",
     "country": "Italy",
@@ -777,10 +841,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 350,
     "active": true,
-    "order": 3
+    "order": 3,
+    "comment": ""
   },
   {
-    "id": "vermouth-004",
+    "id": "product-вермуты-3",
     "category": "Вермуты",
     "name": "Martini Fiero",
     "country": "Italy",
@@ -789,10 +854,11 @@
     "bottleVolume": "1000 мл",
     "bottlePrice": 400,
     "active": true,
-    "order": 4
+    "order": 4,
+    "comment": ""
   },
   {
-    "id": "brandy-001",
+    "id": "product-коньяк-бренди-0",
     "category": "Коньяк / бренди",
     "name": "Courvoisier VS",
     "country": "France",
@@ -801,10 +867,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 1050,
     "active": true,
-    "order": 1
+    "order": 1,
+    "comment": ""
   },
   {
-    "id": "brandy-002",
+    "id": "product-коньяк-бренди-1",
     "category": "Коньяк / бренди",
     "name": "Courvoisier VSOP",
     "country": "France",
@@ -813,10 +880,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 1120,
     "active": true,
-    "order": 2
+    "order": 2,
+    "comment": ""
   },
   {
-    "id": "brandy-003",
+    "id": "product-коньяк-бренди-2",
     "category": "Коньяк / бренди",
     "name": "Hennessy VS",
     "country": "France",
@@ -825,10 +893,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 770,
     "active": true,
-    "order": 3
+    "order": 3,
+    "comment": ""
   },
   {
-    "id": "brandy-004",
+    "id": "product-коньяк-бренди-3",
     "category": "Коньяк / бренди",
     "name": "Hennessy VSOP",
     "country": "France",
@@ -837,10 +906,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 1225,
     "active": true,
-    "order": 4
+    "order": 4,
+    "comment": ""
   },
   {
-    "id": "brandy-005",
+    "id": "product-коньяк-бренди-4",
     "category": "Коньяк / бренди",
     "name": "Hennessy XO",
     "country": "France",
@@ -849,10 +919,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 4200,
     "active": true,
-    "order": 5
+    "order": 5,
+    "comment": ""
   },
   {
-    "id": "brandy-006",
+    "id": "product-коньяк-бренди-5",
     "category": "Коньяк / бренди",
     "name": "Torres 10",
     "country": "Spain",
@@ -861,10 +932,11 @@
     "bottleVolume": "700 мл",
     "bottlePrice": 385,
     "active": true,
-    "order": 6
+    "order": 6,
+    "comment": ""
   },
   {
-    "id": "beer-001",
+    "id": "product-пиво-0",
     "category": "Пиво",
     "name": "Miller",
     "country": "Belarus",
@@ -873,10 +945,11 @@
     "bottleVolume": "",
     "bottlePrice": null,
     "active": true,
-    "order": 1
+    "order": 1,
+    "comment": ""
   },
   {
-    "id": "beer-002",
+    "id": "product-пиво-1",
     "category": "Пиво",
     "name": "Maison Arne Blanche",
     "country": "Belarus",
@@ -885,10 +958,11 @@
     "bottleVolume": "",
     "bottlePrice": null,
     "active": true,
-    "order": 2
+    "order": 2,
+    "comment": ""
   },
   {
-    "id": "beer-003",
+    "id": "product-пиво-2",
     "category": "Пиво",
     "name": "Krushovice Alco 0%",
     "country": "Belarus",
@@ -897,10 +971,11 @@
     "bottleVolume": "",
     "bottlePrice": null,
     "active": true,
-    "order": 3
+    "order": 3,
+    "comment": ""
   },
   {
-    "id": "beer-004",
+    "id": "product-пиво-3",
     "category": "Пиво",
     "name": "Corona Extra",
     "country": "Mexico",
@@ -909,10 +984,11 @@
     "bottleVolume": "",
     "bottlePrice": null,
     "active": true,
-    "order": 4
+    "order": 4,
+    "comment": ""
   },
   {
-    "id": "white-wine-001",
+    "id": "product-белое-вино-0",
     "category": "Белое вино",
     "name": "Casillero De Diablo Sauv. Blanc сухое",
     "country": "Chile",
@@ -921,10 +997,11 @@
     "bottleVolume": "Бутылка",
     "bottlePrice": 144,
     "active": true,
-    "order": 1
+    "order": 1,
+    "comment": ""
   },
   {
-    "id": "white-wine-002",
+    "id": "product-белое-вино-1",
     "category": "Белое вино",
     "name": "Villa Wolf Gewurztraminer полусухое",
     "country": "Germany",
@@ -933,10 +1010,11 @@
     "bottleVolume": "Бутылка",
     "bottlePrice": 216,
     "active": true,
-    "order": 2
+    "order": 2,
+    "comment": ""
   },
   {
-    "id": "white-wine-003",
+    "id": "product-белое-вино-2",
     "category": "Белое вино",
     "name": "1D Chablis Premier Cru сухое",
     "country": "France",
@@ -945,10 +1023,11 @@
     "bottleVolume": "Бутылка",
     "bottlePrice": 1200,
     "active": true,
-    "order": 3
+    "order": 3,
+    "comment": ""
   },
   {
-    "id": "white-wine-004",
+    "id": "product-белое-вино-3",
     "category": "Белое вино",
     "name": "Gustave Lorenz Riesling reserv полусухое",
     "country": "France",
@@ -957,10 +1036,11 @@
     "bottleVolume": "Бутылка",
     "bottlePrice": 228,
     "active": true,
-    "order": 4
+    "order": 4,
+    "comment": ""
   },
   {
-    "id": "white-wine-005",
+    "id": "product-белое-вино-4",
     "category": "Белое вино",
     "name": "Domaine Marguerite Carillon сухое",
     "country": "France",
@@ -969,10 +1049,11 @@
     "bottleVolume": "Бутылка",
     "bottlePrice": 180,
     "active": true,
-    "order": 5
+    "order": 5,
+    "comment": ""
   },
   {
-    "id": "red-wine-001",
+    "id": "product-красное-вино-0",
     "category": "Красное вино",
     "name": "Casillero De Diablo Carmenere сухое",
     "country": "Chile",
@@ -981,10 +1062,11 @@
     "bottleVolume": "Бутылка",
     "bottlePrice": 144,
     "active": true,
-    "order": 1
+    "order": 1,
+    "comment": ""
   },
   {
-    "id": "red-wine-002",
+    "id": "product-красное-вино-1",
     "category": "Красное вино",
     "name": "Planeta La Segreta Il Rosso сухое",
     "country": "Italy",
@@ -993,10 +1075,11 @@
     "bottleVolume": "Бутылка",
     "bottlePrice": 216,
     "active": true,
-    "order": 2
+    "order": 2,
+    "comment": ""
   },
   {
-    "id": "red-wine-003",
+    "id": "product-красное-вино-2",
     "category": "Красное вино",
     "name": "Ca'Bianca Barolo DOCG сухое",
     "country": "Italy",
@@ -1005,10 +1088,11 @@
     "bottleVolume": "Бутылка",
     "bottlePrice": 900,
     "active": true,
-    "order": 3
+    "order": 3,
+    "comment": ""
   },
   {
-    "id": "red-wine-004",
+    "id": "product-красное-вино-3",
     "category": "Красное вино",
     "name": "Cioccolate Tube Primitivo полусухое",
     "country": "Italy",
@@ -1017,10 +1101,11 @@
     "bottleVolume": "Бутылка",
     "bottlePrice": 240,
     "active": true,
-    "order": 4
+    "order": 4,
+    "comment": ""
   },
   {
-    "id": "red-wine-005",
+    "id": "product-красное-вино-4",
     "category": "Красное вино",
     "name": "The Dogfather Zinfandel Reserve полусухое",
     "country": "USA",
@@ -1029,10 +1114,11 @@
     "bottleVolume": "Бутылка",
     "bottlePrice": 276,
     "active": true,
-    "order": 5
+    "order": 5,
+    "comment": ""
   },
   {
-    "id": "sparkling-001",
+    "id": "product-шампанское-игристое-вино-0",
     "category": "Шампанское / игристое вино",
     "name": "Cin Zano Asti",
     "country": "Italy",
@@ -1041,10 +1127,11 @@
     "bottleVolume": "Бутылка",
     "bottlePrice": 168,
     "active": true,
-    "order": 1
+    "order": 1,
+    "comment": ""
   },
   {
-    "id": "sparkling-002",
+    "id": "product-шампанское-игристое-вино-1",
     "category": "Шампанское / игристое вино",
     "name": "Prosecco Bea Vita",
     "country": "Italy",
@@ -1053,10 +1140,11 @@
     "bottleVolume": "Бутылка",
     "bottlePrice": 156,
     "active": true,
-    "order": 2
+    "order": 2,
+    "comment": ""
   },
   {
-    "id": "sparkling-003",
+    "id": "product-шампанское-игристое-вино-2",
     "category": "Шампанское / игристое вино",
     "name": "Mazet Brut",
     "country": "France",
@@ -1065,70 +1153,76 @@
     "bottleVolume": "Бутылка",
     "bottlePrice": 156,
     "active": true,
-    "order": 3
+    "order": 3,
+    "comment": ""
   },
   {
-    "id": "sparkling-004",
+    "id": "product-шампанское-игристое-вино-3",
     "category": "Шампанское / игристое вино",
     "name": "Luc Belaire розовое сухое",
     "country": "France",
-    "portionLabel": "125 мл",
+    "portionLabel": "",
     "portionPrice": null,
     "bottleVolume": "Бутылка",
     "bottlePrice": 500,
     "active": true,
-    "order": 4
+    "order": 4,
+    "comment": ""
   },
   {
-    "id": "sparkling-005",
+    "id": "product-шампанское-игристое-вино-4",
     "category": "Шампанское / игристое вино",
     "name": "Luc Belaire белое брют",
     "country": "France",
-    "portionLabel": "125 мл",
+    "portionLabel": "",
     "portionPrice": null,
     "bottleVolume": "Бутылка",
     "bottlePrice": 500,
     "active": true,
-    "order": 5
+    "order": 5,
+    "comment": ""
   },
   {
-    "id": "sparkling-006",
+    "id": "product-шампанское-игристое-вино-5",
     "category": "Шампанское / игристое вино",
     "name": "Veuve Clicquot Brut белое брют",
     "country": "France",
-    "portionLabel": "125 мл",
+    "portionLabel": "",
     "portionPrice": null,
     "bottleVolume": "Бутылка",
     "bottlePrice": 1500,
     "active": true,
-    "order": 6
+    "order": 6,
+    "comment": ""
   },
   {
-    "id": "sparkling-007",
+    "id": "product-шампанское-игристое-вино-6",
     "category": "Шампанское / игристое вино",
     "name": "Moet & Chandon Brut белое брют",
     "country": "France",
-    "portionLabel": "125 мл",
+    "portionLabel": "",
     "portionPrice": null,
     "bottleVolume": "Бутылка",
     "bottlePrice": 850,
     "active": true,
-    "order": 7
+    "order": 7,
+    "comment": ""
   },
   {
-    "id": "sparkling-008",
+    "id": "product-шампанское-игристое-вино-7",
     "category": "Шампанское / игристое вино",
     "name": "Moet & Chandon Brut розовое брют",
     "country": "France",
-    "portionLabel": "125 мл",
+    "portionLabel": "",
     "portionPrice": null,
     "bottleVolume": "Бутылка",
     "bottlePrice": 950,
     "active": true,
-    "order": 8
+    "order": 8,
+    "comment": ""
   },
   {
-    "id": "sparkling-009",
+    "id": "product-шампанское-игристое-вино-8",
     "category": "Шампанское / игристое вино",
     "name": "Bottega Gold Prosecco белое брют",
     "country": "Italy",
@@ -1137,10 +1231,11 @@
     "bottleVolume": "Бутылка",
     "bottlePrice": 450,
     "active": true,
-    "order": 9
+    "order": 9,
+    "comment": ""
   },
   {
-    "id": "sparkling-010",
+    "id": "product-шампанское-игристое-вино-9",
     "category": "Шампанское / игристое вино",
     "name": "Bottega Rose Gold Pinot Nero розовое брют",
     "country": "Italy",
@@ -1149,46 +1244,50 @@
     "bottleVolume": "Бутылка",
     "bottlePrice": 540,
     "active": true,
-    "order": 10
+    "order": 10,
+    "comment": ""
   },
   {
-    "id": "sparkling-011",
+    "id": "product-шампанское-игристое-вино-10",
     "category": "Шампанское / игристое вино",
     "name": "Mumm белое брют",
     "country": "France",
-    "portionLabel": "125 мл",
+    "portionLabel": "",
     "portionPrice": null,
     "bottleVolume": "Бутылка",
     "bottlePrice": 750,
     "active": true,
-    "order": 11
+    "order": 11,
+    "comment": ""
   },
   {
-    "id": "sparkling-012",
+    "id": "product-шампанское-игристое-вино-11",
     "category": "Шампанское / игристое вино",
     "name": "Dom Perignon Brut",
     "country": "France",
-    "portionLabel": "125 мл",
+    "portionLabel": "",
     "portionPrice": null,
     "bottleVolume": "Бутылка",
     "bottlePrice": 6000,
     "active": true,
-    "order": 12
+    "order": 12,
+    "comment": ""
   },
   {
-    "id": "sparkling-013",
+    "id": "product-шампанское-игристое-вино-12",
     "category": "Шампанское / игристое вино",
     "name": "Ruinart, Blanc de Blancs",
     "country": "France",
-    "portionLabel": "125 мл",
+    "portionLabel": "",
     "portionPrice": null,
     "bottleVolume": "Бутылка",
     "bottlePrice": 3000,
     "active": true,
-    "order": 13
+    "order": 13,
+    "comment": ""
   },
   {
-    "id": "nonalc-wine-001",
+    "id": "product-безалкогольное-вино-0",
     "category": "Безалкогольное вино",
     "name": "Nozeco игристое",
     "country": "France",
@@ -1197,10 +1296,11 @@
     "bottleVolume": "Бутылка",
     "bottlePrice": 108,
     "active": true,
-    "order": 1
+    "order": 1,
+    "comment": ""
   },
   {
-    "id": "nonalc-wine-002",
+    "id": "product-безалкогольное-вино-1",
     "category": "Безалкогольное вино",
     "name": "Light house белое",
     "country": "Germany",
@@ -1209,10 +1309,11 @@
     "bottleVolume": "Бутылка",
     "bottlePrice": 108,
     "active": true,
-    "order": 2
+    "order": 2,
+    "comment": ""
   },
   {
-    "id": "nonalc-wine-003",
+    "id": "product-безалкогольное-вино-2",
     "category": "Безалкогольное вино",
     "name": "Light house розовое",
     "country": "Germany",
@@ -1221,10 +1322,11 @@
     "bottleVolume": "Бутылка",
     "bottlePrice": 108,
     "active": true,
-    "order": 3
+    "order": 3,
+    "comment": ""
   },
   {
-    "id": "soft-drinks-001",
+    "id": "product-напитки-0",
     "category": "Напитки",
     "name": "Рич апельсин/вишня/яблоко/томат",
     "country": "Belarus",
@@ -1233,10 +1335,11 @@
     "bottleVolume": "",
     "bottlePrice": null,
     "active": true,
-    "order": 1
+    "order": 1,
+    "comment": ""
   },
   {
-    "id": "soft-drinks-002",
+    "id": "product-напитки-1",
     "category": "Напитки",
     "name": "Кока-кола/Швепс/Спрайт",
     "country": "Belarus",
@@ -1245,10 +1348,11 @@
     "bottleVolume": "",
     "bottlePrice": null,
     "active": true,
-    "order": 2
+    "order": 2,
+    "comment": ""
   },
   {
-    "id": "soft-drinks-003",
+    "id": "product-напитки-2",
     "category": "Напитки",
     "name": "Кока-кола зеро",
     "country": "Belarus",
@@ -1257,10 +1361,11 @@
     "bottleVolume": "",
     "bottlePrice": null,
     "active": true,
-    "order": 3
+    "order": 3,
+    "comment": ""
   },
   {
-    "id": "soft-drinks-004",
+    "id": "product-напитки-3",
     "category": "Напитки",
     "name": "Red Bull",
     "country": "Austria",
@@ -1269,10 +1374,11 @@
     "bottleVolume": "",
     "bottlePrice": null,
     "active": true,
-    "order": 4
+    "order": 4,
+    "comment": ""
   },
   {
-    "id": "soft-drinks-005",
+    "id": "product-напитки-4",
     "category": "Напитки",
     "name": "Red Bull зеро",
     "country": "Austria",
@@ -1281,10 +1387,11 @@
     "bottleVolume": "",
     "bottlePrice": null,
     "active": true,
-    "order": 5
+    "order": 5,
+    "comment": ""
   },
   {
-    "id": "soft-drinks-006",
+    "id": "product-напитки-5",
     "category": "Напитки",
     "name": "Боровая газ/негаз",
     "country": "Belarus",
@@ -1293,10 +1400,11 @@
     "bottleVolume": "",
     "bottlePrice": null,
     "active": true,
-    "order": 6
+    "order": 6,
+    "comment": ""
   },
   {
-    "id": "soft-drinks-007",
+    "id": "product-напитки-6",
     "category": "Напитки",
     "name": "Tassay газ/негаз",
     "country": "Kazakhstan",
@@ -1305,10 +1413,11 @@
     "bottleVolume": "",
     "bottlePrice": null,
     "active": true,
-    "order": 7
+    "order": 7,
+    "comment": ""
   },
   {
-    "id": "coffee-tea-001",
+    "id": "product-кофе-чай-0",
     "category": "Кофе / чай",
     "name": "Американо",
     "country": "",
@@ -1317,10 +1426,11 @@
     "bottleVolume": "",
     "bottlePrice": null,
     "active": true,
-    "order": 1
+    "order": 1,
+    "comment": ""
   },
   {
-    "id": "coffee-tea-002",
+    "id": "product-кофе-чай-1",
     "category": "Кофе / чай",
     "name": "Эспрессо",
     "country": "",
@@ -1329,10 +1439,11 @@
     "bottleVolume": "",
     "bottlePrice": null,
     "active": true,
-    "order": 2
+    "order": 2,
+    "comment": ""
   },
   {
-    "id": "coffee-tea-003",
+    "id": "product-кофе-чай-2",
     "category": "Кофе / чай",
     "name": "Черный чай",
     "country": "",
@@ -1341,10 +1452,11 @@
     "bottleVolume": "",
     "bottlePrice": null,
     "active": true,
-    "order": 3
+    "order": 3,
+    "comment": ""
   },
   {
-    "id": "coffee-tea-004",
+    "id": "product-кофе-чай-3",
     "category": "Кофе / чай",
     "name": "Зеленый чай",
     "country": "",
@@ -1353,6 +1465,7 @@
     "bottleVolume": "",
     "bottlePrice": null,
     "active": true,
-    "order": 4
+    "order": 4,
+    "comment": ""
   }
 ]
