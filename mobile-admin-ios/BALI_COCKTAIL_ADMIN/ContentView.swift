@@ -11,7 +11,7 @@ struct ContentView: View {
 }
 
 struct AdminWebView: UIViewRepresentable {
-    private let url = URL(string: "https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/main/mobile-admin/admin-v2.html")!
+    private let url = URL(string: "https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/main/mobile-admin/admin-v3.html")!
     func makeCoordinator() -> Coordinator { Coordinator() }
     func makeUIView(context: Context) -> WKWebView {
         let config = WKWebViewConfiguration()
