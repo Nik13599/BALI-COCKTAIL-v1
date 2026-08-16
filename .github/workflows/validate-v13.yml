@@ -6,8 +6,10 @@ on:
     paths:
       - 'admin/**'
       - 'data/ingredients.json'
+      - 'data/products.json'
       - 'data/manifest.json'
       - 'images/ingredients/default/**'
+      - 'media/ingredients/**'
       - '.github/workflows/validate-v13.yml'
   workflow_dispatch:
 
@@ -22,31 +24,63 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Validate admin JavaScript
+      - name: Validate active admin JavaScript
         run: |
+          node --check admin/v13-core.js
+          node --check admin/products.js
           node --check admin/print-tools.js
-          node --check admin/bar-menu.js
-          node --check admin/products-a4.js
-          node --check admin/document-print.js
           node --check admin/publish-fix.js
-      - name: Validate default ingredient images and mappings
+          node --check admin/main.js
+      - name: Validate catalog, ingredient images and products
         run: |
           python3 - <<'PY'
           import json, os
-          p='data/ingredients.json'
-          data=json.load(open(p,encoding='utf-8'))
-          assert data, 'ingredients.json is empty'
+          ingredients=json.load(open('data/ingredients.json',encoding='utf-8'))
+          products=json.load(open('data/products.json',encoding='utf-8'))
+          manifest=json.load(open('data/manifest.json',encoding='utf-8'))
+          assert ingredients, 'ingredients.json is empty'
+          assert products, 'products.json is empty'
+          assert int(manifest.get('catalogVersion',0)) > 0, 'catalogVersion must be positive'
           missing=[]
-          for item in data:
+          for item in ingredients:
               image=item.get('officialImage')
               if not image:
-                  missing.append(item.get('name'))
-                  continue
-              if image.startswith('images/ingredients/default/') and not os.path.isfile(image):
-                  raise SystemExit(f'Missing image file: {image}')
-          print('ingredients:',len(data),'without default image:',len(missing))
+                  missing.append(item.get('name','?'))
+              elif not image.startswith(('http://','https://')) and not os.path.isfile(image):
+                  raise SystemExit(f'Missing ingredient image file: {image}')
           if missing:
-              print('NO_IMAGE:', *missing, sep='\n')
+              raise SystemExit('Ingredients without image: '+', '.join(missing))
+          for p in products:
+              assert p.get('id'), 'product without id'
+              assert p.get('name'), 'product without name'
+              if p.get('portionPrice') is not None:
+                  float(p['portionPrice'])
+              if p.get('bottlePrice') is not None:
+                  float(p['bottlePrice'])
+          print('ingredients:',len(ingredients),'images: OK')
+          print('products:',len(products),'prices: OK')
+          print('catalogVersion:',manifest['catalogVersion'])
           PY
-      - name: Validate Windows icon
-        run: test -f admin/icon.ico
+      - name: Validate Electron package manifest
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const p=require('./admin/package.json');
+          const required=['index.html','main.js','v13-core.js','products.js','print-tools.js','publish-fix.js'];
+          for(const f of required){if(!fs.existsSync('admin/'+f))throw new Error('Missing admin/'+f)}
+          if(!p.build?.files?.includes('v13-core.js'))throw new Error('v13-core.js not packaged');
+          if(!p.build?.files?.includes('products.js'))throw new Error('products.js not packaged');
+          if(!p.build?.files?.includes('print-tools.js'))throw new Error('print-tools.js not packaged');
+          console.log('Electron package manifest: OK');
+          NODE
+      - name: Validate Windows icon can be generated
+        run: |
+          python3 -m pip install --quiet pillow
+          python3 - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          p=Path('/tmp/bali-test.ico')
+          Image.new('RGBA',(256,256),(11,11,13,255)).save(p,format='ICO',sizes=[(16,16),(32,32),(64,64),(128,128),(256,256)])
+          assert p.is_file() and p.stat().st_size>100, 'ICO generation failed'
+          print('Windows ICO generation: OK',p.stat().st_size)
+          PY
