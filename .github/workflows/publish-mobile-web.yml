@@ -13,12 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - name: Generate fallback catalogue
         shell: bash
         run: |
-          set -euo pipefail
           cat scripts/bootstrap.part.* > /tmp/bootstrap.sh
           chmod +x /tmp/bootstrap.sh
           /tmp/bootstrap.sh generated
@@ -31,25 +29,14 @@ jobs:
           rm -rf /tmp/bali-mobile
           mkdir -p /tmp/bali-mobile/images
           cp web-template/index.html /tmp/bali-mobile/index.html
-          cp web-template/sw.js /tmp/bali-mobile/sw.js
-          cp web-template/ingredient-zoom.js /tmp/bali-mobile/ingredient-zoom.js
-          cp web-template/readonly-mobile.js /tmp/bali-mobile/readonly-mobile.js
-          cp web-template/manifest.webmanifest /tmp/bali-mobile/manifest.webmanifest
+          cp web-template/sw.js web-template/ingredient-zoom.js web-template/readonly-mobile.js web-template/manifest.webmanifest /tmp/bali-mobile/
           cp data/cocktails.json /tmp/bali-mobile/cocktails.json
-          python3 -m pip install --quiet pillow
+          cp branding/app-icon.png /tmp/bali-mobile/images/ic_launcher.png
           python3 - <<'PY'
           from pathlib import Path
-          import base64,io
-          from PIL import Image,ImageFile
-          ImageFile.LOAD_TRUNCATED_IMAGES=True
-          raw=''.join(Path('mobile-admin/icon.b64').read_text(encoding='utf-8-sig').split())
-          im=Image.open(io.BytesIO(base64.b64decode(raw))).convert('RGB').resize((512,512),Image.Resampling.LANCZOS)
-          im.save('/tmp/bali-mobile/images/ic_launcher.jpg',format='JPEG',quality=92,optimize=True)
-          p=Path('/tmp/bali-mobile/index.html')
-          s=p.read_text(encoding='utf-8')
+          p=Path('/tmp/bali-mobile/index.html');s=p.read_text(encoding='utf-8')
           s=s.replace('</body>','<script src="ingredient-zoom.js"></script>\n<script src="readonly-mobile.js"></script>\n</body>')
-          if 'apple-touch-icon' not in s:
-              s=s.replace('</head>','<link rel="apple-touch-icon" href="images/ic_launcher.jpg">\n</head>')
+          if 'apple-touch-icon' not in s:s=s.replace('</head>','<link rel="apple-touch-icon" href="images/ic_launcher.png">\n</head>')
           p.write_text(s,encoding='utf-8')
           PY
           touch /tmp/bali-mobile/.nojekyll
@@ -58,47 +45,30 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout --orphan mobile-web
-          git rm -rf .
-          git clean -fdx
-          cp -R /tmp/bali-mobile/. .
-          git add -A
-          git commit -m "Publish BALI COCKTAIL v1 iPhone web app"
-          WEB_SHA=$(git rev-parse HEAD)
-          git push --force origin mobile-web
-          echo "sha=$WEB_SHA" >> "$GITHUB_OUTPUT"
+          git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan mobile-web; git rm -rf .; git clean -fdx; cp -R /tmp/bali-mobile/. .
+          git add -A; git commit -m "Publish BALI COCKTAIL v1 iPhone web app"
+          WEB_SHA=$(git rev-parse HEAD); git push --force origin mobile-web; echo "sha=$WEB_SHA" >> "$GITHUB_OUTPUT"
       - name: Verify iPhone app is served as HTML
         shell: bash
         env: {WEB_SHA: '${{ steps.publish.outputs.sha }}'}
         run: |
-          set -euo pipefail
-          URL="https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/${WEB_SHA}/index.html"
-          ok=0
-          for attempt in $(seq 1 12); do
-            headers="$(curl -fsSI "$URL" 2>/dev/null || true)"
-            if printf '%s\n' "$headers" | tr -d '\r' | grep -Eqi '^content-type:[[:space:]]*text/html'; then ok=1; break; fi
-            sleep 5
-          done
-          if [ "$ok" -ne 1 ]; then echo "iPhone app host did not return Content-Type text/html" >&2; exit 1; fi
+          URL="https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/${WEB_SHA}/index.html"; ok=0
+          for attempt in $(seq 1 12); do headers="$(curl -fsSI "$URL" 2>/dev/null || true)"; if printf '%s\n' "$headers" | tr -d '\r' | grep -Eqi '^content-type:[[:space:]]*text/html'; then ok=1; break; fi; sleep 5; done
+          test "$ok" -eq 1
       - name: Build iPhone installation profile with exact BALI icon
         shell: bash
         env: {WEB_SHA: '${{ steps.publish.outputs.sha }}'}
         run: |
-          set -euo pipefail
           mkdir -p out
           python3 - <<'PY'
           import plistlib,uuid,os
           from pathlib import Path
-          sha=os.environ['WEB_SHA']
-          app_url=f'https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/{sha}/index.html'
-          icon=Path('/tmp/bali-mobile/images/ic_launcher.jpg').read_bytes()
-          webclip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktail.v1.webclip.readonly','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL','PayloadDescription':'BALI COCKTAIL v1 — режим просмотра','Label':'BALI COCKTAIL','URL':app_url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
-          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktail.v1.profile.readonly','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL','PayloadDescription':'Устанавливает BALI COCKTAIL v1 на iPhone в режиме просмотра. Изменения выполняются только через BALI COCKTAIL ADMIN.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[webclip]}
-          with open('out/BALI-COCKTAIL-v1-iPhone.mobileconfig','wb') as f: plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
-          print(app_url)
+          sha=os.environ['WEB_SHA'];app_url=f'https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/{sha}/index.html'
+          icon=Path('/tmp/bali-mobile/images/ic_launcher.png').read_bytes()
+          clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktail.v1.webclip.readonly.v2','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL','PayloadDescription':'BALI COCKTAIL v1 — режим просмотра','Label':'BALI COCKTAIL','URL':app_url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
+          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktail.v1.profile.readonly.v2','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL','PayloadDescription':'Устанавливает BALI COCKTAIL на iPhone в режиме просмотра.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
+          with open('out/BALI-COCKTAIL-v1-iPhone.mobileconfig','wb') as f:plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
           PY
-      - name: Upload iPhone profile
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with: {name: BALI-COCKTAIL-v1-iPhone-Mobileconfig, path: out/BALI-COCKTAIL-v1-iPhone.mobileconfig, if-no-files-found: error, retention-days: 30}
