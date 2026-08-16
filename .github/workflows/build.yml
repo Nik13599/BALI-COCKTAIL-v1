@@ -25,6 +25,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p generated/android/app/src/main/res/drawable
+          rm -f generated/android/app/src/main/res/drawable/ic_launcher.*
           cp branding/app-icon.png generated/android/app/src/main/res/drawable/ic_launcher.png
       - uses: actions/setup-java@v4
         with: {distribution: temurin, java-version: '17'}
