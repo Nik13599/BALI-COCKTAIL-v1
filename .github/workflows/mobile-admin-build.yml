@@ -7,6 +7,7 @@ on:
       - 'mobile-admin/**'
       - 'mobile-admin-android/**'
       - 'mobile-admin-ios/**'
+      - 'branding/app-icon.png'
       - '.github/workflows/mobile-admin-build.yml'
   workflow_dispatch:
 
@@ -26,13 +27,12 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
-          import re,xml.etree.ElementTree as ET,base64
+          import re,xml.etree.ElementTree as ET
           html=Path('mobile-admin/admin-v2.html').read_text(encoding='utf-8')
           scripts=re.findall(r'<script>(.*?)</script>',html,re.S); assert scripts
           Path('/tmp/admin-v2.js').write_text(scripts[-1],encoding='utf-8')
           ET.parse('mobile-admin/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig')
-          raw=''.join(Path('mobile-admin/icon.b64').read_text(encoding='utf-8-sig').split())
-          img=base64.b64decode(raw,validate=True); assert img[:2]==b'\xff\xd8'
+          icon=Path('branding/app-icon.png'); assert icon.exists() and icon.stat().st_size > 100000
           for word in ['editCocktail','editIngredient','editProduct','Contents → Read and write','data/cocktails.json','data/ingredients.json','data/products.json']: assert word in html,word
           print('mobile admin v2 structure OK')
           PY
@@ -49,17 +49,9 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p mobile-admin-android/app/src/main/assets/mobile-admin mobile-admin-android/app/src/main/res/drawable
-          cp mobile-admin/admin-v2.html mobile-admin/manifest.webmanifest mobile-admin/sw.js mobile-admin/icon.b64 mobile-admin-android/app/src/main/assets/mobile-admin/
-          python3 -m pip install --quiet pillow
-          python3 - <<'PY'
-          from pathlib import Path
-          import base64,io
-          from PIL import Image,ImageFile
-          ImageFile.LOAD_TRUNCATED_IMAGES=True
-          raw=''.join(Path('mobile-admin/icon.b64').read_text(encoding='utf-8-sig').split())
-          im=Image.open(io.BytesIO(base64.b64decode(raw))).convert('RGB').resize((512,512),Image.Resampling.LANCZOS)
-          im.save('mobile-admin-android/app/src/main/res/drawable/bali_app_icon.png',format='PNG',optimize=True)
-          PY
+          cp mobile-admin/admin-v2.html mobile-admin/manifest.webmanifest mobile-admin/sw.js mobile-admin-android/app/src/main/assets/mobile-admin/
+          cp branding/app-icon.png mobile-admin-android/app/src/main/assets/mobile-admin/app-icon.png
+          cp branding/app-icon.png mobile-admin-android/app/src/main/res/drawable/bali_app_icon.png
       - uses: actions/setup-java@v4
         with: {distribution: temurin, java-version: '17'}
       - uses: android-actions/setup-android@v3
@@ -84,7 +76,7 @@ jobs:
           test -f "$APK"
           unzip -l "$APK" >/tmp/admin-apk.txt
           grep -q 'assets/mobile-admin/admin-v2.html' /tmp/admin-apk.txt
-          grep -q 'assets/mobile-admin/icon.b64' /tmp/admin-apk.txt
+          grep -q 'assets/mobile-admin/app-icon.png' /tmp/admin-apk.txt
           grep -q 'res/drawable/bali_app_icon.png' /tmp/admin-apk.txt
           mkdir -p out
           cp "$APK" out/BALI-COCKTAIL-ADMIN-Android.apk
@@ -133,8 +125,7 @@ jobs:
           A=mobile-admin-ios/BALI_COCKTAIL_ADMIN/Assets.xcassets
           mkdir -p "$A/AppIcon.appiconset"
           printf '%s\n' '{"info":{"author":"xcode","version":1}}' > "$A/Contents.json"
-          base64 -D -i mobile-admin/icon.b64 -o /tmp/bali-icon.jpg
-          sips -s format png -z 1024 1024 /tmp/bali-icon.jpg --out "$A/AppIcon.appiconset/appicon-1024.png" >/dev/null
+          cp branding/app-icon.png "$A/AppIcon.appiconset/appicon-1024.png"
           sips -z 120 120 "$A/AppIcon.appiconset/appicon-1024.png" --out "$A/AppIcon.appiconset/appicon-120.png" >/dev/null
           sips -z 180 180 "$A/AppIcon.appiconset/appicon-1024.png" --out "$A/AppIcon.appiconset/appicon-180.png" >/dev/null
           cat > "$A/AppIcon.appiconset/Contents.json" <<'JSON'
@@ -147,10 +138,11 @@ jobs:
           python3 - <<'PY'
           import plistlib,uuid
           from pathlib import Path
-          icon=Path('mobile-admin-ios/BALI_COCKTAIL_ADMIN/Assets.xcassets/AppIcon.appiconset/appicon-1024.png').read_bytes()
+          # A 180px icon is sufficient for the Home Screen and keeps the profile small.
+          icon=Path('mobile-admin-ios/BALI_COCKTAIL_ADMIN/Assets.xcassets/AppIcon.appiconset/appicon-180.png').read_bytes()
           url='https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/main/mobile-admin/admin-v2.html'
-          clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.webclip.v4','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'BALI COCKTAIL administrator','Label':'BALI COCKTAIL ADMIN','URL':url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
-          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.profile.v4','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'Устанавливает BALI COCKTAIL ADMIN на экран Домой iPhone.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
+          clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.webclip.v5','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'BALI COCKTAIL administrator','Label':'BALI COCKTAIL ADMIN','URL':url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
+          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.profile.v5','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'Устанавливает BALI COCKTAIL ADMIN на экран Домой iPhone.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
           with open('out/ios/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig','wb') as f: plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
           PY
           plutil -lint out/ios/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig
