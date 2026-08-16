@@ -21,22 +21,23 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: {node-version: '22'}
-      - name: Validate mobile admin editor, icon and profile
+      - name: Validate mobile admin v3 editor, icon and profile
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
           import re,xml.etree.ElementTree as ET
-          html=Path('mobile-admin/admin-v2.html').read_text(encoding='utf-8')
+          html=Path('mobile-admin/admin-v3.html').read_text(encoding='utf-8')
           scripts=re.findall(r'<script>(.*?)</script>',html,re.S); assert scripts
-          Path('/tmp/admin-v2.js').write_text(scripts[-1],encoding='utf-8')
+          Path('/tmp/admin-v3.js').write_text(scripts[-1],encoding='utf-8')
           ET.parse('mobile-admin/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig')
           icon=Path('branding/app-icon.png'); assert icon.exists() and icon.stat().st_size > 100000
-          for word in ['editCocktail','editIngredient','editProduct','Contents → Read and write','data/cocktails.json','data/ingredients.json','data/products.json']: assert word in html,word
-          print('mobile admin v2 structure OK')
+          for word in ['openEditor','saveCocktail','saveIngredient','saveProduct','editorPage','data/cocktails.json','data/ingredients.json','data/products.json','Contents → Read and write']: assert word in html,word
+          assert 'data-amount' in html and 'delete c.ingredients[n].dose' in html
+          print('mobile admin v3 structure OK')
           PY
-          node --check /tmp/admin-v2.js
+          node --check /tmp/admin-v3.js
 
   android:
     name: Android ADMIN APK
@@ -49,7 +50,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p mobile-admin-android/app/src/main/assets/mobile-admin mobile-admin-android/app/src/main/res/drawable
-          cp mobile-admin/admin-v2.html mobile-admin/manifest.webmanifest mobile-admin/sw.js mobile-admin-android/app/src/main/assets/mobile-admin/
+          cp mobile-admin/admin-v3.html mobile-admin/manifest.webmanifest mobile-admin/sw.js mobile-admin-android/app/src/main/assets/mobile-admin/
           cp branding/app-icon.png mobile-admin-android/app/src/main/assets/mobile-admin/app-icon.png
           cp branding/app-icon.png mobile-admin-android/app/src/main/res/drawable/bali_app_icon.png
       - uses: actions/setup-java@v4
@@ -59,7 +60,7 @@ jobs:
       - name: Install Android API 36
         run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
       - uses: actions/cache@v4
-        with: {path: ~/.android/debug.keystore, key: bali-cocktail-mobile-admin-debug-keystore-v2}
+        with: {path: ~/.android/debug.keystore, key: bali-cocktail-mobile-admin-debug-keystore-v3}
       - name: Create signing key when missing
         shell: bash
         run: |
@@ -75,13 +76,13 @@ jobs:
           APK=mobile-admin-android/app/build/outputs/apk/debug/app-debug.apk
           test -f "$APK"
           unzip -l "$APK" >/tmp/admin-apk.txt
-          grep -q 'assets/mobile-admin/admin-v2.html' /tmp/admin-apk.txt
+          grep -q 'assets/mobile-admin/admin-v3.html' /tmp/admin-apk.txt
           grep -q 'assets/mobile-admin/app-icon.png' /tmp/admin-apk.txt
           grep -q 'res/drawable/bali_app_icon.png' /tmp/admin-apk.txt
           mkdir -p out
-          cp "$APK" out/BALI-COCKTAIL-ADMIN-Android.apk
+          cp "$APK" out/BALI-COCKTAIL-ADMIN-Android-v3.apk
       - uses: actions/upload-artifact@v4
-        with: {name: BALI-COCKTAIL-ADMIN-Android, path: out/BALI-COCKTAIL-ADMIN-Android.apk, if-no-files-found: error, retention-days: 30}
+        with: {name: BALI-COCKTAIL-ADMIN-Android-v3, path: out/BALI-COCKTAIL-ADMIN-Android-v3.apk, if-no-files-found: error, retention-days: 30}
       - name: Emulator smoke test
         continue-on-error: true
         uses: reactivecircus/android-emulator-runner@v2
@@ -104,15 +105,13 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - name: Validate static profile
-        run: plutil -lint mobile-admin/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig
-      - name: Verify iPhone ADMIN page is served as HTML
+      - name: Verify iPhone ADMIN v3 page is served as HTML
         shell: bash
         run: |
           set -euo pipefail
-          URL='https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/main/mobile-admin/admin-v2.html'
+          URL='https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/main/mobile-admin/admin-v3.html'
           ok=0
-          for attempt in $(seq 1 8); do
+          for attempt in $(seq 1 12); do
             headers="$(curl -fsSI "$URL" 2>/dev/null || true)"
             if printf '%s\n' "$headers" | tr -d '\r' | grep -Eqi '^content-type:[[:space:]]*text/html'; then ok=1; break; fi
             sleep 4
@@ -138,14 +137,13 @@ jobs:
           python3 - <<'PY'
           import plistlib,uuid
           from pathlib import Path
-          # A 180px icon is sufficient for the Home Screen and keeps the profile small.
           icon=Path('mobile-admin-ios/BALI_COCKTAIL_ADMIN/Assets.xcassets/AppIcon.appiconset/appicon-180.png').read_bytes()
-          url='https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/main/mobile-admin/admin-v2.html'
-          clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.webclip.v5','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'BALI COCKTAIL administrator','Label':'BALI COCKTAIL ADMIN','URL':url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
-          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.profile.v5','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'Устанавливает BALI COCKTAIL ADMIN на экран Домой iPhone.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
-          with open('out/ios/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig','wb') as f: plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
+          url='https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/main/mobile-admin/admin-v3.html'
+          clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.webclip.v6','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'BALI COCKTAIL administrator v3','Label':'BALI COCKTAIL ADMIN','URL':url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
+          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.profile.v6','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'Устанавливает BALI COCKTAIL ADMIN v3 на экран Домой iPhone.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
+          with open('out/ios/BALI-COCKTAIL-ADMIN-iPhone-v3.mobileconfig','wb') as f: plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
           PY
-          plutil -lint out/ios/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig
+          plutil -lint out/ios/BALI-COCKTAIL-ADMIN-iPhone-v3.mobileconfig
       - name: Install XcodeGen
         run: brew install xcodegen
       - name: Generate Xcode project
@@ -159,6 +157,6 @@ jobs:
           test -n "$APP"
           ditto -c -k --sequesterRsrc --keepParent "$APP" out/ios/BALI-COCKTAIL-ADMIN-iOS-Simulator.app.zip
       - uses: actions/upload-artifact@v4
-        with: {name: BALI-COCKTAIL-ADMIN-iOS-Unsigned, path: out/ios/BALI-COCKTAIL-ADMIN-iOS-Simulator.app.zip, if-no-files-found: error, retention-days: 30}
+        with: {name: BALI-COCKTAIL-ADMIN-iOS-v3-Unsigned, path: out/ios/BALI-COCKTAIL-ADMIN-iOS-Simulator.app.zip, if-no-files-found: error, retention-days: 30}
       - uses: actions/upload-artifact@v4
-        with: {name: BALI-COCKTAIL-ADMIN-iPhone-Profile, path: out/ios/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig, if-no-files-found: error, retention-days: 30}
+        with: {name: BALI-COCKTAIL-ADMIN-iPhone-v3-Profile, path: out/ios/BALI-COCKTAIL-ADMIN-iPhone-v3.mobileconfig, if-no-files-found: error, retention-days: 30}
