@@ -21,17 +21,19 @@ jobs:
           cp admin/index.html out/BALI-COCKTAIL-ADMIN/index.html
           cp admin/print-tools.js out/BALI-COCKTAIL-ADMIN/print-tools.js
           cp admin/bar-menu.js out/BALI-COCKTAIL-ADMIN/bar-menu.js
+          cp admin/products-a4.js out/BALI-COCKTAIL-ADMIN/products-a4.js
+          cp admin/document-print.js out/BALI-COCKTAIL-ADMIN/document-print.js
           cp admin/publish-fix.js out/BALI-COCKTAIL-ADMIN/publish-fix.js
           python3 - <<'PY'
           from pathlib import Path
           p=Path('out/BALI-COCKTAIL-ADMIN/index.html')
           s=p.read_text(encoding='utf-8')
-          inject='''<script src="print-tools.js"></script>\n<script src="bar-menu.js"></script>\n<script src="publish-fix.js"></script>\n'''
+          inject='''<script src="print-tools.js"></script>\n<script src="bar-menu.js"></script>\n<script src="products-a4.js"></script>\n<script src="document-print.js"></script>\n<script src="publish-fix.js"></script>\n'''
           s=s.replace('</body>',inject+'</body>')
           p.write_text(s,encoding='utf-8')
           PY
           cat > out/BALI-COCKTAIL-ADMIN/README.txt <<'TXT'
-          BALI COCKTAIL ADMIN v1.2
+          BALI COCKTAIL ADMIN v1.3
 
           1. Откройте index.html в Chrome или Edge на компьютере.
           2. Введите fine-grained GitHub Personal Access Token для Nik13599/BALI-COCKTAIL-v1.
@@ -39,9 +41,10 @@ jobs:
           4. Публикация использует GitHub Contents API и не требует доступа к Git Blobs API.
           5. Разделы «Коктейли» и «Ингредиенты» управляют мобильным каталогом и официальными фотографиями.
           6. «Продукция» — отдельный список алкогольной/безалкогольной продукции, цен и объёмов.
-          7. «Меню A3» формирует двусторонний A3 tri-fold макет, позволяет менять шрифт, проверять переполнение и сохранять через печать в PDF.
-          8. «Печать техкарт» создаёт квадратные карточки 120/150/180/200 мм.
-          9. После «Опубликовать» manifest обновляется последним — мобильные приложения получают только полностью опубликованную версию.
+          7. «Печать продукции A4» печатает выбранную часть продукции на одном или нескольких листах A4 с граммовкой/объёмом и ценами в BYN.
+          8. «Печать техкарт для бармена» создаёт квадратные карточки 120/150/180/200 мм с фото ингредиентов.
+          9. «Печать техкарт для документов» создаёт официальный шаблон A4 по образцу технологической карты.
+          10. После «Опубликовать» manifest обновляется последним — мобильные приложения получают только полностью опубликованную версию.
 
           Token хранится только на компьютере, если включена галочка «Запомнить».
           TXT
