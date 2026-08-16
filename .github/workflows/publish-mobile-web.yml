@@ -36,11 +36,15 @@ jobs:
           cp web-template/readonly-mobile.js /tmp/bali-mobile/readonly-mobile.js
           cp web-template/manifest.webmanifest /tmp/bali-mobile/manifest.webmanifest
           cp data/cocktails.json /tmp/bali-mobile/cocktails.json
+          python3 -m pip install --quiet pillow
           python3 - <<'PY'
           from pathlib import Path
-          import base64
+          import base64,io
+          from PIL import Image,ImageFile
+          ImageFile.LOAD_TRUNCATED_IMAGES=True
           raw=''.join(Path('mobile-admin/icon.b64').read_text(encoding='utf-8-sig').split())
-          Path('/tmp/bali-mobile/images/ic_launcher.jpg').write_bytes(base64.b64decode(raw))
+          im=Image.open(io.BytesIO(base64.b64decode(raw))).convert('RGB').resize((512,512),Image.Resampling.LANCZOS)
+          im.save('/tmp/bali-mobile/images/ic_launcher.jpg',format='JPEG',quality=92,optimize=True)
           p=Path('/tmp/bali-mobile/index.html')
           s=p.read_text(encoding='utf-8')
           s=s.replace('</body>','<script src="ingredient-zoom.js"></script>\n<script src="readonly-mobile.js"></script>\n</body>')
