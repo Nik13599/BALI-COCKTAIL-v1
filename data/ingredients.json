@@ -4,423 +4,476 @@
     "name": "Ангостура Биттер",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-3312a473210a.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-8843481272699335594",
     "name": "Апельсин",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-a98fbeca1a5e.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-2439379686806395429",
     "name": "Бадьян",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-46fd2aee1e84.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-2583973214022561171",
     "name": "Базилик",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-8d84dc68d1a3.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-2801670206194608693",
     "name": "Биттер Ангостура",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-6b7016240c24.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "rosso-martini",
     "name": "Вермут Rosso “Martini”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-2d94621fb922.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "martini",
     "name": "Вермут Бьянко “Martini”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-9c9b73868532.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "martini-rosso",
     "name": "Вермут “Martini Rosso”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-fef1375af800.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "jim-beam",
     "name": "Виски “Jim Beam”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-74cd6e401bc8.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "bonaqua",
     "name": "Вода сильно газированная “Bonaqua”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-5e73049bb510.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-550479881196021692",
     "name": "Водка “Сябры”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-d8ad0fe3eac8.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-1034450724347275410",
     "name": "Гвоздика",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-bbd3a06928e8.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-6850846035667279229",
     "name": "Гранатовый сок",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-e735b636bbc7.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-986179106394320058",
     "name": "Грейпфрут",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-2d361369a8ee.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "bickens",
     "name": "Джин “Bickens”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-25421fc82e19.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-6590723016669712469",
     "name": "Душистый перец горошек",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-43a206ac555f.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-1087961559091119526",
     "name": "Игристое “Барон д`Арньяк”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-e687bdd95f55.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-8622428876326118119",
     "name": "Кардамон",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-4b04c076c1a4.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-8371002996241621517",
     "name": "Клюква",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-026303659ca5.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-5904083384581358579",
     "name": "Кокосовая стружка",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-98fd251ebb5c.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "napitki",
     "name": "Кордиал Киви-Фисташка “Napitki”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-afbe2abeaabe.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-4489786869873076486",
     "name": "Корица",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-bed009dcb06c.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-4830221076390273291",
     "name": "Кофе Эспрессо",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-cfae7cff404a.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "triple-sec-volare",
     "name": "Ликер Triple Sec “Volare”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-de1023d018c2.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "ramazotti",
     "name": "Ликер Амаретто “Ramazotti”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-f055787d2826.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "volare",
     "name": "Ликер кофейный “Volare”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-ab31537ce7e0.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "bumby",
     "name": "Ликер сливочный “Bumby”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-9875f9e2b958.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "aperol",
     "name": "Ликер “Aperol”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-44fd02488a4f.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "campari",
     "name": "Ликер “Campari”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-6c842750d497.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "frangelico",
     "name": "Ликер “Frangelico”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-b9f8450228a5.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "maraschino",
     "name": "Ликер “Maraschino”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-08e839f05484.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-670529702604910898",
     "name": "Малина",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-e693b5af5e24.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-6730101478200522403",
     "name": "Молочный Кордиал",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-81aae6cbdaad.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-136957411381451620",
     "name": "Морс Клюквенный “Сочный”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-c484fc6e7de8.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-791201347993421369",
     "name": "Морс клюквенный “Сочный”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-c8ead5232539.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-2108679991956257856",
     "name": "Мята",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-5012080e7616.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "moon-berry",
     "name": "Напиток Алоэ вера “Moon Berry”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-aaa145ec0f73.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-1977240990649287455",
     "name": "Наршараб",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-db8b7f70388a.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-5325511345531246001",
     "name": "Настойка “Вишня”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-3f159df98ab2.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-2131772114039232830",
     "name": "Настойка “Кафирского Лайма”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-fa9cff17dafe.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-2332375043392595738",
     "name": "Перец чили",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-b4fb2d35c975.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "negrita",
     "name": "Ром “Negrita”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-2512de1b62c6.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-5052205649094645332",
     "name": "Сахар песок",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-90b1ccdafe03.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-6015883883595337781",
     "name": "Сахар тростниковый",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-e179e285f3d0.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-4020456252462178681",
     "name": "Сахарный сироп",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-ba457447f2f8.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "richeza",
     "name": "Сироп Ананас “Richeza”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-6d4d690cd160.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "20-milkavita",
     "name": "Сливки 20% “Milkavita”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-d913135c1c09.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "villa-dina",
     "name": "Сок Грейпфрут “Villa Dina”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-fb099efa5c98.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-3645362827299557583",
     "name": "Соус Кимчи",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-2b3546b29bd3.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-2751805162961066529",
     "name": "Соус соевый",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-edd10f79719b.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "siera",
     "name": "Текила “Siera”",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-d91173c36461.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-5170597353474199256",
     "name": "Цедра апельсина",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-b117ba4c6a9e.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   },
   {
     "id": "item-8670667683935999926",
     "name": "Черный перец горошек",
     "category": "Не указано",
     "description": "",
-    "officialImage": null,
-    "active": true
+    "officialImage": "images/ingredients/default/ingredient-aded2875618d.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
   }
 ]
