@@ -31,7 +31,8 @@ jobs:
           scripts=re.findall(r'<script>(.*?)</script>',html,re.S); assert scripts
           Path('/tmp/admin-v2.js').write_text(scripts[-1],encoding='utf-8')
           ET.parse('mobile-admin/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig')
-          img=base64.b64decode(Path('mobile-admin/icon.b64').read_text().strip(),validate=True); assert img[:2]==b'\xff\xd8'
+          raw=''.join(Path('mobile-admin/icon.b64').read_text(encoding='utf-8-sig').split())
+          img=base64.b64decode(raw,validate=True); assert img[:2]==b'\xff\xd8'
           for word in ['editCocktail','editIngredient','editProduct','Contents → Read and write','data/cocktails.json','data/ingredients.json','data/products.json']: assert word in html,word
           print('mobile admin v2 structure OK')
           PY
@@ -49,7 +50,12 @@ jobs:
           set -euo pipefail
           mkdir -p mobile-admin-android/app/src/main/assets/mobile-admin mobile-admin-android/app/src/main/res/drawable
           cp mobile-admin/admin-v2.html mobile-admin/manifest.webmanifest mobile-admin/sw.js mobile-admin/icon.b64 mobile-admin-android/app/src/main/assets/mobile-admin/
-          base64 -d mobile-admin/icon.b64 > mobile-admin-android/app/src/main/res/drawable/bali_app_icon.jpg
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64
+          raw=''.join(Path('mobile-admin/icon.b64').read_text(encoding='utf-8-sig').split())
+          Path('mobile-admin-android/app/src/main/res/drawable/bali_app_icon.jpg').write_bytes(base64.b64decode(raw))
+          PY
       - uses: actions/setup-java@v4
         with: {distribution: temurin, java-version: '17'}
       - uses: android-actions/setup-android@v3
@@ -136,7 +142,8 @@ jobs:
           python3 - <<'PY'
           import plistlib,uuid,base64
           from pathlib import Path
-          icon=base64.b64decode(Path('mobile-admin/icon.b64').read_text().strip())
+          raw=''.join(Path('mobile-admin/icon.b64').read_text(encoding='utf-8-sig').split())
+          icon=base64.b64decode(raw)
           url='https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/main/mobile-admin/admin-v2.html'
           clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.webclip.v3','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'BALI COCKTAIL administrator','Label':'BALI COCKTAIL ADMIN','URL':url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
           profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.profile.v3','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'Устанавливает BALI COCKTAIL ADMIN на экран Домой iPhone.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
