@@ -1,0 +1,76 @@
+name: Release BALI COCKTAIL ADMIN v1.3
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/release-admin-v13.yml'
+      - 'admin/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prepare icon if not committed
+        shell: pwsh
+        run: |
+          if (-not (Test-Path 'admin/icon.ico')) {
+            $candidates = @('web-template/icon.png','web-template/app-icon.png','web-template/assets/icon.png','assets/icon.png','assets/app-icon.png')
+            $source=$null
+            foreach($p in $candidates){if(Test-Path $p){$source=$p;break}}
+            if(-not $source){$source=(Get-ChildItem -Path . -Recurse -File -Include *.png | Where-Object {$_.Name -match 'icon|logo'} | Select-Object -First 1).FullName}
+            if(-not $source){throw 'No PNG icon source found'}
+            npm install --no-save png-to-ico@2.1.8
+            $env:ICON_SOURCE=$source
+            @'
+            const fs=require('fs'); const pngToIco=require('png-to-ico');
+            (async()=>fs.writeFileSync('admin/icon.ico',await pngToIco(process.env.ICON_SOURCE)))().catch(e=>{console.error(e);process.exit(1)});
+            '@ | Set-Content -Encoding UTF8 make-icon.js
+            node make-icon.js
+          }
+      - name: Validate JavaScript
+        working-directory: admin
+        run: |
+          node --check print-tools.js
+          node --check bar-menu.js
+          node --check products-a4.js
+          node --check document-print.js
+          node --check publish-fix.js
+      - name: Build Windows portable admin
+        working-directory: admin
+        run: |
+          npm install
+          npm run dist
+      - name: Prepare release files
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path out | Out-Null
+          $exe=Get-ChildItem -Path admin/dist -Filter '*.exe' -File | Select-Object -First 1
+          if(-not $exe){throw 'EXE not found'}
+          Copy-Item $exe.FullName 'out/BALI-COCKTAIL-ADMIN-v1.3.exe'
+          New-Item -ItemType Directory -Force -Path browser/BALI-COCKTAIL-ADMIN | Out-Null
+          Copy-Item admin/index.html,admin/print-tools.js,admin/bar-menu.js,admin/products-a4.js,admin/document-print.js,admin/publish-fix.js browser/BALI-COCKTAIL-ADMIN/
+          $p='browser/BALI-COCKTAIL-ADMIN/index.html'
+          $s=Get-Content $p -Raw
+          $inject='<script src="print-tools.js"></script>`n<script src="bar-menu.js"></script>`n<script src="products-a4.js"></script>`n<script src="document-print.js"></script>`n<script src="publish-fix.js"></script>`n'
+          $s=$s.Replace('</body>',$inject+'</body>')
+          Set-Content -Path $p -Value $s -Encoding UTF8
+          Compress-Archive -Path browser/BALI-COCKTAIL-ADMIN -DestinationPath out/BALI-COCKTAIL-ADMIN-v1.3-Browser.zip -Force
+      - name: Publish stable release assets
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view admin-v1.3 *> $null
+          if($LASTEXITCODE -ne 0){
+            gh release create admin-v1.3 --title 'BALI COCKTAIL ADMIN v1.3' --notes 'Windows admin: A4 product lists, bartender tech cards, formal A4 documentation tech cards, ingredient visuals and fixed GitHub publishing.' --target main
+          }
+          gh release upload admin-v1.3 out/BALI-COCKTAIL-ADMIN-v1.3.exe out/BALI-COCKTAIL-ADMIN-v1.3-Browser.zip --clobber
