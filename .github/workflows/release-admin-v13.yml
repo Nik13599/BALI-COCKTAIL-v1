@@ -26,7 +26,8 @@ jobs:
           @'
           from pathlib import Path
           import base64
-          from PIL import Image
+          from PIL import Image, ImageFile
+          ImageFile.LOAD_TRUNCATED_IMAGES=True
           raw=''.join(Path('mobile-admin/icon.b64').read_text(encoding='utf-8-sig').split())
           Path('admin/icon-source.jpg').write_bytes(base64.b64decode(raw))
           im=Image.open('admin/icon-source.jpg').convert('RGBA').resize((256,256),Image.Resampling.LANCZOS)
