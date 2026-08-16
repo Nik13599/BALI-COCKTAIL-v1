@@ -1,9 +1,9 @@
 # BALI COCKTAIL branding
 
-`app-icon.png` is the single canonical application icon for every BALI COCKTAIL build.
+`mobile-admin/icon.b64` is the single canonical application-icon source. It contains the exact BALI COCKTAIL logo supplied by the owner, resized only for application-icon use.
 
 Display names:
 - user apps: `BALI COCKTAIL`
 - administrator apps: `BALI COCKTAIL ADMIN`
 
-Do not recolor, redraw or replace the icon in platform-specific builds. Platform build steps must derive required icon sizes from `branding/app-icon.png`.
+Every Android, iPhone/iOS and Windows build must derive its platform icon from this same source. Do not redraw, recolor or substitute another icon. The only distinction between user and administrator builds is the application display name.
