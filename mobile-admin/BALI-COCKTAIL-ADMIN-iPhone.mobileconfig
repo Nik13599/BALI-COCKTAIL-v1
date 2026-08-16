@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>PayloadContent</key>
+  <array>
+    <dict>
+      <key>FullScreen</key><true/>
+      <key>IsRemovable</key><true/>
+      <key>Label</key><string>BALI ADMIN</string>
+      <key>Precomposed</key><true/>
+      <key>URL</key><string>https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/main/mobile-admin/index.html</string>
+      <key>PayloadDescription</key><string>BALI COCKTAIL mobile administrator</string>
+      <key>PayloadDisplayName</key><string>BALI COCKTAIL ADMIN</string>
+      <key>PayloadIdentifier</key><string>by.bali.cocktails.admin.mobile.webclip</string>
+      <key>PayloadType</key><string>com.apple.webClip.managed</string>
+      <key>PayloadUUID</key><string>97E0BFF2-36B2-4A61-87D1-271A0FB5A1F2</string>
+      <key>PayloadVersion</key><integer>1</integer>
+    </dict>
+  </array>
+  <key>PayloadDescription</key><string>Устанавливает BALI COCKTAIL ADMIN на экран Домой iPhone.</string>
+  <key>PayloadDisplayName</key><string>BALI COCKTAIL ADMIN</string>
+  <key>PayloadIdentifier</key><string>by.bali.cocktails.admin.mobile.profile</string>
+  <key>PayloadOrganization</key><string>BALI</string>
+  <key>PayloadRemovalDisallowed</key><false/>
+  <key>PayloadType</key><string>Configuration</string>
+  <key>PayloadUUID</key><string>5300F7D3-A1E8-497A-9E2A-449E78E278C4</string>
+  <key>PayloadVersion</key><integer>1</integer>
+</dict>
+</plist>
