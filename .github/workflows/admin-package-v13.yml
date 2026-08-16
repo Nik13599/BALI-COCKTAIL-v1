@@ -15,30 +15,44 @@ jobs:
       - uses: actions/checkout@v4
       - name: Validate JavaScript
         run: |
+          node --check admin/v13-core.js
+          node --check admin/products.js
           node --check admin/print-tools.js
-          node --check admin/bar-menu.js
-          node --check admin/products-a4.js
-          node --check admin/document-print.js
           node --check admin/publish-fix.js
       - name: Prepare package
         run: |
           set -euo pipefail
+          rm -rf out/BALI-COCKTAIL-ADMIN
           mkdir -p out/BALI-COCKTAIL-ADMIN
-          cp admin/index.html admin/print-tools.js admin/bar-menu.js admin/products-a4.js admin/document-print.js admin/publish-fix.js out/BALI-COCKTAIL-ADMIN/
+          cp admin/index.html admin/v13-core.js admin/products.js admin/print-tools.js admin/publish-fix.js out/BALI-COCKTAIL-ADMIN/
           python3 - <<'PY'
           from pathlib import Path
           p=Path('out/BALI-COCKTAIL-ADMIN/index.html')
           s=p.read_text(encoding='utf-8')
-          scripts='''<script src="print-tools.js"></script>\n<script src="bar-menu.js"></script>\n<script src="products-a4.js"></script>\n<script src="document-print.js"></script>\n<script src="publish-fix.js"></script>\n'''
-          s=s.replace('</body>',scripts+'</body>')
+          scripts='''<script src="v13-core.js"></script>\n<script src="products.js"></script>\n<script src="print-tools.js"></script>\n<script src="publish-fix.js"></script>\n'''
+          if 'v13-core.js' not in s:
+              s=s.replace('</body>',scripts+'</body>')
           p.write_text(s,encoding='utf-8')
           PY
           cat > out/BALI-COCKTAIL-ADMIN/README.txt <<'TXT'
           BALI COCKTAIL ADMIN v1.3
-          Откройте index.html в Chrome или Edge.
-          Новое: печать выбранной продукции A4 с ценами BYN; техкарты для бармена; документальные техкарты A4; исправленная публикация GitHub Contents API.
+
+          1. Распакуйте архив полностью.
+          2. Откройте index.html в Chrome или Edge.
+          3. Для публикации используйте fine-grained GitHub token с Contents: Read and write только для репозитория BALI-COCKTAIL-v1.
+          4. Token не нужно передавать в чат или кому-либо ещё.
+
+          Возможности:
+          - коктейли и ингредиенты, официальные фотографии;
+          - продукция, поиск, категории, цены BYN;
+          - выбор отдельных позиций и печать A4 / PDF;
+          - квадратные техкарты для бармена с изображениями ингредиентов;
+          - документальные технологические карты A4;
+          - публикация каталога и автоматическое обновление мобильной версии.
           TXT
-          cd out && zip -r BALI-COCKTAIL-ADMIN-v1.3-Browser.zip BALI-COCKTAIL-ADMIN
+          cd out
+          zip -r BALI-COCKTAIL-ADMIN-v1.3-Browser.zip BALI-COCKTAIL-ADMIN
+          unzip -l BALI-COCKTAIL-ADMIN-v1.3-Browser.zip
       - name: Upload browser admin
         uses: actions/upload-artifact@v4
         with:
