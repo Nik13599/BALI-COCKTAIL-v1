@@ -28,14 +28,11 @@ jobs:
           from pathlib import Path
           import re,xml.etree.ElementTree as ET,base64
           html=Path('mobile-admin/admin-v2.html').read_text(encoding='utf-8')
-          scripts=re.findall(r'<script>(.*?)</script>',html,re.S)
-          assert scripts
+          scripts=re.findall(r'<script>(.*?)</script>',html,re.S); assert scripts
           Path('/tmp/admin-v2.js').write_text(scripts[-1],encoding='utf-8')
           ET.parse('mobile-admin/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig')
-          img=base64.b64decode(Path('mobile-admin/icon.b64').read_text().strip(),validate=True)
-          assert img[:2]==b'\xff\xd8'
-          for word in ['editCocktail','editIngredient','editProduct','Contents → Read and write','data/cocktails.json','data/ingredients.json','data/products.json']:
-            assert word in html,word
+          img=base64.b64decode(Path('mobile-admin/icon.b64').read_text().strip(),validate=True); assert img[:2]==b'\xff\xd8'
+          for word in ['editCocktail','editIngredient','editProduct','Contents → Read and write','data/cocktails.json','data/ingredients.json','data/products.json']: assert word in html,word
           print('mobile admin v2 structure OK')
           PY
           node --check /tmp/admin-v2.js
@@ -104,8 +101,20 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - name: Validate profile
+      - name: Validate static profile
         run: plutil -lint mobile-admin/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig
+      - name: Verify iPhone ADMIN page is served as HTML
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL='https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/main/mobile-admin/admin-v2.html'
+          ok=0
+          for attempt in $(seq 1 8); do
+            headers="$(curl -fsSI "$URL" 2>/dev/null || true)"
+            if printf '%s\n' "$headers" | tr -d '\r' | grep -Eqi '^content-type:[[:space:]]*text/html'; then ok=1; break; fi
+            sleep 4
+          done
+          test "$ok" -eq 1
       - name: Prepare exact BALI app icon
         shell: bash
         run: |
@@ -120,6 +129,20 @@ jobs:
           cat > "$A/AppIcon.appiconset/Contents.json" <<'JSON'
           {"images":[{"filename":"appicon-120.png","idiom":"iphone","scale":"2x","size":"60x60"},{"filename":"appicon-180.png","idiom":"iphone","scale":"3x","size":"60x60"},{"filename":"appicon-1024.png","idiom":"ios-marketing","scale":"1x","size":"1024x1024"}],"info":{"author":"xcode","version":1}}
           JSON
+      - name: Build iPhone WebClip profile with exact BALI icon
+        shell: bash
+        run: |
+          mkdir -p out/ios
+          python3 - <<'PY'
+          import plistlib,uuid,base64
+          from pathlib import Path
+          icon=base64.b64decode(Path('mobile-admin/icon.b64').read_text().strip())
+          url='https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/main/mobile-admin/admin-v2.html'
+          clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.webclip.v3','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'BALI COCKTAIL administrator','Label':'BALI COCKTAIL ADMIN','URL':url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
+          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.profile.v3','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'Устанавливает BALI COCKTAIL ADMIN на экран Домой iPhone.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
+          with open('out/ios/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig','wb') as f: plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
+          PY
+          plutil -lint out/ios/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig
       - name: Install XcodeGen
         run: brew install xcodegen
       - name: Generate Xcode project
@@ -131,9 +154,8 @@ jobs:
           xcodebuild -project mobile-admin-ios/BALI_COCKTAIL_ADMIN.xcodeproj -scheme BALI_COCKTAIL_ADMIN -sdk iphonesimulator -configuration Release -derivedDataPath mobile-admin-ios/build CODE_SIGNING_ALLOWED=NO build
           APP="$(find mobile-admin-ios/build/Build/Products/Release-iphonesimulator -maxdepth 1 -name '*.app' -print -quit)"
           test -n "$APP"
-          mkdir -p out/ios
           ditto -c -k --sequesterRsrc --keepParent "$APP" out/ios/BALI-COCKTAIL-ADMIN-iOS-Simulator.app.zip
       - uses: actions/upload-artifact@v4
         with: {name: BALI-COCKTAIL-ADMIN-iOS-Unsigned, path: out/ios/BALI-COCKTAIL-ADMIN-iOS-Simulator.app.zip, if-no-files-found: error, retention-days: 30}
       - uses: actions/upload-artifact@v4
-        with: {name: BALI-COCKTAIL-ADMIN-iPhone-Profile, path: mobile-admin/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig, if-no-files-found: error, retention-days: 30}
+        with: {name: BALI-COCKTAIL-ADMIN-iPhone-Profile, path: out/ios/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig, if-no-files-found: error, retention-days: 30}
