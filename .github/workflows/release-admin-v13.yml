@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/release-admin-v13.yml'
       - 'admin/**'
+      - 'scripts/generate-admin-icon.py'
   workflow_dispatch:
 
 permissions:
@@ -24,23 +25,7 @@ jobs:
         run: |
           if (-not (Test-Path 'admin/icon.ico')) {
             python -m pip install --quiet pillow
-            @'
-            from PIL import Image, ImageDraw, ImageFont
-            size=512
-            im=Image.new('RGBA',(size,size),(11,11,13,255)); d=ImageDraw.Draw(im)
-            d.rounded_rectangle((42,42,470,470),88,fill=(21,21,25,255),outline=(75,41,52,255),width=8)
-            d.ellipse((112,94,400,382),fill=(112,31,57,255)); d.ellipse((142,124,370,352),outline=(205,143,160,210),width=4)
-            def F(path,size):
-                try:return ImageFont.truetype(path,size)
-                except:return ImageFont.load_default()
-            def centered(text,y,f,fill):
-                box=d.textbbox((0,0),text,font=f); w=box[2]-box[0]; d.text(((size-w)/2,y),text,font=f,fill=fill)
-            centered('BALI',186,F('C:/Windows/Fonts/arialbd.ttf',72),(255,255,255,255))
-            centered('COCKTAIL',274,F('C:/Windows/Fonts/arialbd.ttf',29),(255,255,255,255))
-            centered('ADMIN',407,F('C:/Windows/Fonts/arial.ttf',18),(203,143,160,255))
-            im.save('admin/icon.ico',format='ICO',sizes=[(16,16),(24,24),(32,32),(48,48),(64,64),(128,128),(256,256)])
-            '@ | Set-Content -Encoding UTF8 make_icon.py
-            python make_icon.py
+            python scripts/generate-admin-icon.py
           }
           if (-not (Test-Path 'admin/icon.ico')) { throw 'BALI icon was not generated' }
       - name: Validate JavaScript
@@ -70,11 +55,11 @@ jobs:
           Remove-Item -Recurse -Force browser -ErrorAction SilentlyContinue
           New-Item -ItemType Directory -Force -Path browser/BALI-COCKTAIL-ADMIN | Out-Null
           Copy-Item admin/index.html,admin/v13-core.js,admin/products.js,admin/print-tools.js,admin/publish-fix.js browser/BALI-COCKTAIL-ADMIN/
-          @'
-          BALI COCKTAIL ADMIN v1.3
-          Откройте index.html в Chrome или Edge.
-          Управление коктейлями, ингредиентами и продукцией; цены BYN; A4/PDF; техкарты бармена и документальные техкарты; публикация в мобильный каталог.
-          '@ | Set-Content -Encoding UTF8 browser/BALI-COCKTAIL-ADMIN/README.txt
+          Set-Content -Path browser/BALI-COCKTAIL-ADMIN/README.txt -Encoding UTF8 -Value @(
+            'BALI COCKTAIL ADMIN v1.3',
+            'Откройте index.html в Chrome или Edge.',
+            'Управление коктейлями, ингредиентами и продукцией; цены BYN; A4/PDF; техкарты бармена и документальные техкарты; публикация в мобильный каталог.'
+          )
           $p='browser/BALI-COCKTAIL-ADMIN/index.html'
           $s=Get-Content $p -Raw
           if($s -notmatch 'v13-core\.js'){
