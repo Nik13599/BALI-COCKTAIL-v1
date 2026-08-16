@@ -23,10 +23,12 @@ jobs:
         shell: pwsh
         run: |
           python -m pip install --quiet pillow
-          $bytes=[Convert]::FromBase64String((Get-Content 'mobile-admin/icon.b64' -Raw).Trim())
-          [IO.File]::WriteAllBytes('admin/icon-source.jpg',$bytes)
           @'
+          from pathlib import Path
+          import base64
           from PIL import Image
+          raw=''.join(Path('mobile-admin/icon.b64').read_text(encoding='utf-8-sig').split())
+          Path('admin/icon-source.jpg').write_bytes(base64.b64decode(raw))
           im=Image.open('admin/icon-source.jpg').convert('RGBA').resize((256,256),Image.Resampling.LANCZOS)
           im.save('admin/icon.ico',format='ICO',sizes=[(16,16),(24,24),(32,32),(48,48),(64,64),(128,128),(256,256)])
           '@ | Set-Content -Encoding utf8 icon.py
