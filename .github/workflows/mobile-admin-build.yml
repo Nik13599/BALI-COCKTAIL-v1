@@ -126,7 +126,7 @@ jobs:
           A=mobile-admin-ios/BALI_COCKTAIL_ADMIN/Assets.xcassets
           mkdir -p "$A/AppIcon.appiconset"
           printf '%s\n' '{"info":{"author":"xcode","version":1}}' > "$A/Contents.json"
-          base64 --decode mobile-admin/icon.b64 > /tmp/bali-admin-icon.png || base64 -D mobile-admin/icon.b64 > /tmp/bali-admin-icon.png
+          base64 -D -i mobile-admin/icon.b64 -o /tmp/bali-admin-icon.png
           sips -z 1024 1024 /tmp/bali-admin-icon.png --out "$A/AppIcon.appiconset/appicon-1024.png" >/dev/null
           sips -z 120 120 "$A/AppIcon.appiconset/appicon-1024.png" --out "$A/AppIcon.appiconset/appicon-120.png" >/dev/null
           sips -z 180 180 "$A/AppIcon.appiconset/appicon-1024.png" --out "$A/AppIcon.appiconset/appicon-180.png" >/dev/null
