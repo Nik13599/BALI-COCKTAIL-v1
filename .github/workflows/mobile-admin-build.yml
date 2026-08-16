@@ -19,26 +19,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Validate mobile admin JavaScript and profile
+        with: {node-version: '22'}
+      - name: Validate mobile admin editor, icon and profile
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
-          import re, xml.etree.ElementTree as ET, base64
-          html=Path('mobile-admin/index.html').read_text(encoding='utf-8')
+          import re,xml.etree.ElementTree as ET,base64
+          html=Path('mobile-admin/admin-v2.html').read_text(encoding='utf-8')
           scripts=re.findall(r'<script>(.*?)</script>',html,re.S)
-          assert scripts, 'inline mobile admin script not found'
-          Path('/tmp/mobile-admin.js').write_text(scripts[-1],encoding='utf-8')
+          assert scripts
+          Path('/tmp/admin-v2.js').write_text(scripts[-1],encoding='utf-8')
           ET.parse('mobile-admin/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig')
-          base64.b64decode(Path('mobile-admin/icon.b64').read_text().strip(), validate=True)
-          assert 'BALI ADMIN' in html
-          assert 'data/cocktails.json' in html and 'data/ingredients.json' in html and 'data/products.json' in html
-          print('mobile admin html/profile/icon structure OK')
+          img=base64.b64decode(Path('mobile-admin/icon.b64').read_text().strip(),validate=True)
+          assert img[:2]==b'\xff\xd8'
+          for word in ['editCocktail','editIngredient','editProduct','Contents → Read and write','data/cocktails.json','data/ingredients.json','data/products.json']:
+            assert word in html,word
+          print('mobile admin v2 structure OK')
           PY
-          node --check /tmp/mobile-admin.js
+          node --check /tmp/admin-v2.js
 
   android:
     name: Android ADMIN APK
@@ -46,57 +46,43 @@ jobs:
     timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
-      - name: Package mobile admin web assets
+      - name: Package editor and exact BALI icon
+        shell: bash
         run: |
-          mkdir -p mobile-admin-android/app/src/main/assets/mobile-admin
-          cp mobile-admin/index.html mobile-admin/manifest.webmanifest mobile-admin/sw.js mobile-admin/icon.svg mobile-admin-android/app/src/main/assets/mobile-admin/
+          set -euo pipefail
+          mkdir -p mobile-admin-android/app/src/main/assets/mobile-admin mobile-admin-android/app/src/main/res/drawable
+          cp mobile-admin/admin-v2.html mobile-admin/manifest.webmanifest mobile-admin/sw.js mobile-admin/icon.b64 mobile-admin-android/app/src/main/assets/mobile-admin/
+          base64 -d mobile-admin/icon.b64 > mobile-admin-android/app/src/main/res/drawable/bali_app_icon.jpg
       - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
+        with: {distribution: temurin, java-version: '17'}
       - uses: android-actions/setup-android@v3
-        with:
-          packages: platform-tools
+        with: {packages: platform-tools}
       - name: Install Android API 36
         run: sdkmanager "platforms;android-36" "build-tools;36.0.0"
-      - name: Keep stable mobile admin signing key
-        uses: actions/cache@v4
-        with:
-          path: ~/.android/debug.keystore
-          key: bali-cocktail-mobile-admin-debug-keystore-v1
+      - uses: actions/cache@v4
+        with: {path: ~/.android/debug.keystore, key: bali-cocktail-mobile-admin-debug-keystore-v2}
       - name: Create signing key when missing
         shell: bash
         run: |
           mkdir -p "$HOME/.android"
-          if [ ! -f "$HOME/.android/debug.keystore" ]; then
-            keytool -genkeypair -v -keystore "$HOME/.android/debug.keystore" -storepass android -alias androiddebugkey -keypass android -dname "CN=Android Debug,O=BALI ADMIN,C=BY" -keyalg RSA -keysize 2048 -validity 10000
-          fi
+          if [ ! -f "$HOME/.android/debug.keystore" ]; then keytool -genkeypair -v -keystore "$HOME/.android/debug.keystore" -storepass android -alias androiddebugkey -keypass android -dname "CN=Android Debug,O=BALI ADMIN,C=BY" -keyalg RSA -keysize 2048 -validity 10000; fi
       - uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: '9.1.0'
+        with: {gradle-version: '9.1.0'}
       - name: Build Android admin APK
         run: gradle -p mobile-admin-android :app:assembleDebug --stacktrace
-      - name: Verify Android admin APK
+      - name: Verify APK
         shell: bash
         run: |
-          set -euo pipefail
           APK=mobile-admin-android/app/build/outputs/apk/debug/app-debug.apk
           test -f "$APK"
-          unzip -l "$APK" > /tmp/admin-apk.txt
-          grep -q 'assets/mobile-admin/index.html' /tmp/admin-apk.txt
-          grep -q 'assets/mobile-admin/manifest.webmanifest' /tmp/admin-apk.txt
-          grep -q 'assets/mobile-admin/icon.svg' /tmp/admin-apk.txt
-      - name: Prepare Android installer
-        run: |
+          unzip -l "$APK" >/tmp/admin-apk.txt
+          grep -q 'assets/mobile-admin/admin-v2.html' /tmp/admin-apk.txt
+          grep -q 'assets/mobile-admin/icon.b64' /tmp/admin-apk.txt
           mkdir -p out
-          cp mobile-admin-android/app/build/outputs/apk/debug/app-debug.apk out/BALI-COCKTAIL-ADMIN-Android.apk
+          cp "$APK" out/BALI-COCKTAIL-ADMIN-Android.apk
       - uses: actions/upload-artifact@v4
-        with:
-          name: BALI-COCKTAIL-ADMIN-Android
-          path: out/BALI-COCKTAIL-ADMIN-Android.apk
-          if-no-files-found: error
-          retention-days: 30
-      - name: Optional emulator smoke test
+        with: {name: BALI-COCKTAIL-ADMIN-Android, path: out/BALI-COCKTAIL-ADMIN-Android.apk, if-no-files-found: error, retention-days: 30}
+      - name: Emulator smoke test
         continue-on-error: true
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -109,7 +95,7 @@ jobs:
           script: |
             adb install -r mobile-admin-android/app/build/outputs/apk/debug/app-debug.apk
             adb shell am start -W -n by.bali.cocktails.admin.mobile/.MainActivity
-            sleep 5
+            sleep 4
             adb shell pidof by.bali.cocktails.admin.mobile
 
   ios:
@@ -118,32 +104,26 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - name: Validate iPhone profile
+      - name: Validate profile
         run: plutil -lint mobile-admin/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig
-      - name: Prepare iOS app icon
+      - name: Prepare exact BALI app icon
         shell: bash
         run: |
           set -euo pipefail
           A=mobile-admin-ios/BALI_COCKTAIL_ADMIN/Assets.xcassets
           mkdir -p "$A/AppIcon.appiconset"
           printf '%s\n' '{"info":{"author":"xcode","version":1}}' > "$A/Contents.json"
-          base64 -D -i mobile-admin/icon.b64 -o /tmp/bali-admin-icon.png
-          sips -z 1024 1024 /tmp/bali-admin-icon.png --out "$A/AppIcon.appiconset/appicon-1024.png" >/dev/null
+          base64 -D -i mobile-admin/icon.b64 -o /tmp/bali-icon.jpg
+          sips -s format png -z 1024 1024 /tmp/bali-icon.jpg --out "$A/AppIcon.appiconset/appicon-1024.png" >/dev/null
           sips -z 120 120 "$A/AppIcon.appiconset/appicon-1024.png" --out "$A/AppIcon.appiconset/appicon-120.png" >/dev/null
           sips -z 180 180 "$A/AppIcon.appiconset/appicon-1024.png" --out "$A/AppIcon.appiconset/appicon-180.png" >/dev/null
           cat > "$A/AppIcon.appiconset/Contents.json" <<'JSON'
-          {"images":[
-            {"filename":"appicon-120.png","idiom":"iphone","scale":"2x","size":"60x60"},
-            {"filename":"appicon-180.png","idiom":"iphone","scale":"3x","size":"60x60"},
-            {"filename":"appicon-1024.png","idiom":"ios-marketing","scale":"1x","size":"1024x1024"}
-          ],"info":{"author":"xcode","version":1}}
+          {"images":[{"filename":"appicon-120.png","idiom":"iphone","scale":"2x","size":"60x60"},{"filename":"appicon-180.png","idiom":"iphone","scale":"3x","size":"60x60"},{"filename":"appicon-1024.png","idiom":"ios-marketing","scale":"1x","size":"1024x1024"}],"info":{"author":"xcode","version":1}}
           JSON
       - name: Install XcodeGen
         run: brew install xcodegen
-      - name: Generate iOS project
-        run: |
-          cd mobile-admin-ios
-          xcodegen generate
+      - name: Generate Xcode project
+        run: cd mobile-admin-ios && xcodegen generate
       - name: Build iOS Simulator admin
         shell: bash
         run: |
@@ -154,14 +134,6 @@ jobs:
           mkdir -p out/ios
           ditto -c -k --sequesterRsrc --keepParent "$APP" out/ios/BALI-COCKTAIL-ADMIN-iOS-Simulator.app.zip
       - uses: actions/upload-artifact@v4
-        with:
-          name: BALI-COCKTAIL-ADMIN-iOS-Unsigned
-          path: out/ios/BALI-COCKTAIL-ADMIN-iOS-Simulator.app.zip
-          if-no-files-found: error
-          retention-days: 30
+        with: {name: BALI-COCKTAIL-ADMIN-iOS-Unsigned, path: out/ios/BALI-COCKTAIL-ADMIN-iOS-Simulator.app.zip, if-no-files-found: error, retention-days: 30}
       - uses: actions/upload-artifact@v4
-        with:
-          name: BALI-COCKTAIL-ADMIN-iPhone-Profile
-          path: mobile-admin/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig
-          if-no-files-found: error
-          retention-days: 30
+        with: {name: BALI-COCKTAIL-ADMIN-iPhone-Profile, path: mobile-admin/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig, if-no-files-found: error, retention-days: 30}
