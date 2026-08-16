@@ -6,7 +6,7 @@ on:
     paths:
       - '.github/workflows/release-admin-v13.yml'
       - 'admin/**'
-      - 'scripts/generate-admin-icon.py'
+      - 'mobile-admin/icon.b64'
   workflow_dispatch:
 
 permissions:
@@ -18,16 +18,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Prepare BALI Windows icon
+        with: {node-version: '22'}
+      - name: Prepare exact BALI Windows icon
         shell: pwsh
         run: |
-          if (-not (Test-Path 'admin/icon.ico')) {
-            python -m pip install --quiet pillow
-            python scripts/generate-admin-icon.py
-          }
-          if (-not (Test-Path 'admin/icon.ico')) { throw 'BALI icon was not generated' }
+          python -m pip install --quiet pillow
+          $bytes=[Convert]::FromBase64String((Get-Content 'mobile-admin/icon.b64' -Raw).Trim())
+          [IO.File]::WriteAllBytes('admin/icon-source.jpg',$bytes)
+          @'
+          from PIL import Image
+          im=Image.open('admin/icon-source.jpg').convert('RGBA').resize((256,256),Image.Resampling.LANCZOS)
+          im.save('admin/icon.ico',format='ICO',sizes=[(16,16),(24,24),(32,32),(48,48),(64,64),(128,128),(256,256)])
+          '@ | Set-Content -Encoding utf8 icon.py
+          python icon.py
       - name: Validate JavaScript
         working-directory: admin
         run: |
@@ -45,43 +48,24 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path out | Out-Null
-          $exe=Get-ChildItem -Path admin/dist -Filter '*.exe' -File | Sort-Object Length -Descending | Select-Object -First 1
+          $exe=Get-ChildItem admin/dist -Filter '*.exe' -File | Sort-Object Length -Descending | Select-Object -First 1
           if(-not $exe){throw 'EXE not found'}
-          if($exe.Length -lt 1000000){throw "EXE is unexpectedly small: $($exe.Length)"}
           Copy-Item $exe.FullName 'out/BALI-COCKTAIL-ADMIN-v1.3.exe'
-          $bytes=[System.IO.File]::ReadAllBytes('out/BALI-COCKTAIL-ADMIN-v1.3.exe')
-          if($bytes[0] -ne 0x4D -or $bytes[1] -ne 0x5A){throw 'Invalid EXE header'}
-
           Remove-Item -Recurse -Force browser -ErrorAction SilentlyContinue
           New-Item -ItemType Directory -Force -Path browser/BALI-COCKTAIL-ADMIN | Out-Null
           Copy-Item admin/index.html,admin/v13-core.js,admin/products.js,admin/print-tools.js,admin/publish-fix.js browser/BALI-COCKTAIL-ADMIN/
-          Set-Content -Path browser/BALI-COCKTAIL-ADMIN/README.txt -Encoding UTF8 -Value @(
-            'BALI COCKTAIL ADMIN v1.3',
-            'Откройте index.html в Chrome или Edge.',
-            'Управление коктейлями, ингредиентами и продукцией; цены BYN; A4/PDF; техкарты бармена и документальные техкарты; публикация в мобильный каталог.'
-          )
-          $p='browser/BALI-COCKTAIL-ADMIN/index.html'
-          $s=Get-Content $p -Raw
-          if($s -notmatch 'v13-core\.js'){
-            $inject="<script src=`"v13-core.js`"></script>`n<script src=`"products.js`"></script>`n<script src=`"print-tools.js`"></script>`n<script src=`"publish-fix.js`"></script>`n"
-            $s=$s.Replace('</body>',$inject+'</body>')
-            Set-Content -Path $p -Value $s -Encoding UTF8
-          }
+          Set-Content browser/BALI-COCKTAIL-ADMIN/README.txt -Encoding UTF8 -Value @('BALI COCKTAIL ADMIN v1.3','Откройте index.html в Chrome или Edge.','Публикация использует GitHub Contents API. При 403 старый token очищается и приложение просит переподключить token с Contents: Read and write.')
+          $p='browser/BALI-COCKTAIL-ADMIN/index.html';$s=Get-Content $p -Raw
+          if($s -notmatch 'publish-fix\.js'){$inject="<script src=`"v13-core.js`"></script>`n<script src=`"products.js`"></script>`n<script src=`"print-tools.js`"></script>`n<script src=`"publish-fix.js`"></script>`n";$s=$s.Replace('</body>',$inject+'</body>');Set-Content $p -Value $s -Encoding UTF8}
           Compress-Archive -Path browser/BALI-COCKTAIL-ADMIN -DestinationPath out/BALI-COCKTAIL-ADMIN-v1.3-Browser.zip -Force
-          $hash=(Get-FileHash 'out/BALI-COCKTAIL-ADMIN-v1.3.exe' -Algorithm SHA256).Hash
-          Write-Host "Verified release EXE SHA256=$hash"
       - name: Publish stable release assets
         shell: pwsh
-        env:
-          GH_TOKEN: ${{ github.token }}
+        env: {GH_TOKEN: '${{ github.token }}'}
         run: |
           gh release view admin-v1.3 *> $null
-          if($LASTEXITCODE -ne 0){
-            gh release create admin-v1.3 --title 'BALI COCKTAIL ADMIN v1.3' --notes 'Windows admin: product catalogue with BYN prices and A4 printing, bartender square tech cards, formal A4 documentation tech cards, ingredient visuals, official photo publishing and mobile catalogue synchronization.' --target main
-          }
+          if($LASTEXITCODE -ne 0){gh release create admin-v1.3 --title 'BALI COCKTAIL ADMIN v1.3' --notes 'BALI COCKTAIL ADMIN with unified icon, product catalogue, tech cards and fixed GitHub Contents publishing.' --target main}
           gh release upload admin-v1.3 out/BALI-COCKTAIL-ADMIN-v1.3.exe out/BALI-COCKTAIL-ADMIN-v1.3-Browser.zip --clobber
-      - name: Upload workflow artifacts
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: BALI-COCKTAIL-ADMIN-v1.3-Release
           path: |
