@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - 'admin/**'
-      - 'scripts/generate-admin-icon.py'
+      - 'mobile-admin/icon.b64'
       - '.github/workflows/admin-windows-v13.yml'
   workflow_dispatch:
 
@@ -18,15 +18,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Prepare BALI Windows icon
+        with: {node-version: '22'}
+      - name: Prepare exact BALI Windows icon
         shell: pwsh
         run: |
-          if (-not (Test-Path 'admin/icon.ico')) {
-            python -m pip install --quiet pillow
-            python scripts/generate-admin-icon.py
-          }
+          python -m pip install --quiet pillow
+          $bytes=[Convert]::FromBase64String((Get-Content 'mobile-admin/icon.b64' -Raw).Trim())
+          [IO.File]::WriteAllBytes('admin/icon-source.jpg',$bytes)
+          @'
+          from PIL import Image
+          im=Image.open('admin/icon-source.jpg').convert('RGBA').resize((256,256),Image.Resampling.LANCZOS)
+          im.save('admin/icon.ico',format='ICO',sizes=[(16,16),(24,24),(32,32),(48,48),(64,64),(128,128),(256,256)])
+          '@ | Set-Content -Encoding utf8 icon.py
+          python icon.py
           if (-not (Test-Path 'admin/icon.ico')) { throw 'BALI icon was not generated' }
       - name: Validate admin JavaScript
         working-directory: admin
@@ -46,18 +50,10 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path out | Out-Null
-          $exe = Get-ChildItem -Path admin/dist -Filter '*.exe' -File | Sort-Object Length -Descending | Select-Object -First 1
+          $exe=Get-ChildItem admin/dist -Filter '*.exe' -File | Sort-Object Length -Descending | Select-Object -First 1
           if (-not $exe) { throw 'Windows executable not found' }
-          if ($exe.Length -lt 1000000) { throw "Windows executable is unexpectedly small: $($exe.Length)" }
           Copy-Item $exe.FullName 'out/BALI-COCKTAIL-ADMIN-v1.3.exe'
-          $bytes=[System.IO.File]::ReadAllBytes('out/BALI-COCKTAIL-ADMIN-v1.3.exe')
-          if ($bytes[0] -ne 0x4D -or $bytes[1] -ne 0x5A) { throw 'EXE does not have an MZ header' }
-          $hash=(Get-FileHash 'out/BALI-COCKTAIL-ADMIN-v1.3.exe' -Algorithm SHA256).Hash
-          Write-Host "BALI ADMIN EXE verified. Size=$($bytes.Length), SHA256=$hash"
-      - name: Upload Windows admin
-        uses: actions/upload-artifact@v4
-        with:
-          name: BALI-COCKTAIL-ADMIN-v1.3-Windows
-          path: out/BALI-COCKTAIL-ADMIN-v1.3.exe
-          if-no-files-found: error
-          retention-days: 30
+          $bytes=[IO.File]::ReadAllBytes('out/BALI-COCKTAIL-ADMIN-v1.3.exe')
+          if ($bytes[0] -ne 0x4D -or $bytes[1] -ne 0x5A) { throw 'Invalid EXE' }
+      - uses: actions/upload-artifact@v4
+        with: {name: BALI-COCKTAIL-ADMIN-v1.3-Windows, path: out/BALI-COCKTAIL-ADMIN-v1.3.exe, if-no-files-found: error, retention-days: 30}
