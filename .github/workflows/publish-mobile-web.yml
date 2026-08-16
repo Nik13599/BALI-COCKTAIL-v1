@@ -36,13 +36,14 @@ jobs:
           cp web-template/readonly-mobile.js /tmp/bali-mobile/readonly-mobile.js
           cp web-template/manifest.webmanifest /tmp/bali-mobile/manifest.webmanifest
           cp data/cocktails.json /tmp/bali-mobile/cocktails.json
-          base64 -d mobile-admin/icon.b64 > /tmp/bali-mobile/images/ic_launcher.jpg
           python3 - <<'PY'
           from pathlib import Path
+          import base64
+          raw=''.join(Path('mobile-admin/icon.b64').read_text(encoding='utf-8-sig').split())
+          Path('/tmp/bali-mobile/images/ic_launcher.jpg').write_bytes(base64.b64decode(raw))
           p=Path('/tmp/bali-mobile/index.html')
           s=p.read_text(encoding='utf-8')
           s=s.replace('</body>','<script src="ingredient-zoom.js"></script>\n<script src="readonly-mobile.js"></script>\n</body>')
-          # Force the same exact logo for the Home Screen icon.
           if 'apple-touch-icon' not in s:
               s=s.replace('</head>','<link rel="apple-touch-icon" href="images/ic_launcher.jpg">\n</head>')
           p.write_text(s,encoding='utf-8')
