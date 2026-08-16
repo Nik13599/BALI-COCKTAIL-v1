@@ -19,31 +19,38 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Prepare icon if not committed
+      - name: Prepare BALI Windows icon
         shell: pwsh
         run: |
           if (-not (Test-Path 'admin/icon.ico')) {
-            $candidates = @('web-template/icon.png','web-template/app-icon.png','web-template/assets/icon.png','assets/icon.png','assets/app-icon.png')
-            $source=$null
-            foreach($p in $candidates){if(Test-Path $p){$source=$p;break}}
-            if(-not $source){$source=(Get-ChildItem -Path . -Recurse -File -Include *.png | Where-Object {$_.Name -match 'icon|logo'} | Select-Object -First 1).FullName}
-            if(-not $source){throw 'No PNG icon source found'}
-            npm install --no-save png-to-ico@2.1.8
-            $env:ICON_SOURCE=$source
+            python -m pip install --quiet pillow
             @'
-            const fs=require('fs'); const pngToIco=require('png-to-ico');
-            (async()=>fs.writeFileSync('admin/icon.ico',await pngToIco(process.env.ICON_SOURCE)))().catch(e=>{console.error(e);process.exit(1)});
-            '@ | Set-Content -Encoding UTF8 make-icon.js
-            node make-icon.js
+            from PIL import Image, ImageDraw, ImageFont
+            size=512
+            im=Image.new('RGBA',(size,size),(11,11,13,255)); d=ImageDraw.Draw(im)
+            d.rounded_rectangle((42,42,470,470),88,fill=(21,21,25,255),outline=(75,41,52,255),width=8)
+            d.ellipse((112,94,400,382),fill=(112,31,57,255)); d.ellipse((142,124,370,352),outline=(205,143,160,210),width=4)
+            def F(path,size):
+                try:return ImageFont.truetype(path,size)
+                except:return ImageFont.load_default()
+            def centered(text,y,f,fill):
+                box=d.textbbox((0,0),text,font=f); w=box[2]-box[0]; d.text(((size-w)/2,y),text,font=f,fill=fill)
+            centered('BALI',186,F('C:/Windows/Fonts/arialbd.ttf',72),(255,255,255,255))
+            centered('COCKTAIL',274,F('C:/Windows/Fonts/arialbd.ttf',29),(255,255,255,255))
+            centered('ADMIN',407,F('C:/Windows/Fonts/arial.ttf',18),(203,143,160,255))
+            im.save('admin/icon.ico',format='ICO',sizes=[(16,16),(24,24),(32,32),(48,48),(64,64),(128,128),(256,256)])
+            '@ | Set-Content -Encoding UTF8 make_icon.py
+            python make_icon.py
           }
+          if (-not (Test-Path 'admin/icon.ico')) { throw 'BALI icon was not generated' }
       - name: Validate JavaScript
         working-directory: admin
         run: |
+          node --check v13-core.js
+          node --check products.js
           node --check print-tools.js
-          node --check bar-menu.js
-          node --check products-a4.js
-          node --check document-print.js
           node --check publish-fix.js
+          node --check main.js
       - name: Build Windows portable admin
         working-directory: admin
         run: |
@@ -53,17 +60,31 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path out | Out-Null
-          $exe=Get-ChildItem -Path admin/dist -Filter '*.exe' -File | Select-Object -First 1
+          $exe=Get-ChildItem -Path admin/dist -Filter '*.exe' -File | Sort-Object Length -Descending | Select-Object -First 1
           if(-not $exe){throw 'EXE not found'}
+          if($exe.Length -lt 1000000){throw "EXE is unexpectedly small: $($exe.Length)"}
           Copy-Item $exe.FullName 'out/BALI-COCKTAIL-ADMIN-v1.3.exe'
+          $bytes=[System.IO.File]::ReadAllBytes('out/BALI-COCKTAIL-ADMIN-v1.3.exe')
+          if($bytes[0] -ne 0x4D -or $bytes[1] -ne 0x5A){throw 'Invalid EXE header'}
+
+          Remove-Item -Recurse -Force browser -ErrorAction SilentlyContinue
           New-Item -ItemType Directory -Force -Path browser/BALI-COCKTAIL-ADMIN | Out-Null
-          Copy-Item admin/index.html,admin/print-tools.js,admin/bar-menu.js,admin/products-a4.js,admin/document-print.js,admin/publish-fix.js browser/BALI-COCKTAIL-ADMIN/
+          Copy-Item admin/index.html,admin/v13-core.js,admin/products.js,admin/print-tools.js,admin/publish-fix.js browser/BALI-COCKTAIL-ADMIN/
+          @'
+          BALI COCKTAIL ADMIN v1.3
+          Откройте index.html в Chrome или Edge.
+          Управление коктейлями, ингредиентами и продукцией; цены BYN; A4/PDF; техкарты бармена и документальные техкарты; публикация в мобильный каталог.
+          '@ | Set-Content -Encoding UTF8 browser/BALI-COCKTAIL-ADMIN/README.txt
           $p='browser/BALI-COCKTAIL-ADMIN/index.html'
           $s=Get-Content $p -Raw
-          $inject='<script src="print-tools.js"></script>`n<script src="bar-menu.js"></script>`n<script src="products-a4.js"></script>`n<script src="document-print.js"></script>`n<script src="publish-fix.js"></script>`n'
-          $s=$s.Replace('</body>',$inject+'</body>')
-          Set-Content -Path $p -Value $s -Encoding UTF8
+          if($s -notmatch 'v13-core\.js'){
+            $inject="<script src=`"v13-core.js`"></script>`n<script src=`"products.js`"></script>`n<script src=`"print-tools.js`"></script>`n<script src=`"publish-fix.js`"></script>`n"
+            $s=$s.Replace('</body>',$inject+'</body>')
+            Set-Content -Path $p -Value $s -Encoding UTF8
+          }
           Compress-Archive -Path browser/BALI-COCKTAIL-ADMIN -DestinationPath out/BALI-COCKTAIL-ADMIN-v1.3-Browser.zip -Force
+          $hash=(Get-FileHash 'out/BALI-COCKTAIL-ADMIN-v1.3.exe' -Algorithm SHA256).Hash
+          Write-Host "Verified release EXE SHA256=$hash"
       - name: Publish stable release assets
         shell: pwsh
         env:
@@ -71,6 +92,15 @@ jobs:
         run: |
           gh release view admin-v1.3 *> $null
           if($LASTEXITCODE -ne 0){
-            gh release create admin-v1.3 --title 'BALI COCKTAIL ADMIN v1.3' --notes 'Windows admin: A4 product lists, bartender tech cards, formal A4 documentation tech cards, ingredient visuals and fixed GitHub publishing.' --target main
+            gh release create admin-v1.3 --title 'BALI COCKTAIL ADMIN v1.3' --notes 'Windows admin: product catalogue with BYN prices and A4 printing, bartender square tech cards, formal A4 documentation tech cards, ingredient visuals, official photo publishing and mobile catalogue synchronization.' --target main
           }
           gh release upload admin-v1.3 out/BALI-COCKTAIL-ADMIN-v1.3.exe out/BALI-COCKTAIL-ADMIN-v1.3-Browser.zip --clobber
+      - name: Upload workflow artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: BALI-COCKTAIL-ADMIN-v1.3-Release
+          path: |
+            out/BALI-COCKTAIL-ADMIN-v1.3.exe
+            out/BALI-COCKTAIL-ADMIN-v1.3-Browser.zip
+          if-no-files-found: error
+          retention-days: 30
