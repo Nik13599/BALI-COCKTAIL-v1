@@ -1,0 +1,35 @@
+name: Patch mobile admin canonical logo
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/patch-mobile-admin-logo.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - name: Patch logo loader
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('mobile-admin/admin-v2.html')
+          s=p.read_text(encoding='utf-8')
+          old="async function loadIcon(){try{const t=await fetch('icon.b64',{cache:'no-store'}).then(r=>r.text());const u='data:image/jpeg;base64,'+t.trim();$('loginIcon').src=u;$('headIcon').src=u}catch{}}"
+          new="function loadIcon(){const local='app-icon.png',remote='https://raw.githubusercontent.com/Nik13599/BALI-COCKTAIL-v1/main/branding/app-icon.png';[$('loginIcon'),$('headIcon')].forEach(img=>{img.onerror=()=>{if(img.src!==remote)img.src=remote};img.src=local})}"
+          if old not in s: raise SystemExit('Expected old logo loader not found')
+          p.write_text(s.replace(old,new),encoding='utf-8')
+          PY
+      - name: Commit patch
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add mobile-admin/admin-v2.html
+          git commit -m 'Use canonical BALI PNG inside mobile admin UI'
+          git pull --rebase origin main
+          git push origin HEAD:main
