@@ -1,12 +1,9 @@
 {
   "name": "BALI COCKTAIL ADMIN",
   "short_name": "BALI ADMIN",
-  "start_url": "./index.html",
+  "start_url": "./admin-v2.html",
   "display": "standalone",
-  "background_color": "#0b0b0d",
-  "theme_color": "#0b0b0d",
-  "description": "Мобильное приложение администратора BALI COCKTAIL",
-  "icons": [
-    {"src":"../admin/app-icon.jpg","sizes":"512x512","type":"image/jpeg","purpose":"any maskable"}
-  ]
+  "background_color": "#08090b",
+  "theme_color": "#08090b",
+  "description": "Мобильное приложение администратора BALI COCKTAIL"
 }
