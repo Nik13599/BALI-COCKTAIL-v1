@@ -50,11 +50,15 @@ jobs:
           set -euo pipefail
           mkdir -p mobile-admin-android/app/src/main/assets/mobile-admin mobile-admin-android/app/src/main/res/drawable
           cp mobile-admin/admin-v2.html mobile-admin/manifest.webmanifest mobile-admin/sw.js mobile-admin/icon.b64 mobile-admin-android/app/src/main/assets/mobile-admin/
+          python3 -m pip install --quiet pillow
           python3 - <<'PY'
           from pathlib import Path
-          import base64
+          import base64,io
+          from PIL import Image,ImageFile
+          ImageFile.LOAD_TRUNCATED_IMAGES=True
           raw=''.join(Path('mobile-admin/icon.b64').read_text(encoding='utf-8-sig').split())
-          Path('mobile-admin-android/app/src/main/res/drawable/bali_app_icon.jpg').write_bytes(base64.b64decode(raw))
+          im=Image.open(io.BytesIO(base64.b64decode(raw))).convert('RGB').resize((512,512),Image.Resampling.LANCZOS)
+          im.save('mobile-admin-android/app/src/main/res/drawable/bali_app_icon.png',format='PNG',optimize=True)
           PY
       - uses: actions/setup-java@v4
         with: {distribution: temurin, java-version: '17'}
@@ -81,6 +85,7 @@ jobs:
           unzip -l "$APK" >/tmp/admin-apk.txt
           grep -q 'assets/mobile-admin/admin-v2.html' /tmp/admin-apk.txt
           grep -q 'assets/mobile-admin/icon.b64' /tmp/admin-apk.txt
+          grep -q 'res/drawable/bali_app_icon.png' /tmp/admin-apk.txt
           mkdir -p out
           cp "$APK" out/BALI-COCKTAIL-ADMIN-Android.apk
       - uses: actions/upload-artifact@v4
@@ -140,13 +145,12 @@ jobs:
         run: |
           mkdir -p out/ios
           python3 - <<'PY'
-          import plistlib,uuid,base64
+          import plistlib,uuid
           from pathlib import Path
-          raw=''.join(Path('mobile-admin/icon.b64').read_text(encoding='utf-8-sig').split())
-          icon=base64.b64decode(raw)
+          icon=Path('mobile-admin-ios/BALI_COCKTAIL_ADMIN/Assets.xcassets/AppIcon.appiconset/appicon-1024.png').read_bytes()
           url='https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/main/mobile-admin/admin-v2.html'
-          clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.webclip.v3','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'BALI COCKTAIL administrator','Label':'BALI COCKTAIL ADMIN','URL':url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
-          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.profile.v3','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'Устанавливает BALI COCKTAIL ADMIN на экран Домой iPhone.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
+          clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.webclip.v4','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'BALI COCKTAIL administrator','Label':'BALI COCKTAIL ADMIN','URL':url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
+          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.profile.v4','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'Устанавливает BALI COCKTAIL ADMIN на экран Домой iPhone.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
           with open('out/ios/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig','wb') as f: plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
           PY
           plutil -lint out/ios/BALI-COCKTAIL-ADMIN-iPhone.mobileconfig
