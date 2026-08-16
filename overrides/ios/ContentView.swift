@@ -20,6 +20,9 @@ struct ContentView: View {
             let searchMatch = query.isEmpty || cocktail.name.localizedCaseInsensitiveContains(query) || cocktail.taste.localizedCaseInsensitiveContains(query) || ingredientMatch
             return categoryMatch && searchMatch
         }
+        .sorted {
+            $0.name.compare($1.name, options: [.caseInsensitive, .diacriticInsensitive], range: nil, locale: Locale(identifier: "ru_RU")) == .orderedAscending
+        }
     }
 
     var body: some View {
