@@ -43,4 +43,23 @@ async function meta(path){try{return await api(`/repos/${OWNER}/${REPO}/contents
 async function publish(){syncCurrent(false);if(!dirty&&!pending.size)return toast('Нет изменений для публикации');const b=$('publish');b.disabled=true;b.textContent='Публикация…';try{const perm=await repoPermission();if(perm.push===false){const e=new Error('Token не имеет права записи (push=false)');e.status=403;throw e}const v=Number(manifest.catalogVersion||0)+1;cocktails.sort(alpha);ingredients.sort(alpha);products.sort(alpha);for(const [p,x] of pending)await put(p,x,`BALI ADMIN: upload ${p}`);await put('data/cocktails.json',b64(JSON.stringify(cocktails,null,2)),`BALI ADMIN: cocktails v${v}`);await put('data/ingredients.json',b64(JSON.stringify(ingredients,null,2)),`BALI ADMIN: ingredients v${v}`);await put('data/products.json',b64(JSON.stringify(products,null,2)),`BALI ADMIN: products v${v}`);const nm={...manifest,catalogVersion:v,updatedAt:new Date().toISOString()};await put('data/manifest.json',b64(JSON.stringify(nm,null,2)),`BALI ADMIN: publish v${v}`);manifest=nm;pending.clear();clean();$('version').textContent=`Каталог v${v}`;setWriteStatus(true,'Публикация работает · запись разрешена');toast(`Опубликовано. Версия каталога ${v}`)}catch(e){if(e.status===401||e.status===403||String(e.message).includes('Resource not accessible by personal access token')){clearToken();token='';setWriteStatus(false,'Сохранённый token отклонён GitHub и удалён');toast('GitHub отклонил запись. Старый token удалён. Войдите заново с Fine-grained PAT: BALI-COCKTAIL-v1 + Contents Read and write. Деталь: '+e.message,true)}else toast('Ошибка публикации: '+e.message,true)}finally{b.disabled=false;b.textContent='Опубликовать'}}
 $('connect').onclick=connect;$('publish').onclick=publish;$('logout').onclick=()=>{clearToken();location.reload()};$('reload').onclick=async()=>{if(dirty&&!confirm('Есть неопубликованные изменения. Загрузить данные с GitHub и потерять черновик?'))return;try{await load();toast('Данные обновлены с GitHub')}catch(e){toast('Не удалось обновить: '+e.message,true)}};$('cq').oninput=renderCocktails;$('iq').oninput=renderIngredients;$('pq').oninput=renderProducts;$('cadd').onclick=()=>{const c={id:'cocktail-'+Date.now(),name:'Новый коктейль',category:'Авторские',yield:'',method:'',glass:'Тики',ice:'',taste:'',officialImage:'',ingredients:[],steps:[]};cocktails.push(c);mark();openEditor('c',c.id)};$('iadd').onclick=()=>{const i={id:'ingredient-'+Date.now(),name:'Новый ингредиент',category:'',description:'',officialImage:'',active:true};ingredients.push(i);mark();openEditor('i',i.id)};$('padd').onclick=()=>{const p={id:'product-'+Date.now(),name:'Новая позиция',category:'',country:'',portionLabel:'40 мл',portionPrice:null,bottleVolume:'',bottlePrice:null,active:true,order:products.length+1,comment:''};products.push(p);mark();openEditor('p',p.id)};
 window.addEventListener('popstate',()=>{if(!$('editorPage').classList.contains('hidden'))closeEditor()});loadIcon();const saved=localStorage.getItem('baliMobileAdminToken')||localStorage.getItem('baliAdminToken');if(saved){$('token').value=saved;$('remember').checked=true}
-</script></body></html>
+</script><script id="BALI_IMAGE_500_V1">
+async function baliNormalize500(file,kind){
+  const bitmap=await createImageBitmap(file),canvas=document.createElement('canvas');
+  canvas.width=500;canvas.height=500;const ctx=canvas.getContext('2d',{alpha:true});ctx.clearRect(0,0,500,500);
+  const ingredient=kind==='ingredients',iw=bitmap.width,ih=bitmap.height;
+  if(ingredient){const sc=Math.min(460/iw,460/ih),w=iw*sc,h=ih*sc;ctx.drawImage(bitmap,(500-w)/2,(500-h)/2,w,h)}
+  else{const sc=Math.max(500/iw,500/ih),w=iw*sc,h=ih*sc;ctx.drawImage(bitmap,(500-w)/2,(500-h)/2,w,h)}
+  bitmap.close?.();const mime=ingredient?'image/png':'image/jpeg',ext=ingredient?'png':'jpg';
+  const dataUrl=canvas.toDataURL(mime,ingredient?undefined:.92);return{dataUrl,b64:dataUrl.split(',')[1],ext}
+}
+imageFile=async function(file,obj,kind,preview){
+  if(!file)return;
+  try{
+    const out=await baliNormalize500(file,kind),path=`images/${kind}/official/${slug(obj.name)}-${Date.now()}.${out.ext}`;
+    pending.set(path,out.b64);obj.officialImage=path;mark();document.getElementById(preview).src=out.dataUrl;
+    toast('Фотография подготовлена: 500 × 500 px');
+  }catch(e){toast('Не удалось обработать фото: '+(e?.message||e),true)}
+};
+</script>
+</body></html>
