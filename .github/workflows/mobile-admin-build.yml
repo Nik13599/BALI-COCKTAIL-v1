@@ -105,11 +105,12 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - name: Verify iPhone ADMIN v3 page is served as HTML
+      - name: Verify iPhone ADMIN v3 page is served as HTML from production CDN
         shell: bash
+        env: {APP_SHA: '${{ github.sha }}'}
         run: |
           set -euo pipefail
-          URL='https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/main/mobile-admin/admin-v3.html'
+          URL="https://rawcdn.githack.com/Nik13599/BALI-COCKTAIL-v1/${APP_SHA}/mobile-admin/admin-v3.html"
           ok=0
           for attempt in $(seq 1 12); do
             headers="$(curl -fsSI "$URL" 2>/dev/null || true)"
@@ -132,15 +133,17 @@ jobs:
           JSON
       - name: Build iPhone WebClip profile with exact BALI icon
         shell: bash
+        env: {APP_SHA: '${{ github.sha }}'}
         run: |
           mkdir -p out/ios
           python3 - <<'PY'
-          import plistlib,uuid
+          import plistlib,uuid,os
           from pathlib import Path
           icon=Path('mobile-admin-ios/BALI_COCKTAIL_ADMIN/Assets.xcassets/AppIcon.appiconset/appicon-180.png').read_bytes()
-          url='https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/main/mobile-admin/admin-v3.html'
-          clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.webclip.v6','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'BALI COCKTAIL administrator v3','Label':'BALI COCKTAIL ADMIN','URL':url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
-          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.profile.v6','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'Устанавливает BALI COCKTAIL ADMIN v3 на экран Домой iPhone.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
+          sha=os.environ['APP_SHA']
+          url=f'https://rawcdn.githack.com/Nik13599/BALI-COCKTAIL-v1/{sha}/mobile-admin/admin-v3.html'
+          clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.webclip.v7','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'BALI COCKTAIL administrator v3','Label':'BALI COCKTAIL ADMIN','URL':url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
+          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.profile.v7','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'Устанавливает BALI COCKTAIL ADMIN v3 на экран Домой iPhone.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
           with open('out/ios/BALI-COCKTAIL-ADMIN-iPhone-v3.mobileconfig','wb') as f: plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
           PY
           plutil -lint out/ios/BALI-COCKTAIL-ADMIN-iPhone-v3.mobileconfig
