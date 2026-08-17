@@ -19,19 +19,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Verify iPhone launcher is a real HTML page
+      - name: Verify iPhone launcher is rendered XHTML, not source/download
         shell: bash
         run: |
           set -euo pipefail
-          APP_URL="https://bali-cocktail-iphone-v19-59j9a3s9k-kolyaselekh-9471s-projects.vercel.app/"
+          APP_URL="https://mvnxfouyoynqyjdpcblh.supabase.co/functions/v1/bali-cocktail-iphone-xhtml"
           rm -f /tmp/bali-headers /tmp/bali-body
           status="$(curl -L -sS --max-time 30 -D /tmp/bali-headers -o /tmp/bali-body -w '%{http_code}' "$APP_URL")"
           cat /tmp/bali-headers
           test "$status" = "200"
-          tr -d '\r' < /tmp/bali-headers | grep -Eiq '^content-type:[[:space:]]*text/html([;[:space:]]|$)'
+          tr -d '\r' < /tmp/bali-headers | grep -Eiq '^content-type:[[:space:]]*application/xhtml\+xml([;[:space:]]|$)'
           grep -Fq 'BALI COCKTAIL' /tmp/bali-body
+          grep -Fq 'URL.createObjectURL' /tmp/bali-body
           grep -Fq 'raw.githubusercontent.com/Nik13599/BALI-COCKTAIL-v1' /tmp/bali-body
-          grep -Eiq '<!doctype html' /tmp/bali-body
           if tr -d '\r' < /tmp/bali-headers | grep -Eiq '^content-disposition:[[:space:]]*attachment'; then
             echo "Launcher is being downloaded instead of rendered"
             exit 1
@@ -46,15 +46,15 @@ jobs:
           python3 - <<'PY'
           import plistlib,uuid
           from pathlib import Path
-          app_url='https://bali-cocktail-iphone-v19-59j9a3s9k-kolyaselekh-9471s-projects.vercel.app/'
+          app_url='https://mvnxfouyoynqyjdpcblh.supabase.co/functions/v1/bali-cocktail-iphone-xhtml'
           icon=Path('/tmp/bali-180.png').read_bytes()
           clip={
               'PayloadType':'com.apple.webClip.managed',
               'PayloadVersion':1,
-              'PayloadIdentifier':'by.bali.cocktail.v1.webclip.fixed.v19',
+              'PayloadIdentifier':'by.bali.cocktail.v1.webclip.fixed.v20',
               'PayloadUUID':str(uuid.uuid4()).upper(),
               'PayloadDisplayName':'BALI COCKTAIL',
-              'PayloadDescription':'BALI COCKTAIL iPhone v19 — настоящий HTML launcher. Без SVG, без raw HTML как text/plain.',
+              'PayloadDescription':'BALI COCKTAIL iPhone v20 — XHTML launcher, который открывает HTML-интерфейс внутри iPhone без показа исходного кода и без SVG-файла.',
               'Label':'BALI COCKTAIL',
               'URL':app_url,
               'IsRemovable':True,
@@ -66,22 +66,22 @@ jobs:
           profile={
               'PayloadType':'Configuration',
               'PayloadVersion':1,
-              'PayloadIdentifier':'by.bali.cocktail.v1.profile.fixed.v19',
+              'PayloadIdentifier':'by.bali.cocktail.v1.profile.fixed.v20',
               'PayloadUUID':str(uuid.uuid4()).upper(),
               'PayloadDisplayName':'BALI COCKTAIL',
-              'PayloadDescription':'Версия v19 для iPhone. Исправлена причина экранов с HTML-кодом и загрузки SVG-файла: WebClip теперь открывает реальную HTML-страницу с MIME type text/html.',
+              'PayloadDescription':'Версия v20 для iPhone. Исправлены обе предыдущие ошибки: HTML больше не отдаётся как text/plain, а SVG больше не используется как launcher.',
               'PayloadOrganization':'BALI',
               'PayloadRemovalDisallowed':False,
               'PayloadContent':[clip],
           }
-          with open('out/BALI-COCKTAIL-iPhone-FIXED-v19.mobileconfig','wb') as f:
+          with open('out/BALI-COCKTAIL-iPhone-FIXED-v20.mobileconfig','wb') as f:
               plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
           PY
-          plutil -lint out/BALI-COCKTAIL-iPhone-FIXED-v19.mobileconfig
+          plutil -lint out/BALI-COCKTAIL-iPhone-FIXED-v20.mobileconfig
 
       - uses: actions/upload-artifact@v4
         with:
-          name: BALI-COCKTAIL-iPhone-FIXED-v19
-          path: out/BALI-COCKTAIL-iPhone-FIXED-v19.mobileconfig
+          name: BALI-COCKTAIL-iPhone-FIXED-v20
+          path: out/BALI-COCKTAIL-iPhone-FIXED-v20.mobileconfig
           if-no-files-found: error
           retention-days: 30
