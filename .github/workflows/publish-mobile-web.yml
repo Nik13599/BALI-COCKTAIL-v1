@@ -49,11 +49,11 @@ jobs:
           git checkout --orphan mobile-web; git rm -rf .; git clean -fdx; cp -R /tmp/bali-mobile/. .
           git add -A; git commit -m "Publish BALI COCKTAIL v1 iPhone web app"
           WEB_SHA=$(git rev-parse HEAD); git push --force origin mobile-web; echo "sha=$WEB_SHA" >> "$GITHUB_OUTPUT"
-      - name: Verify iPhone app is served as HTML
+      - name: Verify iPhone app is served as HTML from production CDN
         shell: bash
         env: {WEB_SHA: '${{ steps.publish.outputs.sha }}'}
         run: |
-          URL="https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/${WEB_SHA}/index.html"; ok=0
+          URL="https://rawcdn.githack.com/Nik13599/BALI-COCKTAIL-v1/${WEB_SHA}/index.html"; ok=0
           for attempt in $(seq 1 12); do headers="$(curl -fsSI "$URL" 2>/dev/null || true)"; if printf '%s\n' "$headers" | tr -d '\r' | grep -Eqi '^content-type:[[:space:]]*text/html'; then ok=1; break; fi; sleep 5; done
           test "$ok" -eq 1
       - name: Build iPhone installation profile with exact BALI icon
@@ -64,10 +64,10 @@ jobs:
           python3 - <<'PY'
           import plistlib,uuid,os
           from pathlib import Path
-          sha=os.environ['WEB_SHA'];app_url=f'https://raw.githack.com/Nik13599/BALI-COCKTAIL-v1/{sha}/index.html'
+          sha=os.environ['WEB_SHA'];app_url=f'https://rawcdn.githack.com/Nik13599/BALI-COCKTAIL-v1/{sha}/index.html'
           icon=Path('/tmp/bali-mobile/images/ic_launcher.png').read_bytes()
-          clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktail.v1.webclip.readonly.v2','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL','PayloadDescription':'BALI COCKTAIL v1 — режим просмотра','Label':'BALI COCKTAIL','URL':app_url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
-          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktail.v1.profile.readonly.v2','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL','PayloadDescription':'Устанавливает BALI COCKTAIL на iPhone в режиме просмотра.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
+          clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktail.v1.webclip.readonly.v3','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL','PayloadDescription':'BALI COCKTAIL v1 — режим просмотра','Label':'BALI COCKTAIL','URL':app_url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
+          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktail.v1.profile.readonly.v3','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL','PayloadDescription':'Устанавливает BALI COCKTAIL на iPhone в режиме просмотра.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
           with open('out/BALI-COCKTAIL-v1-iPhone.mobileconfig','wb') as f:plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
           PY
       - uses: actions/upload-artifact@v4
