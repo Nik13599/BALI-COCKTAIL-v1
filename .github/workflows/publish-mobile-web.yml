@@ -20,23 +20,26 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build iPhone installation profile with exact BALI icon
         shell: bash
+        env:
+          WEB_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
           mkdir -p out
           sips -z 180 180 branding/app-icon.png --out /tmp/bali-180.png >/dev/null
           python3 - <<'PY'
-          import plistlib,uuid
+          import plistlib,uuid,os
           from pathlib import Path
-          app_url='https://nik13599.github.io/BALI-COCKTAIL-v1/'
+          sha=os.environ['WEB_SHA']
+          app_url=f'https://cdn.jsdelivr.net/gh/Nik13599/BALI-COCKTAIL-v1@{sha}/web-template/iphone-offline.html'
           icon=Path('/tmp/bali-180.png').read_bytes()
-          clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktail.v1.webclip.offline.v5','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL','PayloadDescription':'BALI COCKTAIL offline-first','Label':'BALI COCKTAIL','URL':app_url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
-          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktail.v1.profile.offline.v5','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL','PayloadDescription':'Устанавливает BALI COCKTAIL на iPhone. Каталог и фотографии сохраняются локально после первой синхронизации.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
-          with open('out/BALI-COCKTAIL-iPhone-OFFLINE-v5.mobileconfig','wb') as f:plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
+          clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktail.v1.webclip.offline.v11','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL','PayloadDescription':'BALI COCKTAIL offline-first','Label':'BALI COCKTAIL','URL':app_url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
+          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktail.v1.profile.offline.v11','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL','PayloadDescription':'Устанавливает BALI COCKTAIL на iPhone. Каталог и фотографии сохраняются локально после первой синхронизации.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
+          with open('out/BALI-COCKTAIL-iPhone-OFFLINE-v11.mobileconfig','wb') as f:plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
           PY
-          plutil -lint out/BALI-COCKTAIL-iPhone-OFFLINE-v5.mobileconfig
+          plutil -lint out/BALI-COCKTAIL-iPhone-OFFLINE-v11.mobileconfig
       - uses: actions/upload-artifact@v4
         with:
-          name: BALI-COCKTAIL-iPhone-OFFLINE-v5
-          path: out/BALI-COCKTAIL-iPhone-OFFLINE-v5.mobileconfig
+          name: BALI-COCKTAIL-iPhone-OFFLINE-v11
+          path: out/BALI-COCKTAIL-iPhone-OFFLINE-v11.mobileconfig
           if-no-files-found: error
           retention-days: 30
