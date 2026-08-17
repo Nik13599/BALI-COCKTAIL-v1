@@ -19,20 +19,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Verify iPhone launcher is rendered, not shown as HTML source
+      - name: Verify iPhone URL renders HTML in browser
         shell: bash
         run: |
           set -euo pipefail
-          APP_URL="https://mvnxfouyoynqyjdpcblh.supabase.co/functions/v1/bali-cocktail-iphone?k=mYLMPT6khtrtYzlxwG2aA2w-CzdWWpC8"
+          APP_URL="https://cdn.jsdelivr.net/gh/Nik13599/BALI-COCKTAIL-v1@main/web-template/index.html"
           rm -f /tmp/bali-headers /tmp/bali-body
-          status="$(curl -sS --max-time 30 -D /tmp/bali-headers -o /tmp/bali-body -w '%{http_code}' "$APP_URL")"
+          status="$(curl -L -sS --max-time 30 -D /tmp/bali-headers -o /tmp/bali-body -w '%{http_code}' "$APP_URL")"
           cat /tmp/bali-headers
           test "$status" = "200"
-          tr -d '\r' < /tmp/bali-headers | grep -Eiq '^content-type:[[:space:]]*image/svg\+xml([;[:space:]]|$)'
+          tr -d '\r' < /tmp/bali-headers | grep -Eiq '^content-type:[[:space:]]*text/html([;[:space:]]|$)'
           grep -Fq 'BALI COCKTAIL' /tmp/bali-body
-          grep -Fq 'window.location.replace(URL.createObjectURL(b))' /tmp/bali-body
-          if tr -d '\r' < /tmp/bali-headers | grep -Eiq '^content-type:[[:space:]]*text/plain'; then
-            echo "Launcher is still plain text"
+          grep -Eiq '<!doctype html' /tmp/bali-body
+          if tr -d '\r' < /tmp/bali-headers | grep -Eiq '^content-disposition:[[:space:]]*attachment'; then
+            echo "URL is being downloaded instead of rendered"
             exit 1
           fi
 
@@ -45,41 +45,42 @@ jobs:
           python3 - <<'PY'
           import plistlib,uuid
           from pathlib import Path
-          app_url='https://mvnxfouyoynqyjdpcblh.supabase.co/functions/v1/bali-cocktail-iphone?k=mYLMPT6khtrtYzlxwG2aA2w-CzdWWpC8'
+          app_url='https://cdn.jsdelivr.net/gh/Nik13599/BALI-COCKTAIL-v1@main/web-template/index.html'
           icon=Path('/tmp/bali-180.png').read_bytes()
           clip={
               'PayloadType':'com.apple.webClip.managed',
               'PayloadVersion':1,
-              'PayloadIdentifier':'by.bali.cocktail.v1.webclip.fixed.v17',
+              'PayloadIdentifier':'by.bali.cocktail.v1.webclip.fixed.v18',
               'PayloadUUID':str(uuid.uuid4()).upper(),
               'PayloadDisplayName':'BALI COCKTAIL',
-              'PayloadDescription':'BALI COCKTAIL iPhone launcher v17',
+              'PayloadDescription':'BALI COCKTAIL iPhone v18 — прямой запуск HTML-интерфейса без SVG и без показа исходного кода.',
               'Label':'BALI COCKTAIL',
               'URL':app_url,
               'IsRemovable':True,
               'Precomposed':True,
               'FullScreen':True,
+              'IgnoreManifestScope':True,
               'Icon':icon,
           }
           profile={
               'PayloadType':'Configuration',
               'PayloadVersion':1,
-              'PayloadIdentifier':'by.bali.cocktail.v1.profile.fixed.v17',
+              'PayloadIdentifier':'by.bali.cocktail.v1.profile.fixed.v18',
               'PayloadUUID':str(uuid.uuid4()).upper(),
               'PayloadDisplayName':'BALI COCKTAIL',
-              'PayloadDescription':'Исправленная версия для iPhone: вместо исходного HTML-кода запускается интерфейс BALI COCKTAIL. После успешной загрузки оболочка сохраняется на устройстве.',
+              'PayloadDescription':'Исправленная версия v18 для iPhone. Убраны SVG-launcher и Supabase-обёртка: приложение открывает HTML напрямую с корректным MIME type text/html.',
               'PayloadOrganization':'BALI',
               'PayloadRemovalDisallowed':False,
               'PayloadContent':[clip],
           }
-          with open('out/BALI-COCKTAIL-iPhone-FIXED-v17.mobileconfig','wb') as f:
+          with open('out/BALI-COCKTAIL-iPhone-FIXED-v18.mobileconfig','wb') as f:
               plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
           PY
-          plutil -lint out/BALI-COCKTAIL-iPhone-FIXED-v17.mobileconfig
+          plutil -lint out/BALI-COCKTAIL-iPhone-FIXED-v18.mobileconfig
 
       - uses: actions/upload-artifact@v4
         with:
-          name: BALI-COCKTAIL-iPhone-FIXED-v17
-          path: out/BALI-COCKTAIL-iPhone-FIXED-v17.mobileconfig
+          name: BALI-COCKTAIL-iPhone-FIXED-v18
+          path: out/BALI-COCKTAIL-iPhone-FIXED-v18.mobileconfig
           if-no-files-found: error
           retention-days: 30
