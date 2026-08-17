@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import Network
 
 struct Ingredient: Codable, Identifiable, Hashable {
     let ingredientId: String?
@@ -53,6 +54,7 @@ private struct CatalogManifest: Codable {
     let mediaBase: String?
 }
 
+@MainActor
 final class CocktailStore: ObservableObject {
     @Published var cocktails: [Cocktail] = []
     @Published var ingredients: [CatalogIngredient] = []
@@ -60,27 +62,40 @@ final class CocktailStore: ObservableObject {
 
     private let baseURL = "https://raw.githubusercontent.com/Nik13599/BALI-COCKTAIL-v1/main/"
     private let decoder = JSONDecoder()
+    private let networkMonitor = NWPathMonitor()
+    private let networkQueue = DispatchQueue(label: "by.bali.cocktails.network-monitor")
+    private var syncInProgress = false
 
     init() {
         loadLocal()
+        networkMonitor.pathUpdateHandler = { [weak self] path in
+            guard path.status == .satisfied else { return }
+            Task { @MainActor in self?.sync() }
+        }
+        networkMonitor.start(queue: networkQueue)
         sync()
     }
 
     func sync() {
+        guard !syncInProgress else { return }
+        syncInProgress = true
+        syncStatus = cocktails.isEmpty ? "Загрузка каталога…" : "Проверка обновлений…"
+
         Task {
+            defer { syncInProgress = false }
             do {
-                let manifestURL = URL(string: baseURL + "data/manifest.json?ts=\(Int(Date().timeIntervalSince1970))")!
-                let (manifestData, _) = try await URLSession.shared.data(from: manifestURL)
+                let stamp = Int(Date().timeIntervalSince1970 * 1000)
+                let manifestURL = URL(string: baseURL + "data/manifest.json?ts=\(stamp)")!
+                var manifestRequest = URLRequest(url: manifestURL)
+                manifestRequest.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+                let (manifestData, manifestResponse) = try await URLSession.shared.data(for: manifestRequest)
+                if let http = manifestResponse as? HTTPURLResponse, !(200...299).contains(http.statusCode) { throw URLError(.badServerResponse) }
                 let manifest = try decoder.decode(CatalogManifest.self, from: manifestData)
-                let localVersion = UserDefaults.standard.integer(forKey: "bali.catalog.version")
 
-                guard manifest.catalogVersion > localVersion || cocktails.isEmpty else {
-                    await MainActor.run { self.syncStatus = "Каталог актуален · v\(manifest.catalogVersion)" }
-                    return
-                }
-
-                async let cocktailData = download(path: manifest.cocktails, version: manifest.catalogVersion)
-                async let ingredientData = download(path: manifest.ingredients, version: manifest.catalogVersion)
+                // Всегда перечитываем маленькие JSON-каталоги при наличии интернета.
+                // Это ремонтирует ситуацию, когда версия уже совпала, а устройство однажды получило старый JSON из кэша.
+                async let cocktailData = download(path: manifest.cocktails, version: manifest.catalogVersion, stamp: stamp)
+                async let ingredientData = download(path: manifest.ingredients, version: manifest.catalogVersion, stamp: stamp)
                 let (newCocktailData, newIngredientData) = try await (cocktailData, ingredientData)
 
                 let decodedCocktails = try decoder.decode([Cocktail].self, from: newCocktailData)
@@ -91,25 +106,27 @@ final class CocktailStore: ObservableObject {
                 try save(manifestData, name: "manifest.json")
                 UserDefaults.standard.set(manifest.catalogVersion, forKey: "bali.catalog.version")
 
+                cocktails = decodedCocktails
+                ingredients = decodedIngredients
+
+                // Даже при той же версии повторяем загрузку отсутствующих медиа.
+                // OfficialMediaStore не скачивает уже сохранённые файлы, поэтому офлайн-кэш остаётся экономным.
                 let mediaPaths = Set(decodedCocktails.compactMap(\.officialImage) + decodedIngredients.compactMap(\.officialImage))
                 await OfficialMediaStore.prefetch(paths: Array(mediaPaths), version: manifest.catalogVersion)
 
-                await MainActor.run {
-                    self.cocktails = decodedCocktails
-                    self.ingredients = decodedIngredients
-                    self.syncStatus = "Каталог обновлён · v\(manifest.catalogVersion)"
-                }
+                syncStatus = "Каталог актуален · v\(manifest.catalogVersion)"
             } catch {
-                await MainActor.run {
-                    self.syncStatus = self.cocktails.isEmpty ? "Не удалось загрузить каталог" : "Офлайн · сохранённый каталог"
-                }
+                syncStatus = cocktails.isEmpty ? "Не удалось загрузить каталог" : "Офлайн · сохранённый каталог"
             }
         }
     }
 
-    private func download(path: String, version: Int) async throws -> Data {
-        let url = URL(string: baseURL + path + "?v=\(version)")!
-        let (data, response) = try await URLSession.shared.data(from: url)
+    private func download(path: String, version: Int, stamp: Int) async throws -> Data {
+        let separator = path.contains("?") ? "&" : "?"
+        let url = URL(string: baseURL + path + "\(separator)v=\(version)&ts=\(stamp)")!
+        var request = URLRequest(url: url)
+        request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+        let (data, response) = try await URLSession.shared.data(for: request)
         if let http = response as? HTTPURLResponse, !(200...299).contains(http.statusCode) {
             throw URLError(.badServerResponse)
         }
@@ -137,7 +154,7 @@ final class CocktailStore: ObservableObject {
                 if FileManager.default.fileExists(atPath: iURL.path) {
                     ingredients = try decoder.decode([CatalogIngredient].self, from: Data(contentsOf: iURL))
                 }
-                syncStatus = "Сохранённый каталог"
+                syncStatus = "Сохранённый каталог · проверка обновлений…"
                 return
             }
         } catch { }
