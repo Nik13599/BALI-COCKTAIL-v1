@@ -1,6 +1,6 @@
 {
   "name": "bali-cocktail-admin",
-  "version": "1.3.3",
+  "version": "1.4.0",
   "description": "BALI COCKTAIL administrator application",
   "main": "main.js",
   "author": "BALI",
@@ -24,6 +24,7 @@
       "print-tools.js",
       "print-bartender-tweaks.js",
       "publish-fix.js",
+      "offline-cache.js",
       "bartender-photo-sync.js",
       "reload-verify.js",
       "print-media-fix.js",
