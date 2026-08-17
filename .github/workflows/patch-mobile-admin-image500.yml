@@ -1,0 +1,58 @@
+name: Patch mobile ADMIN images to 500x500
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/patch-mobile-admin-image500.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add exact 500x500 image normalizer to mobile admin
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('mobile-admin/admin-v3.html')
+          s=p.read_text(encoding='utf-8')
+          if 'BALI_IMAGE_500_V1' in s:
+              print('already patched')
+              raise SystemExit(0)
+          js=r'''<script id="BALI_IMAGE_500_V1">
+          async function baliNormalize500(file,kind){
+            const bitmap=await createImageBitmap(file),canvas=document.createElement('canvas');
+            canvas.width=500;canvas.height=500;const ctx=canvas.getContext('2d',{alpha:true});ctx.clearRect(0,0,500,500);
+            const ingredient=kind==='ingredients',iw=bitmap.width,ih=bitmap.height;
+            if(ingredient){const sc=Math.min(460/iw,460/ih),w=iw*sc,h=ih*sc;ctx.drawImage(bitmap,(500-w)/2,(500-h)/2,w,h)}
+            else{const sc=Math.max(500/iw,500/ih),w=iw*sc,h=ih*sc;ctx.drawImage(bitmap,(500-w)/2,(500-h)/2,w,h)}
+            bitmap.close?.();const mime=ingredient?'image/png':'image/jpeg',ext=ingredient?'png':'jpg';
+            const dataUrl=canvas.toDataURL(mime,ingredient?undefined:.92);return{dataUrl,b64:dataUrl.split(',')[1],ext}
+          }
+          imageFile=async function(file,obj,kind,preview){
+            if(!file)return;
+            try{
+              const out=await baliNormalize500(file,kind),path=`images/${kind}/official/${slug(obj.name)}-${Date.now()}.${out.ext}`;
+              pending.set(path,out.b64);obj.officialImage=path;mark();document.getElementById(preview).src=out.dataUrl;
+              toast('Фотография подготовлена: 500 × 500 px');
+            }catch(e){toast('Не удалось обработать фото: '+(e?.message||e),true)}
+          };
+          </script>'''
+          s=s.replace('</body>',js+'\n</body>',1)
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit patch
+        shell: bash
+        run: |
+          if git diff --quiet -- mobile-admin/admin-v3.html; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add mobile-admin/admin-v3.html
+          git commit -m 'Normalize mobile admin uploads to exact 500x500'
+          git push
