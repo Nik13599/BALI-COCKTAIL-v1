@@ -10,6 +10,7 @@ if [ -d "$ANDROID" ]; then
   cp overrides/android/AndroidManifest.xml "$ANDROID/app/src/main/AndroidManifest.xml"
   cp data/cocktails.json "$ANDROID/app/src/main/assets/cocktails.json"
   python3 scripts/patch-android-sync.py "$ANDROID/app/src/main/java/by/bali/cocktails/MainActivity.kt"
+  python3 scripts/patch-android-sync-repair.py "$ANDROID/app/src/main/java/by/bali/cocktails/MainActivity.kt"
   python3 scripts/patch-android-alpha.py "$ANDROID/app/src/main/java/by/bali/cocktails/MainActivity.kt"
   python3 scripts/patch-android-ingredient-zoom.py "$ANDROID/app/src/main/java/by/bali/cocktails/MainActivity.kt"
   python3 scripts/patch-android-readonly.py "$ANDROID/app/src/main/java/by/bali/cocktails/MainActivity.kt"
