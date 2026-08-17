@@ -96,6 +96,9 @@
 
   window.baliRefreshCatalog = refreshCatalog;
   window.baliWarmOffline = warmOfflineFromCurrent;
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.register('./sw.js').then(()=>navigator.serviceWorker.ready).then(()=>warmOfflineFromCurrent()).catch(()=>{});
+  }
   window.addEventListener('online', () => refreshCatalog('online'));
   window.addEventListener('offline',()=>{const s=document.getElementById('syncState');if(s)s.textContent='Офлайн · сохранённый каталог v'+(manifest?.catalogVersion||localStorage.getItem('baliCatalogVersion')||'?')});
   window.addEventListener('pageshow', () => refreshCatalog('pageshow'));
