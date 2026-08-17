@@ -14,6 +14,40 @@ async function getContentMeta(path){try{return await gh(`https://api.github.com/
 async function putContent(path,contentBase64,message){const meta=await getContentMeta(path);const body={message,content:contentBase64,branch:BRANCH};if(meta?.sha)body.sha=meta.sha;return gh(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${pathUrl(path)}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})}
 function jsonB64(v){return btoa(unescape(encodeURIComponent(JSON.stringify(v,null,2))))}
 function setPublishing(on){state.publishing=on;document.querySelectorAll('.publish').forEach(b=>{b.disabled=on;b.textContent=on?'Публикация…':'Опубликовать'})}
+
+// Все новые официальные изображения нормализуются в админке до точного размера 500×500 px.
+// Коктейль: квадратный center-crop. Ингредиент: contain на прозрачном квадрате, чтобы не обрезать бутылку.
+async function normalizeImage500(file,base){
+  const isIngredient=String(base||'').includes('/ingredients/');
+  const bitmap=await createImageBitmap(file);
+  const canvas=document.createElement('canvas');canvas.width=500;canvas.height=500;
+  const ctx=canvas.getContext('2d',{alpha:true});ctx.clearRect(0,0,500,500);
+  const iw=bitmap.width,ih=bitmap.height;
+  if(isIngredient){
+    const scale=Math.min(460/iw,460/ih);const w=iw*scale,h=ih*scale;
+    ctx.drawImage(bitmap,(500-w)/2,(500-h)/2,w,h);
+  }else{
+    const scale=Math.max(500/iw,500/ih);const w=iw*scale,h=ih*scale;
+    ctx.drawImage(bitmap,(500-w)/2,(500-h)/2,w,h);
+  }
+  bitmap.close?.();
+  const mime=isIngredient?'image/png':'image/jpeg';
+  const ext=isIngredient?'.png':'.jpg';
+  const dataUrl=canvas.toDataURL(mime,isIngredient?undefined:0.92);
+  return {path:String(base).replace(/\.(png|jpe?g|webp)$/i,'')+ext,b64:dataUrl.split(',')[1],dataUrl};
+}
+window.BALI_normalizeImage500=normalizeImage500;
+try{
+  // queueImage объявлена в основном admin/index.html. Перехватываем её после загрузки Electron.
+  queueImage=function(file,base,done){
+    if(!file)return;
+    normalizeImage500(file,base).then(x=>{
+      pendingFiles.set(x.path,x.b64);done(x.path);
+      toast('Изображение подготовлено: 500 × 500 px');
+    }).catch(e=>toast('Не удалось обработать изображение: '+(e?.message||e),true));
+  };
+}catch{}
+
 async function publishFixed(){
   if(state.publishing)return;
   const productsDirty=Boolean(window.barMenuDirty);
@@ -24,15 +58,19 @@ async function publishFixed(){
   try{
     const perm=await repoPermission();
     if(perm.push===false){const e=new Error('Этот token может читать репозиторий, но GitHub сообщает permissions.push=false.');e.status=403;throw e}
-    // Важен порядок: сначала медиа, затем каталоги, manifest всегда последним.
-    for(const [path,b64] of pendingFiles) await putContent(path,b64,`BALI ADMIN: upload ${path}`);
+    // Порядок критичен: сначала все медиа, затем каталоги, manifest всегда последним.
+    // Поэтому приложение никогда не увидит новую версию раньше, чем фото реально появится в репозитории.
+    let uploadedMedia=0;
+    for(const [path,b64] of pendingFiles){await putContent(path,b64,`BALI ADMIN: upload ${path}`);uploadedMedia++}
+    cocktails.sort((a,b)=>String(a?.name||'').localeCompare(String(b?.name||''),'ru',{sensitivity:'base'}));
+    ingredients.sort((a,b)=>String(a?.name||'').localeCompare(String(b?.name||''),'ru',{sensitivity:'base'}));
     await putContent('data/cocktails.json',jsonB64(cocktails),`BALI ADMIN: cocktails v${nextVersion}`);
     await putContent('data/ingredients.json',jsonB64(ingredients),`BALI ADMIN: ingredients v${nextVersion}`);
     if(Array.isArray(barProducts)) await putContent('data/products.json',jsonB64(barProducts),`BALI ADMIN: products v${nextVersion}`);
     await putContent('data/manifest.json',jsonB64(nextManifest),`BALI ADMIN: publish v${nextVersion}`);
     manifest=nextManifest;pendingFiles.clear();window.barMenuDirty=false;window.ingredientsSynthesized=0;markClean();
     if($('versionText'))$('versionText').textContent=`Каталог v${nextVersion}`;if($('kVersion'))$('kVersion').textContent=nextVersion;renderAll();
-    toast(`Опубликовано. Версия ${nextVersion}. Мобильные приложения получат обновление при синхронизации.`);
+    toast(`Опубликовано. Версия ${nextVersion}${uploadedMedia?` · фото: ${uploadedMedia}`:''}. Мобильные приложения обновятся автоматически при наличии интернета.`);
   }catch(e){
     const msg=String(e?.message||e);
     if(e?.status===401||e?.status===403||msg.includes('Resource not accessible by personal access token')){
@@ -41,6 +79,6 @@ async function publishFixed(){
     }else toast('Ошибка публикации: '+msg,true);
   }finally{setPublishing(false);bind()}
 }
-function bind(){document.querySelectorAll('.publish').forEach(b=>{b.onclick=publishFixed;b.dataset.publishFixed='2'})}
+function bind(){document.querySelectorAll('.publish').forEach(b=>{b.onclick=publishFixed;b.dataset.publishFixed='3'})}
 window.publishFixed=publishFixed;window.BALI_putContent=putContent;window.BALI_checkWriteAccess=repoPermission;bind();new MutationObserver(bind).observe(document.body,{childList:true,subtree:true});
 })();
