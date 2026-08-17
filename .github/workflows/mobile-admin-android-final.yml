@@ -1,10 +1,13 @@
-name: Build BALI COCKTAIL ADMIN Android FINAL
+name: Build BALI COCKTAIL ADMIN Android OFFLINE
 
 on:
   push:
     branches: [main]
     paths:
       - 'mobile-admin/admin-v3.html'
+      - 'mobile-admin/admin-runtime-fix.js'
+      - 'mobile-admin/offline-first.js'
+      - 'mobile-admin/sw.js'
       - 'mobile-admin-android/**'
       - 'branding/app-icon.png'
       - '.github/workflows/mobile-admin-android-final.yml'
@@ -19,16 +22,26 @@ jobs:
     timeout-minutes: 35
     steps:
       - uses: actions/checkout@v4
-      - name: Package full mobile editor and BALI icon
+      - name: Package full mobile editor, offline cache and BALI icon
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p mobile-admin-android/app/src/main/assets/mobile-admin mobile-admin-android/app/src/main/res/drawable
-          cp mobile-admin/admin-v3.html mobile-admin/manifest.webmanifest mobile-admin/sw.js mobile-admin-android/app/src/main/assets/mobile-admin/
+          cp mobile-admin/admin-v3.html mobile-admin/manifest.webmanifest mobile-admin/sw.js mobile-admin/admin-runtime-fix.js mobile-admin/offline-first.js mobile-admin-android/app/src/main/assets/mobile-admin/
           cp branding/app-icon.png mobile-admin-android/app/src/main/assets/mobile-admin/app-icon.png
           cp branding/app-icon.png mobile-admin-android/app/src/main/res/drawable/bali_app_icon.png
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('mobile-admin-android/app/src/main/assets/mobile-admin/admin-v3.html')
+          s=p.read_text(encoding='utf-8')
+          inject='<script src="admin-runtime-fix.js"></script><script src="offline-first.js"></script>'
+          if inject not in s:s=s.replace('</body>',inject+'</body>')
+          p.write_text(s,encoding='utf-8')
+          PY
+          grep -q 'offline-first.js' mobile-admin-android/app/src/main/assets/mobile-admin/admin-v3.html
+          grep -q 'admin-runtime-fix.js' mobile-admin-android/app/src/main/assets/mobile-admin/admin-v3.html
           grep -q 'admin-v3.html' mobile-admin-android/app/src/main/java/by/bali/cocktails/admin/mobile/MainActivity.java
-          grep -q 'versionCode 3' mobile-admin-android/app/build.gradle
+          grep -q 'versionCode 5' mobile-admin-android/app/build.gradle
       - uses: actions/setup-java@v4
         with: {distribution: temurin, java-version: '17'}
       - uses: android-actions/setup-android@v3
@@ -57,13 +70,15 @@ jobs:
           test -f "$APK"
           unzip -l "$APK" >/tmp/apk.txt
           grep -q 'assets/mobile-admin/admin-v3.html' /tmp/apk.txt
+          grep -q 'assets/mobile-admin/offline-first.js' /tmp/apk.txt
+          grep -q 'assets/mobile-admin/admin-runtime-fix.js' /tmp/apk.txt
           grep -q 'res/drawable/bali_app_icon.png' /tmp/apk.txt
           mkdir -p out
-          cp "$APK" out/BALI-COCKTAIL-ADMIN-Android-FINAL-v3.apk
+          cp "$APK" out/BALI-COCKTAIL-ADMIN-Android-OFFLINE-v5.apk
       - uses: actions/upload-artifact@v4
         with:
-          name: BALI-COCKTAIL-ADMIN-Android-FINAL-v3
-          path: out/BALI-COCKTAIL-ADMIN-Android-FINAL-v3.apk
+          name: BALI-COCKTAIL-ADMIN-Android-OFFLINE-v5
+          path: out/BALI-COCKTAIL-ADMIN-Android-OFFLINE-v5.apk
           if-no-files-found: error
           retention-days: 30
       - name: Emulator smoke test
