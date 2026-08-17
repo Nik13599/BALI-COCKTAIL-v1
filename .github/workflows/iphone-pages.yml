@@ -1,0 +1,63 @@
+name: Deploy BALI COCKTAIL iPhone Web Apps
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'web-template/**'
+      - 'mobile-admin/admin-v3.html'
+      - 'mobile-admin/admin-runtime-fix.js'
+      - 'mobile-admin/offline-first.js'
+      - 'mobile-admin/sw.js'
+      - 'mobile-admin/manifest.webmanifest'
+      - 'branding/app-icon.png'
+      - '.github/workflows/iphone-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+environment:
+  name: github-pages
+  url: ${{ steps.deployment.outputs.page_url }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build static iPhone apps
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf _site
+          mkdir -p _site/admin
+          cp -R web-template/. _site/
+          cp mobile-admin/admin-v3.html _site/admin/index.html
+          cp mobile-admin/admin-runtime-fix.js mobile-admin/offline-first.js mobile-admin/sw.js mobile-admin/manifest.webmanifest _site/admin/
+          cp branding/app-icon.png _site/admin/app-icon.png
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('_site/admin/index.html')
+          s=p.read_text(encoding='utf-8')
+          inject='<script src="admin-runtime-fix.js"></script><script src="offline-first.js"></script>'
+          if inject not in s:s=s.replace('</body>',inject+'</body>')
+          p.write_text(s,encoding='utf-8')
+          PY
+          grep -q 'offline-first.js' _site/admin/index.html
+          grep -q 'admin-runtime-fix.js' _site/admin/index.html
+          test -f _site/sw.js
+          test -f _site/admin/sw.js
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
