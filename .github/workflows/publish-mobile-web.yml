@@ -29,13 +29,13 @@ jobs:
           rm -rf /tmp/bali-mobile
           mkdir -p /tmp/bali-mobile/images
           cp web-template/index.html /tmp/bali-mobile/index.html
-          cp web-template/sw.js web-template/ingredient-zoom.js web-template/readonly-mobile.js web-template/sort-alpha.js web-template/manifest.webmanifest /tmp/bali-mobile/
+          cp web-template/sw.js web-template/ingredient-zoom.js web-template/readonly-mobile.js web-template/sort-alpha.js web-template/sync-repair.js web-template/manifest.webmanifest /tmp/bali-mobile/
           cp data/cocktails.json /tmp/bali-mobile/cocktails.json
           cp branding/app-icon.png /tmp/bali-mobile/images/ic_launcher.png
           python3 - <<'PY'
           from pathlib import Path
           p=Path('/tmp/bali-mobile/index.html');s=p.read_text(encoding='utf-8')
-          s=s.replace('</body>','<script src="ingredient-zoom.js"></script>\n<script src="readonly-mobile.js"></script>\n<script src="sort-alpha.js"></script>\n</body>')
+          s=s.replace('</body>','<script src="ingredient-zoom.js"></script>\n<script src="readonly-mobile.js"></script>\n<script src="sort-alpha.js"></script>\n<script src="sync-repair.js"></script>\n</body>')
           if 'apple-touch-icon' not in s:s=s.replace('</head>','<link rel="apple-touch-icon" href="images/ic_launcher.png">\n</head>')
           p.write_text(s,encoding='utf-8')
           PY
