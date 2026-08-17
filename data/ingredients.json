@@ -45,11 +45,11 @@
     "imageSource": "BALI default visual; administrator can replace"
   },
   {
-    "id": "rosso-martini",
-    "name": "Вермут Rosso “Martini”",
+    "id": "martini-rosso",
+    "name": "Вермут “Martini Rosso”",
     "category": "Не указано",
     "description": "",
-    "officialImage": "images/ingredients/default/ingredient-2d94621fb922.png",
+    "officialImage": "images/ingredients/default/ingredient-fef1375af800.png",
     "active": true,
     "imageSource": "BALI default visual; administrator can replace"
   },
@@ -63,11 +63,11 @@
     "imageSource": "BALI default visual; administrator can replace"
   },
   {
-    "id": "martini-rosso",
-    "name": "Вермут “Martini Rosso”",
+    "id": "rosso-martini",
+    "name": "Вермут Rosso “Martini”",
     "category": "Не указано",
     "description": "",
-    "officialImage": "images/ingredients/default/ingredient-fef1375af800.png",
+    "officialImage": "images/ingredients/default/ingredient-2d94621fb922.png",
     "active": true,
     "imageSource": "BALI default visual; administrator can replace"
   },
@@ -180,6 +180,30 @@
     "imageSource": "BALI default visual; administrator can replace"
   },
   {
+    "id": "ing-dec6e08c",
+    "name": "Концентрат Ананас “Richeza”",
+    "category": "Заготовки / компоненты",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "ing-42c14ac4",
+    "name": "Концентрат Кокос “Richeza”",
+    "category": "Заготовки / компоненты",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "ing-caa0f907",
+    "name": "Концентрат Юдзу “Richeza”",
+    "category": "Заготовки / компоненты",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
     "id": "napitki",
     "name": "Кордиал Киви-Фисташка “Napitki”",
     "category": "Не указано",
@@ -203,42 +227,6 @@
     "category": "Не указано",
     "description": "",
     "officialImage": "images/ingredients/default/ingredient-cfae7cff404a.png",
-    "active": true,
-    "imageSource": "BALI default visual; administrator can replace"
-  },
-  {
-    "id": "triple-sec-volare",
-    "name": "Ликер Triple Sec “Volare”",
-    "category": "Не указано",
-    "description": "",
-    "officialImage": "images/ingredients/default/ingredient-de1023d018c2.png",
-    "active": true,
-    "imageSource": "BALI default visual; administrator can replace"
-  },
-  {
-    "id": "ramazotti",
-    "name": "Ликер Амаретто “Ramazotti”",
-    "category": "Не указано",
-    "description": "",
-    "officialImage": "images/ingredients/default/ingredient-f055787d2826.png",
-    "active": true,
-    "imageSource": "BALI default visual; administrator can replace"
-  },
-  {
-    "id": "volare",
-    "name": "Ликер кофейный “Volare”",
-    "category": "Не указано",
-    "description": "",
-    "officialImage": "images/ingredients/default/ingredient-ab31537ce7e0.png",
-    "active": true,
-    "imageSource": "BALI default visual; administrator can replace"
-  },
-  {
-    "id": "bumby",
-    "name": "Ликер сливочный “Bumby”",
-    "category": "Не указано",
-    "description": "",
-    "officialImage": "images/ingredients/default/ingredient-9875f9e2b958.png",
     "active": true,
     "imageSource": "BALI default visual; administrator can replace"
   },
@@ -275,6 +263,50 @@
     "category": "Не указано",
     "description": "",
     "officialImage": "images/ingredients/default/ingredient-08e839f05484.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
+  },
+  {
+    "id": "ramazotti",
+    "name": "Ликер Амаретто “Ramazotti”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": "images/ingredients/default/ingredient-f055787d2826.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
+  },
+  {
+    "id": "volare",
+    "name": "Ликер кофейный “Volare”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": "images/ingredients/default/ingredient-ab31537ce7e0.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
+  },
+  {
+    "id": "ing-f751c776",
+    "name": "Ликер Персик “Volare”",
+    "category": "Алкоголь",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "bumby",
+    "name": "Ликер сливочный “Bumby”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": "images/ingredients/default/ingredient-9875f9e2b958.png",
+    "active": true,
+    "imageSource": "BALI default visual; administrator can replace"
+  },
+  {
+    "id": "triple-sec-volare",
+    "name": "Ликер Triple Sec “Volare”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": "images/ingredients/default/ingredient-de1023d018c2.png",
     "active": true,
     "imageSource": "BALI default visual; administrator can replace"
   },
@@ -369,6 +401,30 @@
     "imageSource": "BALI default visual; administrator can replace"
   },
   {
+    "id": "ing-940ac68",
+    "name": "Пюре Малина “Richeza”",
+    "category": "Заготовки / компоненты",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "ing-b440511d",
+    "name": "Пюре Маракуйя “Richeza”",
+    "category": "Заготовки / компоненты",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "ing-31a1974b",
+    "name": "Пюре Персик “Richeza”",
+    "category": "Заготовки / компоненты",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
     "id": "negrita",
     "name": "Ром “Negrita”",
     "category": "Не указано",
@@ -414,6 +470,102 @@
     "imageSource": "BALI default visual; administrator can replace"
   },
   {
+    "id": "ing-11e869d3",
+    "name": "Сироп Банан “Richeza”",
+    "category": "Сиропы / сахар",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "ing-51ff79df",
+    "name": "Сироп Брауни “Richeza”",
+    "category": "Сиропы / сахар",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "ing-9bdd9a7e",
+    "name": "Сироп Ваниль “Richeza”",
+    "category": "Сиропы / сахар",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "ing-3b54e8c",
+    "name": "Сироп Груша “Richeza”",
+    "category": "Сиропы / сахар",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "ing-11fb5181",
+    "name": "Сироп Зеленое яблоко “Richeza”",
+    "category": "Сиропы / сахар",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "ing-6aa72438",
+    "name": "Сироп Карамель “Richeza”",
+    "category": "Сиропы / сахар",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "ing-d692638e",
+    "name": "Сироп Киви “Richeza”",
+    "category": "Сиропы / сахар",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "ing-da47255b",
+    "name": "Сироп Кокос “Richeza”",
+    "category": "Сиропы / сахар",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "ing-85a03a71",
+    "name": "Сироп Маракуйя “Richeza”",
+    "category": "Сиропы / сахар",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "ing-54631c4c",
+    "name": "Сироп Миндаль “Richeza”",
+    "category": "Сиропы / сахар",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "ing-53b4cadf",
+    "name": "Сироп Персик “Richeza”",
+    "category": "Сиропы / сахар",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "ing-681a01d9",
+    "name": "Сироп Цветы Бузины “Richeza”",
+    "category": "Сиропы / сахар",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
     "id": "20-milkavita",
     "name": "Сливки 20% “Milkavita”",
     "category": "Не указано",
@@ -423,6 +575,38 @@
     "imageSource": "BALI default visual; administrator can replace"
   },
   {
+    "id": "ing-94a2b860",
+    "name": "Содовая сильный газ “Bonaqua”",
+    "category": "Не указано",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "ing-41dd6ea0",
+    "name": "Сок Ананас “Villa Dina”",
+    "category": "Безалкогольные напитки",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "ing-b29f3caa",
+    "name": "Сок Апельсин “Villa Dina”",
+    "category": "Безалкогольные напитки",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
+    "id": "ing-26c0f483",
+    "name": "Сок вишневый “Villa Dina”",
+    "category": "Безалкогольные напитки",
+    "description": "",
+    "officialImage": null,
+    "active": true
+  },
+  {
     "id": "villa-dina",
     "name": "Сок Грейпфрут “Villa Dina”",
     "category": "Не указано",
@@ -430,6 +614,14 @@
     "officialImage": "images/ingredients/default/ingredient-fb099efa5c98.png",
     "active": true,
     "imageSource": "BALI default visual; administrator can replace"
+  },
+  {
+    "id": "ing-35e10a52",
+    "name": "Сок томатный “Villa Dina”",
+    "category": "Безалкогольные напитки",
+    "description": "",
+    "officialImage": null,
+    "active": true
   },
   {
     "id": "item-3645362827299557583",
@@ -448,6 +640,14 @@
     "officialImage": "images/ingredients/default/ingredient-edd10f79719b.png",
     "active": true,
     "imageSource": "BALI default visual; administrator can replace"
+  },
+  {
+    "id": "ing-292c3816",
+    "name": "Супер Джус Лимон “Napitki”",
+    "category": "Безалкогольные напитки",
+    "description": "",
+    "officialImage": null,
+    "active": true
   },
   {
     "id": "siera",
@@ -475,205 +675,5 @@
     "officialImage": "images/ingredients/default/ingredient-aded2875618d.png",
     "active": true,
     "imageSource": "BALI default visual; administrator can replace"
-  },
-  {
-    "id": "ing-292c3816",
-    "name": "Супер Джус Лимон “Napitki”",
-    "category": "Безалкогольные напитки",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-caa0f907",
-    "name": "Концентрат Юдзу “Richeza”",
-    "category": "Заготовки / компоненты",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-42c14ac4",
-    "name": "Концентрат Кокос “Richeza”",
-    "category": "Заготовки / компоненты",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-9bdd9a7e",
-    "name": "Сироп Ваниль “Richeza”",
-    "category": "Сиропы / сахар",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-11e869d3",
-    "name": "Сироп Банан “Richeza”",
-    "category": "Сиропы / сахар",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-6aa72438",
-    "name": "Сироп Карамель “Richeza”",
-    "category": "Сиропы / сахар",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-3b54e8c",
-    "name": "Сироп Груша “Richeza”",
-    "category": "Сиропы / сахар",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-53b4cadf",
-    "name": "Сироп Персик “Richeza”",
-    "category": "Сиропы / сахар",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-681a01d9",
-    "name": "Сироп Цветы Бузины “Richeza”",
-    "category": "Сиропы / сахар",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-da47255b",
-    "name": "Сироп Кокос “Richeza”",
-    "category": "Сиропы / сахар",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-dec6e08c",
-    "name": "Концентрат Ананас “Richeza”",
-    "category": "Заготовки / компоненты",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-11fb5181",
-    "name": "Сироп Зеленое яблоко “Richeza”",
-    "category": "Сиропы / сахар",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-d692638e",
-    "name": "Сироп Киви “Richeza”",
-    "category": "Сиропы / сахар",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-26c0f483",
-    "name": "Сок вишневый “Villa Dina”",
-    "category": "Безалкогольные напитки",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-51ff79df",
-    "name": "Сироп Брауни “Richeza”",
-    "category": "Сиропы / сахар",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-54631c4c",
-    "name": "Сироп Миндаль “Richeza”",
-    "category": "Сиропы / сахар",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-94a2b860",
-    "name": "Содовая сильный газ “Bonaqua”",
-    "category": "Не указано",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-31a1974b",
-    "name": "Пюре Персик “Richeza”",
-    "category": "Заготовки / компоненты",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-f751c776",
-    "name": "Ликер Персик “Volare”",
-    "category": "Алкоголь",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-940ac68",
-    "name": "Пюре Малина “Richeza”",
-    "category": "Заготовки / компоненты",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-35e10a52",
-    "name": "Сок томатный “Villa Dina”",
-    "category": "Безалкогольные напитки",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-b29f3caa",
-    "name": "Сок Апельсин “Villa Dina”",
-    "category": "Безалкогольные напитки",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-41dd6ea0",
-    "name": "Сок Ананас “Villa Dina”",
-    "category": "Безалкогольные напитки",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-b440511d",
-    "name": "Пюре Маракуйя “Richeza”",
-    "category": "Заготовки / компоненты",
-    "description": "",
-    "officialImage": null,
-    "active": true
-  },
-  {
-    "id": "ing-85a03a71",
-    "name": "Сироп Маракуйя “Richeza”",
-    "category": "Сиропы / сахар",
-    "description": "",
-    "officialImage": null,
-    "active": true
   }
 ]
