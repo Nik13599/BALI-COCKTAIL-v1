@@ -1,0 +1,82 @@
+name: Normalize existing BALI images to 500x500
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/normalize-existing-images-500.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  normalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Normalize referenced images and bump catalog version
+        shell: bash
+        run: |
+          python3 -m pip install --quiet pillow
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import json, datetime
+
+          root=Path('.')
+          refs=[]
+          for data_file,kind in [('data/cocktails.json','cocktail'),('data/ingredients.json','ingredient')]:
+              data=json.loads(Path(data_file).read_text(encoding='utf-8'))
+              for item in data:
+                  p=item.get('officialImage')
+                  if p: refs.append((Path(p),kind))
+
+          changed=0
+          for p,kind in refs:
+              if not p.exists():
+                  print('missing',p)
+                  continue
+              try:
+                  im=Image.open(p)
+                  im.load()
+                  if kind=='cocktail':
+                      im=im.convert('RGB')
+                      w,h=im.size
+                      side=min(w,h); left=(w-side)//2; top=(h-side)//2
+                      out=im.crop((left,top,left+side,top+side)).resize((500,500),Image.Resampling.LANCZOS)
+                      if p.suffix.lower() in ('.jpg','.jpeg'):
+                          out.save(p,'JPEG',quality=92,optimize=True)
+                      else:
+                          out.save(p,'PNG',optimize=True)
+                  else:
+                      im=im.convert('RGBA')
+                      w,h=im.size; scale=min(460/w,460/h)
+                      nw=max(1,round(w*scale)); nh=max(1,round(h*scale))
+                      resized=im.resize((nw,nh),Image.Resampling.LANCZOS)
+                      out=Image.new('RGBA',(500,500),(0,0,0,0)); out.alpha_composite(resized,((500-nw)//2,(500-nh)//2))
+                      if p.suffix.lower() in ('.jpg','.jpeg'):
+                          bg=Image.new('RGB',(500,500),'white'); bg.paste(out,mask=out.getchannel('A')); bg.save(p,'JPEG',quality=92,optimize=True)
+                      else:
+                          out.save(p,'PNG',optimize=True)
+                  changed+=1
+                  print(kind,p,'-> 500x500')
+              except Exception as e:
+                  print('skip',p,e)
+
+          manifest_path=Path('data/manifest.json')
+          manifest=json.loads(manifest_path.read_text(encoding='utf-8'))
+          manifest['catalogVersion']=int(manifest.get('catalogVersion',0))+1
+          manifest['updatedAt']=datetime.datetime.now(datetime.timezone.utc).isoformat().replace('+00:00','Z')
+          manifest_path.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print('normalized',changed,'images; catalog v',manifest['catalogVersion'])
+          PY
+      - name: Commit normalized assets
+        shell: bash
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/manifest.json media/ images/ || true
+          git commit -m 'Normalize official images to 500x500 and refresh catalog'
+          git push
