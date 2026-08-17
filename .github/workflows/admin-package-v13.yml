@@ -1,4 +1,4 @@
-name: Package BALI COCKTAIL ADMIN v1.3 Browser
+name: Package BALI COCKTAIL ADMIN v1.4 Browser
 
 on:
   push:
@@ -18,45 +18,39 @@ jobs:
           node --check admin/v13-core.js
           node --check admin/products.js
           node --check admin/print-tools.js
+          node --check admin/print-bartender-tweaks.js
           node --check admin/publish-fix.js
+          node --check admin/offline-cache.js
+          node --check admin/bartender-photo-sync.js
+          node --check admin/print-media-fix.js
+          node --check admin/reload-verify.js
       - name: Prepare package
         run: |
           set -euo pipefail
           rm -rf out/BALI-COCKTAIL-ADMIN
           mkdir -p out/BALI-COCKTAIL-ADMIN
-          cp admin/index.html admin/v13-core.js admin/products.js admin/print-tools.js admin/publish-fix.js out/BALI-COCKTAIL-ADMIN/
+          cp admin/index.html admin/v13-core.js admin/products.js admin/print-tools.js admin/print-bartender-tweaks.js admin/publish-fix.js admin/offline-cache.js admin/bartender-photo-sync.js admin/print-media-fix.js admin/reload-verify.js out/BALI-COCKTAIL-ADMIN/
           python3 - <<'PY'
           from pathlib import Path
           p=Path('out/BALI-COCKTAIL-ADMIN/index.html')
           s=p.read_text(encoding='utf-8')
-          scripts='''<script src="v13-core.js"></script>\n<script src="products.js"></script>\n<script src="print-tools.js"></script>\n<script src="publish-fix.js"></script>\n'''
-          if 'v13-core.js' not in s:
-              s=s.replace('</body>',scripts+'</body>')
+          scripts='''<script src="v13-core.js"></script>\n<script src="products.js"></script>\n<script src="print-tools.js"></script>\n<script src="print-bartender-tweaks.js"></script>\n<script src="publish-fix.js"></script>\n<script src="offline-cache.js"></script>\n<script src="bartender-photo-sync.js"></script>\n<script src="print-media-fix.js"></script>\n<script src="reload-verify.js"></script>\n'''
+          if 'offline-cache.js' not in s:s=s.replace('</body>',scripts+'</body>')
           p.write_text(s,encoding='utf-8')
           PY
           cat > out/BALI-COCKTAIL-ADMIN/README.txt <<'TXT'
-          BALI COCKTAIL ADMIN v1.3
+          BALI COCKTAIL ADMIN v1.4
 
-          1. Распакуйте архив полностью.
-          2. Откройте index.html в Chrome или Edge.
-          3. Для публикации используйте fine-grained GitHub token с Contents: Read and write только для репозитория BALI-COCKTAIL-v1.
-          4. Token не нужно передавать в чат или кому-либо ещё.
-
-          Возможности:
-          - коктейли и ингредиенты, официальные фотографии;
-          - продукция, поиск, категории, цены BYN;
-          - выбор отдельных позиций и печать A4 / PDF;
-          - квадратные техкарты для бармена с изображениями ингредиентов;
-          - документальные технологические карты A4;
-          - публикация каталога и автоматическое обновление мобильной версии.
+          Offline-first: после первой синхронизации каталог и официальные фотографии сохраняются на устройстве.
+          Интернет требуется только для обновления каталога и публикации изменений.
           TXT
           cd out
-          zip -r BALI-COCKTAIL-ADMIN-v1.3-Browser.zip BALI-COCKTAIL-ADMIN
-          unzip -l BALI-COCKTAIL-ADMIN-v1.3-Browser.zip
+          zip -r BALI-COCKTAIL-ADMIN-v1.4-Browser.zip BALI-COCKTAIL-ADMIN
+          unzip -l BALI-COCKTAIL-ADMIN-v1.4-Browser.zip
       - name: Upload browser admin
         uses: actions/upload-artifact@v4
         with:
-          name: BALI-COCKTAIL-ADMIN-v1.3-Browser
-          path: out/BALI-COCKTAIL-ADMIN-v1.3-Browser.zip
+          name: BALI-COCKTAIL-ADMIN-v1.4-Browser
+          path: out/BALI-COCKTAIL-ADMIN-v1.4-Browser.zip
           if-no-files-found: error
           retention-days: 30
