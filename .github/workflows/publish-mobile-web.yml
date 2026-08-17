@@ -19,26 +19,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Verify public iPhone launcher renders as HTML
+      - name: Verify iPhone launcher is rendered, not shown as HTML source
         shell: bash
         run: |
           set -euo pipefail
-          APP_URL="https://mvnxfouyoynqyjdpcblh.supabase.co/functions/v1/bali-cocktail-iphone/mYLMPT6khtrtYzlxwG2aA2w-CzdWWpC8/"
-          SW_URL="${APP_URL}sw.js"
-          rm -f /tmp/bali-headers /tmp/bali-body /tmp/bali-sw-headers /tmp/bali-sw
-
+          APP_URL="https://mvnxfouyoynqyjdpcblh.supabase.co/functions/v1/bali-cocktail-iphone?k=mYLMPT6khtrtYzlxwG2aA2w-CzdWWpC8"
+          rm -f /tmp/bali-headers /tmp/bali-body
           status="$(curl -sS --max-time 30 -D /tmp/bali-headers -o /tmp/bali-body -w '%{http_code}' "$APP_URL")"
           cat /tmp/bali-headers
           test "$status" = "200"
-          tr -d '\r' < /tmp/bali-headers | grep -Eiq '^content-type:[[:space:]]*text/html([;[:space:]]|$)'
+          tr -d '\r' < /tmp/bali-headers | grep -Eiq '^content-type:[[:space:]]*image/svg\+xml([;[:space:]]|$)'
           grep -Fq 'BALI COCKTAIL' /tmp/bali-body
-          grep -Eiq '<!doctype html' /tmp/bali-body
-
-          sw_status="$(curl -sS --max-time 30 -D /tmp/bali-sw-headers -o /tmp/bali-sw -w '%{http_code}' "$SW_URL")"
-          cat /tmp/bali-sw-headers
-          test "$sw_status" = "200"
-          tr -d '\r' < /tmp/bali-sw-headers | grep -Eiq '^content-type:[[:space:]]*(application/javascript|text/javascript)([;[:space:]]|$)'
-          grep -Fq 'bali-cocktail-iphone-core-v16' /tmp/bali-sw
+          grep -Fq 'window.location.replace(URL.createObjectURL(b))' /tmp/bali-body
+          if tr -d '\r' < /tmp/bali-headers | grep -Eiq '^content-type:[[:space:]]*text/plain'; then
+            echo "Launcher is still plain text"
+            exit 1
+          fi
 
       - name: Build iPhone installation profile with exact BALI icon
         shell: bash
@@ -49,42 +45,41 @@ jobs:
           python3 - <<'PY'
           import plistlib,uuid
           from pathlib import Path
-          app_url='https://mvnxfouyoynqyjdpcblh.supabase.co/functions/v1/bali-cocktail-iphone/mYLMPT6khtrtYzlxwG2aA2w-CzdWWpC8/'
+          app_url='https://mvnxfouyoynqyjdpcblh.supabase.co/functions/v1/bali-cocktail-iphone?k=mYLMPT6khtrtYzlxwG2aA2w-CzdWWpC8'
           icon=Path('/tmp/bali-180.png').read_bytes()
           clip={
               'PayloadType':'com.apple.webClip.managed',
               'PayloadVersion':1,
-              'PayloadIdentifier':'by.bali.cocktail.v1.webclip.offline.v16',
+              'PayloadIdentifier':'by.bali.cocktail.v1.webclip.fixed.v17',
               'PayloadUUID':str(uuid.uuid4()).upper(),
               'PayloadDisplayName':'BALI COCKTAIL',
-              'PayloadDescription':'BALI COCKTAIL iPhone offline-first',
+              'PayloadDescription':'BALI COCKTAIL iPhone launcher v17',
               'Label':'BALI COCKTAIL',
               'URL':app_url,
               'IsRemovable':True,
               'Precomposed':True,
               'FullScreen':True,
-              'IgnoreManifestScope':True,
               'Icon':icon,
           }
           profile={
               'PayloadType':'Configuration',
               'PayloadVersion':1,
-              'PayloadIdentifier':'by.bali.cocktail.v1.profile.offline.v16',
+              'PayloadIdentifier':'by.bali.cocktail.v1.profile.fixed.v17',
               'PayloadUUID':str(uuid.uuid4()).upper(),
               'PayloadDisplayName':'BALI COCKTAIL',
-              'PayloadDescription':'Исправленная iPhone-версия BALI COCKTAIL. HTML открывается как приложение; каталог и фотографии сохраняются локально после первой синхронизации.',
+              'PayloadDescription':'Исправленная версия для iPhone: вместо исходного HTML-кода запускается интерфейс BALI COCKTAIL. После успешной загрузки оболочка сохраняется на устройстве.',
               'PayloadOrganization':'BALI',
               'PayloadRemovalDisallowed':False,
               'PayloadContent':[clip],
           }
-          with open('out/BALI-COCKTAIL-iPhone-FIXED-v16.mobileconfig','wb') as f:
+          with open('out/BALI-COCKTAIL-iPhone-FIXED-v17.mobileconfig','wb') as f:
               plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
           PY
-          plutil -lint out/BALI-COCKTAIL-iPhone-FIXED-v16.mobileconfig
+          plutil -lint out/BALI-COCKTAIL-iPhone-FIXED-v17.mobileconfig
 
       - uses: actions/upload-artifact@v4
         with:
-          name: BALI-COCKTAIL-iPhone-FIXED-v16
-          path: out/BALI-COCKTAIL-iPhone-FIXED-v16.mobileconfig
+          name: BALI-COCKTAIL-iPhone-FIXED-v17
+          path: out/BALI-COCKTAIL-iPhone-FIXED-v17.mobileconfig
           if-no-files-found: error
           retention-days: 30
