@@ -6,7 +6,7 @@ final class OfficialMediaStore {
     static let baseURL = "https://raw.githubusercontent.com/Nik13599/BALI-COCKTAIL-v1/main/"
 
     private static func directory() -> URL? {
-        guard let base = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else { return nil }
+        guard let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first else { return nil }
         let dir = base.appendingPathComponent("BALI_COCKTAIL_OfficialMedia", isDirectory: true)
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         return dir
@@ -40,6 +40,7 @@ final class OfficialMediaStore {
             guard let url = URL(string: baseURL + path + suffix) else { return image(path: path) }
             var request = URLRequest(url: url)
             request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+            request.timeoutInterval = 20
             let (data, response) = try await URLSession.shared.data(for: request)
             if let http = response as? HTTPURLResponse, !(200...299).contains(http.statusCode) { return image(path: path) }
             guard let image = UIImage(data: data), let file = fileURL(for: path) else { return image(path: path) }
