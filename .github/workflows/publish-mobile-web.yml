@@ -19,20 +19,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Verify iPhone URL renders HTML in browser
+      - name: Verify iPhone launcher is a real HTML page
         shell: bash
         run: |
           set -euo pipefail
-          APP_URL="https://cdn.jsdelivr.net/gh/Nik13599/BALI-COCKTAIL-v1@main/web-template/index.html"
+          APP_URL="https://bali-cocktail-iphone-v19-59j9a3s9k-kolyaselekh-9471s-projects.vercel.app/"
           rm -f /tmp/bali-headers /tmp/bali-body
           status="$(curl -L -sS --max-time 30 -D /tmp/bali-headers -o /tmp/bali-body -w '%{http_code}' "$APP_URL")"
           cat /tmp/bali-headers
           test "$status" = "200"
           tr -d '\r' < /tmp/bali-headers | grep -Eiq '^content-type:[[:space:]]*text/html([;[:space:]]|$)'
           grep -Fq 'BALI COCKTAIL' /tmp/bali-body
+          grep -Fq 'raw.githubusercontent.com/Nik13599/BALI-COCKTAIL-v1' /tmp/bali-body
           grep -Eiq '<!doctype html' /tmp/bali-body
           if tr -d '\r' < /tmp/bali-headers | grep -Eiq '^content-disposition:[[:space:]]*attachment'; then
-            echo "URL is being downloaded instead of rendered"
+            echo "Launcher is being downloaded instead of rendered"
             exit 1
           fi
 
@@ -45,15 +46,15 @@ jobs:
           python3 - <<'PY'
           import plistlib,uuid
           from pathlib import Path
-          app_url='https://cdn.jsdelivr.net/gh/Nik13599/BALI-COCKTAIL-v1@main/web-template/index.html'
+          app_url='https://bali-cocktail-iphone-v19-59j9a3s9k-kolyaselekh-9471s-projects.vercel.app/'
           icon=Path('/tmp/bali-180.png').read_bytes()
           clip={
               'PayloadType':'com.apple.webClip.managed',
               'PayloadVersion':1,
-              'PayloadIdentifier':'by.bali.cocktail.v1.webclip.fixed.v18',
+              'PayloadIdentifier':'by.bali.cocktail.v1.webclip.fixed.v19',
               'PayloadUUID':str(uuid.uuid4()).upper(),
               'PayloadDisplayName':'BALI COCKTAIL',
-              'PayloadDescription':'BALI COCKTAIL iPhone v18 — прямой запуск HTML-интерфейса без SVG и без показа исходного кода.',
+              'PayloadDescription':'BALI COCKTAIL iPhone v19 — настоящий HTML launcher. Без SVG, без raw HTML как text/plain.',
               'Label':'BALI COCKTAIL',
               'URL':app_url,
               'IsRemovable':True,
@@ -65,22 +66,22 @@ jobs:
           profile={
               'PayloadType':'Configuration',
               'PayloadVersion':1,
-              'PayloadIdentifier':'by.bali.cocktail.v1.profile.fixed.v18',
+              'PayloadIdentifier':'by.bali.cocktail.v1.profile.fixed.v19',
               'PayloadUUID':str(uuid.uuid4()).upper(),
               'PayloadDisplayName':'BALI COCKTAIL',
-              'PayloadDescription':'Исправленная версия v18 для iPhone. Убраны SVG-launcher и Supabase-обёртка: приложение открывает HTML напрямую с корректным MIME type text/html.',
+              'PayloadDescription':'Версия v19 для iPhone. Исправлена причина экранов с HTML-кодом и загрузки SVG-файла: WebClip теперь открывает реальную HTML-страницу с MIME type text/html.',
               'PayloadOrganization':'BALI',
               'PayloadRemovalDisallowed':False,
               'PayloadContent':[clip],
           }
-          with open('out/BALI-COCKTAIL-iPhone-FIXED-v18.mobileconfig','wb') as f:
+          with open('out/BALI-COCKTAIL-iPhone-FIXED-v19.mobileconfig','wb') as f:
               plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
           PY
-          plutil -lint out/BALI-COCKTAIL-iPhone-FIXED-v18.mobileconfig
+          plutil -lint out/BALI-COCKTAIL-iPhone-FIXED-v19.mobileconfig
 
       - uses: actions/upload-artifact@v4
         with:
-          name: BALI-COCKTAIL-iPhone-FIXED-v18
-          path: out/BALI-COCKTAIL-iPhone-FIXED-v18.mobileconfig
+          name: BALI-COCKTAIL-iPhone-FIXED-v19
+          path: out/BALI-COCKTAIL-iPhone-FIXED-v19.mobileconfig
           if-no-files-found: error
           retention-days: 30
