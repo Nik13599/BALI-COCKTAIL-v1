@@ -6,8 +6,18 @@
   async function mediaData(path){
     if(!path) return '';
     const pending = window.pendingFiles?.get?.(path) || (typeof pendingFiles!=='undefined' ? pendingFiles.get(path) : null);
-    if(pending) return `data:${mimeFor(path)};base64,${pending}`;
+    if(pending){
+      const data=`data:${mimeFor(path)};base64,${pending}`;
+      window.BALI_cacheMediaDataUrl?.(path,data,manifest?.catalogVersion||0).catch?.(()=>{});
+      return data;
+    }
     if(cache.has(path)) return cache.get(path);
+    if(typeof window.BALI_getOfflineMedia==='function'){
+      try{
+        const data=await window.BALI_getOfflineMedia(path);
+        if(data){cache.set(path,data);return data}
+      }catch{}
+    }
     const url=`https://api.github.com/repos/${OWNER}/${REPO}/contents/${pathUrl(path)}?ref=${encodeURIComponent(BRANCH)}&_bali=${Date.now()}`;
     const headers={'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'};
     if(typeof token!=='undefined' && token) headers.Authorization='Bearer '+token;
@@ -17,6 +27,7 @@
     const x=await r.json();
     const data=`data:${mimeFor(path)};base64,${String(x.content||'').replace(/\n/g,'')}`;
     cache.set(path,data);
+    window.BALI_cacheMediaDataUrl?.(path,data,manifest?.catalogVersion||0).catch?.(()=>{});
     return data;
   }
 
@@ -82,5 +93,6 @@
   document.addEventListener('click',e=>{
     if(e.target?.id==='saveCocktail'||e.target?.id==='saveIngredient'||e.target?.classList?.contains('publish')) setTimeout(()=>{cache.clear();hydrateAll()},200);
   },true);
+  window.addEventListener('online',()=>{cache.clear();window.BALI_cacheCatalogMedia?.().then(()=>hydrateAll()).catch(()=>{})});
   setTimeout(hydrateAll,250);
 })();
