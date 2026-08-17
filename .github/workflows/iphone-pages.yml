@@ -54,6 +54,8 @@ jobs:
           test -f _site/sw.js
           test -f _site/admin/sw.js
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
