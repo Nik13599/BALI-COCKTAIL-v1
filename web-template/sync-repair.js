@@ -1,7 +1,7 @@
 (() => {
   let running = false;
-  const MEDIA_CACHE='bali-cocktail-media-v10';
-  const DATA_CACHE='bali-cocktail-data-v10';
+  const MEDIA_CACHE='bali-cocktail-media-v11';
+  const DATA_CACHE='bali-cocktail-data-v11';
 
   const canonical=u=>{const x=new URL(u,location.href);x.search='';x.hash='';return x.toString()};
 
@@ -65,7 +65,6 @@
         fetchJson(REMOTE + nextManifest.ingredients + '?v=' + nextManifest.catalogVersion + '&ts=' + stamp)
       ]);
 
-      // Сначала полностью сохраняем новую базу и изображения, затем активируем версию.
       await saveJsonFallback(nextManifest,c,i);
       await cacheAllMedia(c,i,nextManifest.catalogVersion);
 
