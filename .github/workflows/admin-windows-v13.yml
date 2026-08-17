@@ -38,6 +38,7 @@ jobs:
           node --check print-tools.js
           node --check print-bartender-tweaks.js
           node --check publish-fix.js
+          node --check reload-verify.js
           node --check main.js
       - name: Install dependencies
         working-directory: admin
@@ -51,8 +52,8 @@ jobs:
           New-Item -ItemType Directory -Force -Path out | Out-Null
           $exe=Get-ChildItem admin/dist -Filter '*.exe' -File | Sort-Object Length -Descending | Select-Object -First 1
           if (-not $exe) { throw 'Windows executable not found' }
-          Copy-Item $exe.FullName 'out/BALI-COCKTAIL-ADMIN-v1.3.exe'
-          $bytes=[IO.File]::ReadAllBytes('out/BALI-COCKTAIL-ADMIN-v1.3.exe')
+          Copy-Item $exe.FullName 'out/BALI-COCKTAIL-ADMIN-v1.3.1.exe'
+          $bytes=[IO.File]::ReadAllBytes('out/BALI-COCKTAIL-ADMIN-v1.3.1.exe')
           if ($bytes[0] -ne 0x4D -or $bytes[1] -ne 0x5A) { throw 'Invalid EXE' }
       - uses: actions/upload-artifact@v4
-        with: {name: BALI-COCKTAIL-ADMIN-v1.3-Windows, path: out/BALI-COCKTAIL-ADMIN-v1.3.exe, if-no-files-found: error, retention-days: 30}
+        with: {name: BALI-COCKTAIL-ADMIN-v1.3.1-Windows, path: out/BALI-COCKTAIL-ADMIN-v1.3.1.exe, if-no-files-found: error, retention-days: 30}
