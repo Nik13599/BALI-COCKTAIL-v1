@@ -1,74 +1,42 @@
-name: Publish BALI COCKTAIL v1 iPhone Web App
+name: Build BALI COCKTAIL iPhone OFFLINE Profile
 
 on:
   push:
     branches: [main]
+    paths:
+      - 'web-template/**'
+      - 'branding/app-icon.png'
+      - '.github/workflows/publish-mobile-web.yml'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  publish:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
+  profile:
+    runs-on: macos-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - name: Generate fallback catalogue
-        shell: bash
-        run: |
-          cat scripts/bootstrap.part.* > /tmp/bootstrap.sh
-          chmod +x /tmp/bootstrap.sh
-          /tmp/bootstrap.sh generated
-          chmod +x scripts/apply-overrides.sh
-          scripts/apply-overrides.sh generated
-      - name: Prepare static iPhone app with canonical BALI icon
-        shell: bash
-        run: |
-          set -euo pipefail
-          rm -rf /tmp/bali-mobile
-          mkdir -p /tmp/bali-mobile/images
-          cp web-template/index.html /tmp/bali-mobile/index.html
-          cp web-template/sw.js web-template/ingredient-zoom.js web-template/readonly-mobile.js web-template/sort-alpha.js web-template/sync-repair.js web-template/manifest.webmanifest /tmp/bali-mobile/
-          cp data/cocktails.json /tmp/bali-mobile/cocktails.json
-          cp branding/app-icon.png /tmp/bali-mobile/images/ic_launcher.png
-          python3 - <<'PY'
-          from pathlib import Path
-          p=Path('/tmp/bali-mobile/index.html');s=p.read_text(encoding='utf-8')
-          s=s.replace('</body>','<script src="ingredient-zoom.js"></script>\n<script src="readonly-mobile.js"></script>\n<script src="sort-alpha.js"></script>\n<script src="sync-repair.js"></script>\n</body>')
-          if 'apple-touch-icon' not in s:s=s.replace('</head>','<link rel="apple-touch-icon" href="images/ic_launcher.png">\n</head>')
-          p.write_text(s,encoding='utf-8')
-          PY
-          touch /tmp/bali-mobile/.nojekyll
-      - name: Publish mobile-web branch
-        id: publish
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout --orphan mobile-web; git rm -rf .; git clean -fdx; cp -R /tmp/bali-mobile/. .
-          git add -A; git commit -m "Publish BALI COCKTAIL v1 iPhone web app"
-          WEB_SHA=$(git rev-parse HEAD); git push --force origin mobile-web; echo "sha=$WEB_SHA" >> "$GITHUB_OUTPUT"
-      - name: Verify iPhone app is served as HTML from production CDN
-        shell: bash
-        env: {WEB_SHA: '${{ steps.publish.outputs.sha }}'}
-        run: |
-          URL="https://rawcdn.githack.com/Nik13599/BALI-COCKTAIL-v1/${WEB_SHA}/index.html"; ok=0
-          for attempt in $(seq 1 12); do headers="$(curl -fsSI "$URL" 2>/dev/null || true)"; if printf '%s\n' "$headers" | tr -d '\r' | grep -Eqi '^content-type:[[:space:]]*text/html'; then ok=1; break; fi; sleep 5; done
-          test "$ok" -eq 1
       - name: Build iPhone installation profile with exact BALI icon
         shell: bash
-        env: {WEB_SHA: '${{ steps.publish.outputs.sha }}'}
         run: |
+          set -euo pipefail
           mkdir -p out
+          sips -z 180 180 branding/app-icon.png --out /tmp/bali-180.png >/dev/null
           python3 - <<'PY'
-          import plistlib,uuid,os
+          import plistlib,uuid
           from pathlib import Path
-          sha=os.environ['WEB_SHA'];app_url=f'https://rawcdn.githack.com/Nik13599/BALI-COCKTAIL-v1/{sha}/index.html'
-          icon=Path('/tmp/bali-mobile/images/ic_launcher.png').read_bytes()
-          clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktail.v1.webclip.readonly.v3','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL','PayloadDescription':'BALI COCKTAIL v1 — режим просмотра','Label':'BALI COCKTAIL','URL':app_url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
-          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktail.v1.profile.readonly.v3','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL','PayloadDescription':'Устанавливает BALI COCKTAIL на iPhone в режиме просмотра.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
-          with open('out/BALI-COCKTAIL-v1-iPhone.mobileconfig','wb') as f:plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
+          app_url='https://nik13599.github.io/BALI-COCKTAIL-v1/'
+          icon=Path('/tmp/bali-180.png').read_bytes()
+          clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktail.v1.webclip.offline.v5','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL','PayloadDescription':'BALI COCKTAIL offline-first','Label':'BALI COCKTAIL','URL':app_url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
+          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktail.v1.profile.offline.v5','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL','PayloadDescription':'Устанавливает BALI COCKTAIL на iPhone. Каталог и фотографии сохраняются локально после первой синхронизации.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
+          with open('out/BALI-COCKTAIL-iPhone-OFFLINE-v5.mobileconfig','wb') as f:plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
           PY
+          plutil -lint out/BALI-COCKTAIL-iPhone-OFFLINE-v5.mobileconfig
       - uses: actions/upload-artifact@v4
-        with: {name: BALI-COCKTAIL-v1-iPhone-Mobileconfig, path: out/BALI-COCKTAIL-v1-iPhone.mobileconfig, if-no-files-found: error, retention-days: 30}
+        with:
+          name: BALI-COCKTAIL-iPhone-OFFLINE-v5
+          path: out/BALI-COCKTAIL-iPhone-OFFLINE-v5.mobileconfig
+          if-no-files-found: error
+          retention-days: 30
