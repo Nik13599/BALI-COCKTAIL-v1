@@ -1,5 +1,168 @@
 [
   {
+    "id": "amed",
+    "name": "Амед",
+    "category": "Авторские",
+    "yield": "160 мл",
+    "ingredients": [
+      {
+        "name": "Виски “Jim Beam”",
+        "amount": 40,
+        "unit": "мл",
+        "ingredientId": "jim-beam"
+      },
+      {
+        "name": "Ликер кофейный “Volare”",
+        "amount": 20,
+        "unit": "мл",
+        "ingredientId": "volare"
+      },
+      {
+        "name": "Сироп Ваниль “Richeza”",
+        "amount": 10,
+        "unit": "мл",
+        "ingredientId": "richeza"
+      },
+      {
+        "name": "Сироп Банан “Richeza”",
+        "amount": 10,
+        "unit": "мл",
+        "ingredientId": "richeza"
+      },
+      {
+        "name": "Сливки 20% “Milkavita”",
+        "amount": 80,
+        "unit": "мл",
+        "ingredientId": "20-milkavita"
+      }
+    ],
+    "glass": "Тики",
+    "ice": "Кубиковый лёд",
+    "method": "Shake",
+    "taste": "сливочный · кофе · банан · сладкий",
+    "steps": [
+      "Наполни рокс свежим кубиковым льдом.",
+      "В шейкер налей виски, кофейный ликёр, ванильный и банановый сиропы, затем сливки.",
+      "Добавь в шейкер лёд.",
+      "Хорошо встряхивай 12–15 секунд для охлаждения и текстуры.",
+      "Процеди в подготовленный рокс со свежим льдом."
+    ],
+    "officialImage": null
+  },
+  {
+    "id": "americano",
+    "name": "Американо",
+    "category": "Классика",
+    "yield": "120 мл",
+    "ingredients": [
+      {
+        "name": "Вермут Rosso “Martini”",
+        "amount": 30,
+        "unit": "мл",
+        "ingredientId": "rosso-martini"
+      },
+      {
+        "name": "Ликер “Campari”",
+        "amount": 30,
+        "unit": "мл",
+        "ingredientId": "campari"
+      },
+      {
+        "name": "Содовая сильный газ “Bonaqua”",
+        "amount": 60,
+        "unit": "мл",
+        "ingredientId": "bonaqua"
+      }
+    ],
+    "glass": "Хайбол / рокс",
+    "ice": "Кубиковый лёд",
+    "method": "Build",
+    "taste": "горько-сладкий · травяной · освежающий",
+    "steps": [
+      "Наполни бокал кубиковым льдом.",
+      "Налей красный вермут и Campari.",
+      "Долей содовую.",
+      "Аккуратно перемешай барной ложкой 2–3 оборота."
+    ],
+    "officialImage": null
+  },
+  {
+    "id": "aperol_spritz",
+    "name": "Апероль Шпритц",
+    "category": "Классика",
+    "yield": "180 мл",
+    "ingredients": [
+      {
+        "name": "Ликер “Aperol”",
+        "amount": 60,
+        "unit": "мл",
+        "ingredientId": "aperol"
+      },
+      {
+        "name": "Содовая сильный газ “Bonaqua”",
+        "amount": 40,
+        "unit": "мл",
+        "ingredientId": "bonaqua"
+      },
+      {
+        "name": "Игристое “Барон д`Арньяк”",
+        "amount": 80,
+        "unit": "мл",
+        "ingredientId": "item-1087961559091119526"
+      }
+    ],
+    "glass": "Винный бокал",
+    "ice": "Много кубикового льда",
+    "method": "Build",
+    "taste": "апельсин · лёгкая горечь · игристый · освежающий",
+    "steps": [
+      "Полностью наполни винный бокал крупным льдом.",
+      "Налей Aperol.",
+      "Добавь игристое.",
+      "Долей содовую.",
+      "Один раз аккуратно перемешай снизу вверх, не выпуская газ."
+    ],
+    "officialImage": null
+  },
+  {
+    "id": "b52",
+    "name": "Б-52",
+    "category": "Классика",
+    "yield": "50 мл",
+    "ingredients": [
+      {
+        "name": "Ликер кофейный “Volare”",
+        "amount": 15,
+        "unit": "мл",
+        "ingredientId": "volare"
+      },
+      {
+        "name": "Ликер сливочный “Bumby”",
+        "amount": 15,
+        "unit": "мл",
+        "ingredientId": "bumby"
+      },
+      {
+        "name": "Ликер Triple Sec “Volare”",
+        "amount": 20,
+        "unit": "мл",
+        "ingredientId": "triple-sec-volare"
+      }
+    ],
+    "glass": "Шот",
+    "ice": "Без льда",
+    "method": "Layer",
+    "taste": "кофейный · сливочный · апельсиновый · сладкий",
+    "steps": [
+      "Подготовь сухой шот.",
+      "Налей кофейный ликёр первым слоем.",
+      "По обратной стороне барной ложки аккуратно уложи сливочный ликёр.",
+      "Тем же способом уложи сверху Triple Sec.",
+      "Не перемешивай — слои должны оставаться разделёнными."
+    ],
+    "officialImage": null
+  },
+  {
     "id": "barong",
     "name": "Баронг",
     "category": "Авторские",
@@ -42,6 +205,262 @@
       "Процеди через стрейнер и мелкое сито в охлаждённый бокал."
     ],
     "officialImage": null
+  },
+  {
+    "id": "bellini",
+    "name": "Беллини",
+    "category": "Классика",
+    "yield": "160 мл",
+    "ingredients": [
+      {
+        "name": "Пюре Персик “Richeza”",
+        "amount": 25,
+        "unit": "мл",
+        "ingredientId": "richeza"
+      },
+      {
+        "name": "Сироп Персик “Richeza”",
+        "amount": 10,
+        "unit": "мл",
+        "ingredientId": "richeza"
+      },
+      {
+        "name": "Ликер Персик “Volare”",
+        "amount": 5,
+        "unit": "мл",
+        "ingredientId": "volare"
+      },
+      {
+        "name": "Игристое “Барон д`Арньяк”",
+        "amount": 120,
+        "unit": "мл",
+        "ingredientId": "item-1087961559091119526"
+      }
+    ],
+    "glass": "Флюте",
+    "ice": "Без льда",
+    "method": "Build",
+    "taste": "персиковый · игристый · мягкий · сладковатый",
+    "steps": [
+      "Охлади флюте.",
+      "На дно положи персиковое пюре, сироп и персиковый ликёр.",
+      "Добавь небольшую часть игристого и аккуратно размешай основу.",
+      "Долей остальное игристое по стенке.",
+      "Не взбалтывай."
+    ],
+    "officialImage": null
+  },
+  {
+    "id": "white_russian",
+    "name": "Белый русский",
+    "category": "Классика",
+    "yield": "90 мл",
+    "ingredients": [
+      {
+        "name": "Водка “Сябры”",
+        "amount": 30,
+        "unit": "мл",
+        "ingredientId": "item-550479881196021692"
+      },
+      {
+        "name": "Ликер кофейный “Volare”",
+        "amount": 30,
+        "unit": "мл",
+        "ingredientId": "volare"
+      },
+      {
+        "name": "Сливки 20% “Milkavita”",
+        "amount": 30,
+        "unit": "мл",
+        "ingredientId": "20-milkavita"
+      }
+    ],
+    "glass": "Рокс",
+    "ice": "Кубиковый лёд",
+    "method": "Build",
+    "taste": "кофейный · сливочный · сладкий",
+    "steps": [
+      "Наполни рокс льдом.",
+      "Налей водку и кофейный ликёр.",
+      "Слегка перемешай.",
+      "Аккуратно добавь сливки сверху.",
+      "По стандарту бара можно оставить слой сливок или сделать 1–2 мягких оборота ложкой."
+    ],
+    "officialImage": null
+  },
+  {
+    "id": "bukit",
+    "name": "Букит",
+    "category": "Авторские",
+    "yield": "195 мл",
+    "ingredients": [
+      {
+        "name": "Водка “Сябры”",
+        "amount": 60,
+        "unit": "мл",
+        "ingredientId": "item-550479881196021692"
+      },
+      {
+        "name": "Сироп Груша “Richeza”",
+        "amount": 10,
+        "unit": "мл",
+        "ingredientId": "richeza"
+      },
+      {
+        "name": "Сироп Персик “Richeza”",
+        "amount": 15,
+        "unit": "мл",
+        "ingredientId": "richeza"
+      },
+      {
+        "name": "Супер Джус Лимон “Napitki”",
+        "amount": 20,
+        "unit": "мл",
+        "ingredientId": "napitki"
+      },
+      {
+        "name": "Морс Клюквенный “Сочный”",
+        "amount": 100,
+        "unit": "мл",
+        "ingredientId": "item-136957411381451620"
+      }
+    ],
+    "glass": "Тики",
+    "ice": "Кубиковый лёд",
+    "method": "Shake",
+    "taste": "ягодный · фруктовый · кисло-сладкий",
+    "steps": [
+      "Наполни хайбол свежим кубиковым льдом.",
+      "Налей все компоненты в шейкер.",
+      "Добавь лёд и встряхивай 10–12 секунд.",
+      "Процеди в хайбол со свежим льдом.",
+      "При необходимости слегка перемешай барной ложкой."
+    ],
+    "officialImage": null
+  },
+  {
+    "id": "boulevardier",
+    "name": "Бульвардье",
+    "category": "Классика",
+    "yield": "90 мл",
+    "ingredients": [
+      {
+        "name": "Виски “Jim Beam”",
+        "amount": 30,
+        "unit": "мл",
+        "ingredientId": "jim-beam"
+      },
+      {
+        "name": "Вермут Rosso “Martini”",
+        "amount": 30,
+        "unit": "мл",
+        "ingredientId": "rosso-martini"
+      },
+      {
+        "name": "Ликер “Campari”",
+        "amount": 30,
+        "unit": "мл",
+        "ingredientId": "campari"
+      }
+    ],
+    "glass": "Рокс",
+    "ice": "Крупный куб / кубиковый лёд",
+    "method": "Stir",
+    "taste": "горько-сладкий · виски · травяной",
+    "steps": [
+      "Наполни смесительный стакан льдом.",
+      "Налей виски, красный вермут и Campari.",
+      "Перемешивай барной ложкой 15–20 секунд.",
+      "Процеди в рокс на свежий крупный лёд."
+    ],
+    "officialImage": null
+  },
+  {
+    "id": "basil_smash",
+    "name": "Бэзил Смэш",
+    "category": "Классика",
+    "yield": "85 мл",
+    "ingredients": [
+      {
+        "name": "Джин “Bickens”",
+        "amount": 40,
+        "unit": "мл",
+        "ingredientId": "bickens"
+      },
+      {
+        "name": "Базилик",
+        "amount": 5,
+        "unit": "г",
+        "ingredientId": "item-2583973214022561171"
+      },
+      {
+        "name": "Сахарный сироп",
+        "amount": 15,
+        "unit": "мл",
+        "ingredientId": "item-4020456252462178681"
+      },
+      {
+        "name": "Супер Джус Лимон “Napitki”",
+        "amount": 25,
+        "unit": "мл",
+        "ingredientId": "napitki"
+      }
+    ],
+    "glass": "Рокс",
+    "ice": "Кубиковый лёд",
+    "method": "Shake + double strain",
+    "taste": "базилик · цитрус · свежий · кисло-сладкий",
+    "steps": [
+      "Положи базилик в шейкер и мягко прижми мадлером без сильного разрыва листьев.",
+      "Добавь джин, сахарный сироп и лимонный super juice.",
+      "Заполни шейкер льдом и хорошо встряхни.",
+      "Двойная фильтрация в рокс на свежий лёд."
+    ],
+    "officialImage": null
+  },
+  {
+    "id": "whiskey_sour",
+    "name": "Виски Сауэр",
+    "category": "Классика",
+    "yield": "86 мл",
+    "ingredients": [
+      {
+        "name": "Виски “Jim Beam”",
+        "amount": 40,
+        "unit": "мл",
+        "ingredientId": "jim-beam"
+      },
+      {
+        "name": "Сахарный сироп",
+        "amount": 15,
+        "unit": "мл",
+        "ingredientId": "item-4020456252462178681"
+      },
+      {
+        "name": "Ангостура Биттер",
+        "amount": 1,
+        "unit": "мл",
+        "ingredientId": "item-539852004450158089"
+      },
+      {
+        "name": "Супер Джус Лимон “Napitki”",
+        "amount": 30,
+        "unit": "мл",
+        "ingredientId": "napitki"
+      }
+    ],
+    "glass": "Рокс",
+    "ice": "Кубиковый лёд",
+    "method": "Shake",
+    "taste": "виски · цитрус · кисло-сладкий · пряный",
+    "steps": [
+      "Наполни рокс свежим льдом.",
+      "Налей виски, сахарный сироп, Ангостуру и лимонный super juice в шейкер.",
+      "Добавь лёд.",
+      "Интенсивно встряхивай 10–12 секунд.",
+      "Процеди в рокс со свежим льдом."
+    ],
+    "officialImage": "media/cocktails/whiskey_sour-1786976759160.jpg"
   },
   {
     "id": "ganesha",
@@ -158,6 +577,43 @@
     "officialImage": null
   },
   {
+    "id": "daiquiri",
+    "name": "Дайкири",
+    "category": "Классика",
+    "yield": "80 мл",
+    "ingredients": [
+      {
+        "name": "Ром “Negrita”",
+        "amount": 40,
+        "unit": "мл",
+        "ingredientId": "negrita"
+      },
+      {
+        "name": "Сахарный сироп",
+        "amount": 15,
+        "unit": "мл",
+        "ingredientId": "item-4020456252462178681"
+      },
+      {
+        "name": "Супер Джус Лимон “Napitki”",
+        "amount": 25,
+        "unit": "мл",
+        "ingredientId": "napitki"
+      }
+    ],
+    "glass": "Купе",
+    "ice": "В шейкер — кубиковый; в подаче — без льда",
+    "method": "Shake + double strain",
+    "taste": "чистый цитрус · ром · кисло-сладкий",
+    "steps": [
+      "Охлади купе.",
+      "Налей ром, сахарный сироп и лимонный super juice в шейкер.",
+      "Добавь лёд и встряхивай 10–12 секунд.",
+      "Двойная фильтрация в охлаждённый бокал."
+    ],
+    "officialImage": null
+  },
+  {
     "id": "devi_shri",
     "name": "Деви Шри",
     "category": "Авторские",
@@ -208,90 +664,46 @@
     "officialImage": null
   },
   {
-    "id": "malina",
-    "name": "Малина",
-    "category": "Заготовки",
-    "yield": "1351 мл",
+    "id": "clover_club",
+    "name": "Кловер Клаб",
+    "category": "Классика",
+    "yield": "105 мл",
     "ingredients": [
       {
         "name": "Джин “Bickens”",
-        "amount": 750,
+        "amount": 40,
         "unit": "мл",
         "ingredientId": "bickens"
       },
       {
-        "name": "Сахар песок",
-        "amount": 225,
-        "unit": "г",
-        "ingredientId": "item-5052205649094645332"
-      },
-      {
-        "name": "Малина",
-        "amount": 375,
-        "unit": "г",
-        "ingredientId": "item-670529702604910898"
-      },
-      {
-        "name": "Бадьян",
-        "amount": 1,
-        "unit": "г",
-        "ingredientId": "item-2439379686806395429"
-      }
-    ],
-    "glass": "Заготовка / бутылка",
-    "ice": "Не используется",
-    "method": "Infusion / Batch",
-    "taste": "малиновый · пряный · сладкий",
-    "steps": [
-      "Отмерь малину, сахар и бадьян.",
-      "Соедини их в ёмкости и слегка перемешай.",
-      "Добавь джин и тщательно перемешай.",
-      "Закрой ёмкость для настаивания.",
-      "Время настаивания и способ фильтрации в исходной техкарте не указаны — используй внутренний стандарт бара."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "rangda",
-    "name": "Рангда",
-    "category": "Заготовки",
-    "yield": "445 мл",
-    "ingredients": [
-      {
-        "name": "Водка “Сябры”",
-        "amount": 200,
-        "unit": "мл",
-        "ingredientId": "item-550479881196021692"
-      },
-      {
-        "name": "Сливки 20% “Milkavita”",
-        "amount": 140,
-        "unit": "мл",
-        "ingredientId": "20-milkavita"
-      },
-      {
-        "name": "Концентрат Кокос “Richeza”",
-        "amount": 100,
+        "name": "Пюре Малина “Richeza”",
+        "amount": 30,
         "unit": "мл",
         "ingredientId": "richeza"
       },
       {
-        "name": "Кокосовая стружка",
-        "amount": 5,
-        "unit": "г",
-        "ingredientId": "item-5904083384581358579"
+        "name": "Сахарный сироп",
+        "amount": 15,
+        "unit": "мл",
+        "ingredientId": "item-4020456252462178681"
+      },
+      {
+        "name": "Супер Джус Лимон “Napitki”",
+        "amount": 20,
+        "unit": "мл",
+        "ingredientId": "napitki"
       }
     ],
-    "glass": "Заготовка / бутылка",
-    "ice": "Не используется",
-    "method": "Batch",
-    "taste": "сливочный · кокосовый · мягкий",
+    "glass": "Купе",
+    "ice": "В шейкер — кубиковый; в подаче — без льда",
+    "method": "Shake + double strain",
+    "taste": "малиновый · цитрусовый · кисло-сладкий",
     "steps": [
-      "Отмерь водку, сливки и кокосовый концентрат.",
-      "Соедини жидкие компоненты и размешай до однородности.",
-      "Добавь кокосовую стружку и перемешай.",
-      "Перелей в закрывающуюся ёмкость и держи охлаждённой.",
-      "Перед порционированием перемешай/встряхни заготовку, если произошло расслоение."
+      "Охлади купе.",
+      "Налей джин, малиновое пюре, сахарный сироп и лимонный super juice в шейкер.",
+      "Добавь лёд.",
+      "Интенсивно встряхивай 10–12 секунд.",
+      "Двойная фильтрация в охлаждённый бокал."
     ],
     "officialImage": null
   },
@@ -340,52 +752,143 @@
     "officialImage": null
   },
   {
-    "id": "amed",
-    "name": "Амед",
-    "category": "Авторские",
-    "yield": "160 мл",
+    "id": "cosmopolitan",
+    "name": "Космополитен",
+    "category": "Классика",
+    "yield": "125 мл",
+    "ingredients": [
+      {
+        "name": "Водка “Сябры”",
+        "amount": 35,
+        "unit": "мл",
+        "ingredientId": "item-550479881196021692"
+      },
+      {
+        "name": "Ликер Triple Sec “Volare”",
+        "amount": 15,
+        "unit": "мл",
+        "ingredientId": "triple-sec-volare"
+      },
+      {
+        "name": "Морс клюквенный “Сочный”",
+        "amount": 40,
+        "unit": "мл",
+        "ingredientId": "item-791201347993421369"
+      },
+      {
+        "name": "Сахарный сироп",
+        "amount": 20,
+        "unit": "мл",
+        "ingredientId": "item-4020456252462178681"
+      },
+      {
+        "name": "Супер Джус Лимон “Napitki”",
+        "amount": 15,
+        "unit": "мл",
+        "ingredientId": "napitki"
+      }
+    ],
+    "glass": "Купе / Martini",
+    "ice": "В шейкер — кубиковый; в подаче — без льда",
+    "method": "Shake + double strain",
+    "taste": "клюква · цитрус · кисло-сладкий",
+    "steps": [
+      "Охлади бокал.",
+      "Налей в шейкер водку, Triple Sec, клюквенный морс, сахарный сироп и лимонный super juice.",
+      "Добавь лёд и энергично встряхивай 10–12 секунд.",
+      "Двойная фильтрация в охлаждённый бокал."
+    ],
+    "officialImage": null
+  },
+  {
+    "id": "godfather",
+    "name": "Крёстный отец",
+    "category": "Классика",
+    "yield": "80 мл",
     "ingredients": [
       {
         "name": "Виски “Jim Beam”",
-        "amount": 40,
+        "amount": 50,
         "unit": "мл",
         "ingredientId": "jim-beam"
       },
       {
-        "name": "Ликер кофейный “Volare”",
-        "amount": 20,
+        "name": "Ликер Амаретто “Ramazotti”",
+        "amount": 30,
         "unit": "мл",
-        "ingredientId": "volare"
-      },
-      {
-        "name": "Сироп Ваниль “Richeza”",
-        "amount": 10,
-        "unit": "мл",
-        "ingredientId": "richeza"
-      },
-      {
-        "name": "Сироп Банан “Richeza”",
-        "amount": 10,
-        "unit": "мл",
-        "ingredientId": "richeza"
-      },
-      {
-        "name": "Сливки 20% “Milkavita”",
-        "amount": 80,
-        "unit": "мл",
-        "ingredientId": "20-milkavita"
+        "ingredientId": "ramazotti"
       }
     ],
-    "glass": "Тики",
-    "ice": "Кубиковый лёд",
-    "method": "Shake",
-    "taste": "сливочный · кофе · банан · сладкий",
+    "glass": "Рокс",
+    "ice": "Крупный куб / кубиковый лёд",
+    "method": "Stir / Build",
+    "taste": "виски · миндаль · мягкий · сладковатый",
     "steps": [
-      "Наполни рокс свежим кубиковым льдом.",
-      "В шейкер налей виски, кофейный ликёр, ванильный и банановый сиропы, затем сливки.",
-      "Добавь в шейкер лёд.",
-      "Хорошо встряхивай 12–15 секунд для охлаждения и текстуры.",
-      "Процеди в подготовленный рокс со свежим льдом."
+      "Наполни рокс свежим крупным льдом.",
+      "Налей виски и амаретто.",
+      "Перемешай барной ложкой 10–15 секунд прямо в бокале."
+    ],
+    "officialImage": null
+  },
+  {
+    "id": "bloody_mary",
+    "name": "Кровавая Мэри",
+    "category": "Классика",
+    "yield": "145 мл",
+    "ingredients": [
+      {
+        "name": "Водка “Сябры”",
+        "amount": 50,
+        "unit": "мл",
+        "ingredientId": "item-550479881196021692"
+      },
+      {
+        "name": "Сок томатный “Villa Dina”",
+        "amount": 50,
+        "unit": "мл",
+        "ingredientId": "villa-dina"
+      },
+      {
+        "name": "Соус Кимчи",
+        "amount": 5,
+        "unit": "г",
+        "ingredientId": "item-3645362827299557583"
+      },
+      {
+        "name": "Сахарный сироп",
+        "amount": 10,
+        "unit": "мл",
+        "ingredientId": "item-4020456252462178681"
+      },
+      {
+        "name": "Супер Джус Лимон “Napitki”",
+        "amount": 15,
+        "unit": "мл",
+        "ingredientId": "napitki"
+      },
+      {
+        "name": "Сок Апельсин “Villa Dina”",
+        "amount": 10,
+        "unit": "мл",
+        "ingredientId": "villa-dina"
+      },
+      {
+        "name": "Соус соевый",
+        "amount": 5,
+        "unit": "г",
+        "ingredientId": "item-2751805162961066529"
+      }
+    ],
+    "glass": "Хайбол",
+    "ice": "Кубиковый лёд",
+    "method": "Build / Roll",
+    "taste": "томат · пряный · умами · кисло-сладкий",
+    "steps": [
+      "Наполни хайбол кубиковым льдом.",
+      "В отдельной ёмкости соедини все жидкие компоненты и соусы.",
+      "Перелей смесь между двумя ёмкостями 3–4 раза (roll), чтобы смешать без лишней пены.",
+      "Налей в хайбол со льдом.",
+      "Не шейкуй агрессивно."
     ],
     "officialImage": null
   },
@@ -446,28 +949,104 @@
     "officialImage": null
   },
   {
-    "id": "bukit",
-    "name": "Букит",
-    "category": "Авторские",
-    "yield": "195 мл",
+    "id": "malina",
+    "name": "Малина",
+    "category": "Заготовки",
+    "yield": "1351 мл",
     "ingredients": [
       {
-        "name": "Водка “Сябры”",
-        "amount": 60,
+        "name": "Джин “Bickens”",
+        "amount": 750,
         "unit": "мл",
-        "ingredientId": "item-550479881196021692"
+        "ingredientId": "bickens"
       },
       {
-        "name": "Сироп Груша “Richeza”",
-        "amount": 10,
-        "unit": "мл",
-        "ingredientId": "richeza"
+        "name": "Сахар песок",
+        "amount": 225,
+        "unit": "г",
+        "ingredientId": "item-5052205649094645332"
       },
       {
-        "name": "Сироп Персик “Richeza”",
+        "name": "Малина",
+        "amount": 375,
+        "unit": "г",
+        "ingredientId": "item-670529702604910898"
+      },
+      {
+        "name": "Бадьян",
+        "amount": 1,
+        "unit": "г",
+        "ingredientId": "item-2439379686806395429"
+      }
+    ],
+    "glass": "Заготовка / бутылка",
+    "ice": "Не используется",
+    "method": "Infusion / Batch",
+    "taste": "малиновый · пряный · сладкий",
+    "steps": [
+      "Отмерь малину, сахар и бадьян.",
+      "Соедини их в ёмкости и слегка перемешай.",
+      "Добавь джин и тщательно перемешай.",
+      "Закрой ёмкость для настаивания.",
+      "Время настаивания и способ фильтрации в исходной техкарте не указаны — используй внутренний стандарт бара."
+    ],
+    "officialImage": null
+  },
+  {
+    "id": "manhattan",
+    "name": "Манхэттен",
+    "category": "Классика",
+    "yield": "81 мл",
+    "ingredients": [
+      {
+        "name": "Виски “Jim Beam”",
+        "amount": 40,
+        "unit": "мл",
+        "ingredientId": "jim-beam"
+      },
+      {
+        "name": "Вермут Rosso “Martini”",
+        "amount": 40,
+        "unit": "мл",
+        "ingredientId": "rosso-martini"
+      },
+      {
+        "name": "Биттер Ангостура",
+        "amount": 1,
+        "unit": "мл",
+        "ingredientId": "item-2801670206194608693"
+      }
+    ],
+    "glass": "Купе / Nick & Nora",
+    "ice": "В смесительный стакан; в подаче — без льда",
+    "method": "Stir + strain",
+    "taste": "виски · травяной · пряный · суховатый",
+    "steps": [
+      "Охлади бокал.",
+      "Наполни смесительный стакан льдом.",
+      "Налей виски, красный вермут и Ангостуру.",
+      "Перемешивай 15–20 секунд.",
+      "Процеди в охлаждённый бокал."
+    ],
+    "officialImage": null
+  },
+  {
+    "id": "margarita",
+    "name": "Маргарита",
+    "category": "Классика",
+    "yield": "80 мл",
+    "ingredients": [
+      {
+        "name": "Текила “Siera”",
+        "amount": 35,
+        "unit": "мл",
+        "ingredientId": "siera"
+      },
+      {
+        "name": "Ликер Triple Sec “Volare”",
         "amount": 15,
         "unit": "мл",
-        "ingredientId": "richeza"
+        "ingredientId": "triple-sec-volare"
       },
       {
         "name": "Супер Джус Лимон “Napitki”",
@@ -476,22 +1055,108 @@
         "ingredientId": "napitki"
       },
       {
-        "name": "Морс Клюквенный “Сочный”",
-        "amount": 100,
+        "name": "Сахарный сироп",
+        "amount": 10,
         "unit": "мл",
-        "ingredientId": "item-136957411381451620"
+        "ingredientId": "item-4020456252462178681"
       }
     ],
-    "glass": "Тики",
-    "ice": "Кубиковый лёд",
-    "method": "Shake",
-    "taste": "ягодный · фруктовый · кисло-сладкий",
+    "glass": "Купе / Margarita",
+    "ice": "В шейкер; в подаче — без льда",
+    "method": "Shake + double strain",
+    "taste": "текила · цитрус · кисло-сладкий",
     "steps": [
-      "Наполни хайбол свежим кубиковым льдом.",
-      "Налей все компоненты в шейкер.",
-      "Добавь лёд и встряхивай 10–12 секунд.",
-      "Процеди в хайбол со свежим льдом.",
-      "При необходимости слегка перемешай барной ложкой."
+      "Охлади бокал; при стандарте бара подготовь солёный край.",
+      "Налей текилу, Triple Sec, лимонный super juice и сахарный сироп в шейкер.",
+      "Добавь лёд и энергично встряхивай 10–12 секунд.",
+      "Двойная фильтрация в охлаждённый бокал."
+    ],
+    "officialImage": null
+  },
+  {
+    "id": "mojito",
+    "name": "Мохито",
+    "category": "Классика",
+    "yield": "255 мл",
+    "ingredients": [
+      {
+        "name": "Ром “Negrita”",
+        "amount": 50,
+        "unit": "мл",
+        "ingredientId": "negrita"
+      },
+      {
+        "name": "Содовая сильный газ “Bonaqua”",
+        "amount": 150,
+        "unit": "мл",
+        "ingredientId": "bonaqua"
+      },
+      {
+        "name": "Мята",
+        "amount": 5,
+        "unit": "г",
+        "ingredientId": "item-2108679991956257856"
+      },
+      {
+        "name": "Сахарный сироп",
+        "amount": 20,
+        "unit": "мл",
+        "ingredientId": "item-4020456252462178681"
+      },
+      {
+        "name": "Супер Джус Лимон “Napitki”",
+        "amount": 30,
+        "unit": "мл",
+        "ingredientId": "napitki"
+      }
+    ],
+    "glass": "Хайбол",
+    "ice": "Дроблёный / кубиковый лёд",
+    "method": "Build + churn",
+    "taste": "мята · лайм/лимон · ром · очень освежающий",
+    "steps": [
+      "Положи мяту в хайбол, добавь сахарный сироп и лимонный super juice.",
+      "Легко прижми мяту, не разрывая её в кашу.",
+      "Налей ром и заполни бокал льдом.",
+      "Перемешай барной ложкой снизу вверх (churn).",
+      "Долей содовую и сделай ещё 1–2 мягких оборота."
+    ],
+    "officialImage": null
+  },
+  {
+    "id": "negroni",
+    "name": "Негрони",
+    "category": "Классика",
+    "yield": "90 мл",
+    "ingredients": [
+      {
+        "name": "Джин “Bickens”",
+        "amount": 30,
+        "unit": "мл",
+        "ingredientId": "bickens"
+      },
+      {
+        "name": "Вермут “Martini Rosso”",
+        "amount": 30,
+        "unit": "мл",
+        "ingredientId": "martini-rosso"
+      },
+      {
+        "name": "Ликер “Campari”",
+        "amount": 30,
+        "unit": "мл",
+        "ingredientId": "campari"
+      }
+    ],
+    "glass": "Рокс",
+    "ice": "Крупный куб / кубиковый лёд",
+    "method": "Stir",
+    "taste": "горько-сладкий · травяной · цитрусовый",
+    "steps": [
+      "Наполни смесительный стакан льдом.",
+      "Налей джин, красный вермут и Campari.",
+      "Перемешивай 15–20 секунд.",
+      "Процеди в рокс на свежий крупный лёд."
     ],
     "officialImage": null
   },
@@ -548,6 +1213,144 @@
       "Добавь кубиковый лёд.",
       "Интенсивно встряхивай 10–12 секунд.",
       "Процеди в хайбол со свежим льдом."
+    ],
+    "officialImage": null
+  },
+  {
+    "id": "old_fashioned",
+    "name": "Олд Фэшн",
+    "category": "Классика",
+    "yield": "67 мл",
+    "ingredients": [
+      {
+        "name": "Виски “Jim Beam”",
+        "amount": 60,
+        "unit": "мл",
+        "ingredientId": "jim-beam"
+      },
+      {
+        "name": "Сахар тростниковый",
+        "amount": 1,
+        "unit": "г",
+        "ingredientId": "item-6015883883595337781"
+      },
+      {
+        "name": "Биттер Ангостура",
+        "amount": 1,
+        "unit": "мл",
+        "ingredientId": "item-2801670206194608693"
+      },
+      {
+        "name": "Содовая сильный газ “Bonaqua”",
+        "amount": 5,
+        "unit": "мл",
+        "ingredientId": "bonaqua"
+      }
+    ],
+    "glass": "Рокс",
+    "ice": "Крупный куб",
+    "method": "Build / Stir",
+    "taste": "виски · пряный · насыщенный · слегка сладкий",
+    "steps": [
+      "В рокс положи тростниковый сахар, добавь Ангостуру и 5 мл содовой.",
+      "Размешай до максимального растворения сахара.",
+      "Добавь виски.",
+      "Положи крупный куб льда.",
+      "Перемешивай барной ложкой 15–20 секунд."
+    ],
+    "officialImage": null
+  },
+  {
+    "id": "pina_colada",
+    "name": "Пина Колада",
+    "category": "Классика",
+    "yield": "230 мл",
+    "ingredients": [
+      {
+        "name": "Ром “Negrita”",
+        "amount": 50,
+        "unit": "мл",
+        "ingredientId": "negrita"
+      },
+      {
+        "name": "Сок Ананас “Villa Dina”",
+        "amount": 50,
+        "unit": "мл",
+        "ingredientId": "villa-dina"
+      },
+      {
+        "name": "Сироп Кокос “Richeza”",
+        "amount": 20,
+        "unit": "мл",
+        "ingredientId": "richeza"
+      },
+      {
+        "name": "Сахарный сироп",
+        "amount": 10,
+        "unit": "мл",
+        "ingredientId": "item-4020456252462178681"
+      },
+      {
+        "name": "Сливки 20% “Milkavita”",
+        "amount": 100,
+        "unit": "мл",
+        "ingredientId": "20-milkavita"
+      }
+    ],
+    "glass": "Харрикейн / большой хайбол",
+    "ice": "Дроблёный лёд",
+    "method": "Shake",
+    "taste": "кокос · ананас · сливочный · сладкий",
+    "steps": [
+      "Подготовь бокал с дроблёным льдом.",
+      "Налей ром, ананасовый сок, кокосовый и сахарный сиропы, затем сливки в шейкер.",
+      "Добавь лёд и интенсивно встряхивай 12–15 секунд.",
+      "Процеди в бокал на дроблёный лёд.",
+      "При необходимости досыпь дроблёный лёд сверху."
+    ],
+    "officialImage": null
+  },
+  {
+    "id": "rangda",
+    "name": "Рангда",
+    "category": "Заготовки",
+    "yield": "445 мл",
+    "ingredients": [
+      {
+        "name": "Водка “Сябры”",
+        "amount": 200,
+        "unit": "мл",
+        "ingredientId": "item-550479881196021692"
+      },
+      {
+        "name": "Сливки 20% “Milkavita”",
+        "amount": 140,
+        "unit": "мл",
+        "ingredientId": "20-milkavita"
+      },
+      {
+        "name": "Концентрат Кокос “Richeza”",
+        "amount": 100,
+        "unit": "мл",
+        "ingredientId": "richeza"
+      },
+      {
+        "name": "Кокосовая стружка",
+        "amount": 5,
+        "unit": "г",
+        "ingredientId": "item-5904083384581358579"
+      }
+    ],
+    "glass": "Заготовка / бутылка",
+    "ice": "Не используется",
+    "method": "Batch",
+    "taste": "сливочный · кокосовый · мягкий",
+    "steps": [
+      "Отмерь водку, сливки и кокосовый концентрат.",
+      "Соедини жидкие компоненты и размешай до однородности.",
+      "Добавь кокосовую стружку и перемешай.",
+      "Перелей в закрывающуюся ёмкость и держи охлаждённой.",
+      "Перед порционированием перемешай/встряхни заготовку, если произошло расслоение."
     ],
     "officialImage": null
   },
@@ -726,6 +1529,56 @@
     "officialImage": null
   },
   {
+    "id": "french75",
+    "name": "Френч 75",
+    "category": "Классика",
+    "yield": "145 мл",
+    "ingredients": [
+      {
+        "name": "Джин “Bickens”",
+        "amount": 30,
+        "unit": "мл",
+        "ingredientId": "bickens"
+      },
+      {
+        "name": "Супер Джус Лимон “Napitki”",
+        "amount": 20,
+        "unit": "мл",
+        "ingredientId": "napitki"
+      },
+      {
+        "name": "Сахарный сироп",
+        "amount": 10,
+        "unit": "мл",
+        "ingredientId": "item-4020456252462178681"
+      },
+      {
+        "name": "Ликер “Maraschino”",
+        "amount": 5,
+        "unit": "мл",
+        "ingredientId": "maraschino"
+      },
+      {
+        "name": "Игристое “Барон д`Арньяк”",
+        "amount": 80,
+        "unit": "мл",
+        "ingredientId": "item-1087961559091119526"
+      }
+    ],
+    "glass": "Флюте",
+    "ice": "В шейкер для основы; в подаче — без льда",
+    "method": "Shake + top",
+    "taste": "цитрус · можжевельник · сухой игристый · свежий",
+    "steps": [
+      "Охлади флюте.",
+      "В шейкер налей джин, лимонный super juice, сахарный сироп и Maraschino.",
+      "Добавь лёд и встряхивай 8–10 секунд.",
+      "Процеди в охлаждённый флюте.",
+      "Долей игристое и один раз очень мягко перемешай."
+    ],
+    "officialImage": null
+  },
+  {
     "id": "changu",
     "name": "Чангу",
     "category": "Авторские",
@@ -776,761 +1629,46 @@
     "officialImage": null
   },
   {
-    "id": "americano",
-    "name": "Американо",
+    "id": "espresso_martini",
+    "name": "Эспрессо Мартини",
     "category": "Классика",
-    "yield": "120 мл",
+    "yield": "100 мл",
     "ingredients": [
       {
-        "name": "Вермут Rosso “Martini”",
-        "amount": 30,
-        "unit": "мл",
-        "ingredientId": "rosso-martini"
-      },
-      {
-        "name": "Ликер “Campari”",
-        "amount": 30,
-        "unit": "мл",
-        "ingredientId": "campari"
-      },
-      {
-        "name": "Содовая сильный газ “Bonaqua”",
-        "amount": 60,
-        "unit": "мл",
-        "ingredientId": "bonaqua"
-      }
-    ],
-    "glass": "Хайбол / рокс",
-    "ice": "Кубиковый лёд",
-    "method": "Build",
-    "taste": "горько-сладкий · травяной · освежающий",
-    "steps": [
-      "Наполни бокал кубиковым льдом.",
-      "Налей красный вермут и Campari.",
-      "Долей содовую.",
-      "Аккуратно перемешай барной ложкой 2–3 оборота."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "aperol_spritz",
-    "name": "Апероль Шпритц",
-    "category": "Классика",
-    "yield": "180 мл",
-    "ingredients": [
-      {
-        "name": "Ликер “Aperol”",
-        "amount": 60,
-        "unit": "мл",
-        "ingredientId": "aperol"
-      },
-      {
-        "name": "Содовая сильный газ “Bonaqua”",
+        "name": "Водка “Сябры”",
         "amount": 40,
         "unit": "мл",
-        "ingredientId": "bonaqua"
+        "ingredientId": "item-550479881196021692"
       },
       {
-        "name": "Игристое “Барон д`Арньяк”",
-        "amount": 80,
-        "unit": "мл",
-        "ingredientId": "item-1087961559091119526"
-      }
-    ],
-    "glass": "Винный бокал",
-    "ice": "Много кубикового льда",
-    "method": "Build",
-    "taste": "апельсин · лёгкая горечь · игристый · освежающий",
-    "steps": [
-      "Полностью наполни винный бокал крупным льдом.",
-      "Налей Aperol.",
-      "Добавь игристое.",
-      "Долей содовую.",
-      "Один раз аккуратно перемешай снизу вверх, не выпуская газ."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "b52",
-    "name": "Б-52",
-    "category": "Классика",
-    "yield": "50 мл",
-    "ingredients": [
-      {
         "name": "Ликер кофейный “Volare”",
-        "amount": 15,
+        "amount": 20,
         "unit": "мл",
         "ingredientId": "volare"
       },
       {
-        "name": "Ликер сливочный “Bumby”",
-        "amount": 15,
-        "unit": "мл",
-        "ingredientId": "bumby"
-      },
-      {
-        "name": "Ликер Triple Sec “Volare”",
-        "amount": 20,
-        "unit": "мл",
-        "ingredientId": "triple-sec-volare"
-      }
-    ],
-    "glass": "Шот",
-    "ice": "Без льда",
-    "method": "Layer",
-    "taste": "кофейный · сливочный · апельсиновый · сладкий",
-    "steps": [
-      "Подготовь сухой шот.",
-      "Налей кофейный ликёр первым слоем.",
-      "По обратной стороне барной ложки аккуратно уложи сливочный ликёр.",
-      "Тем же способом уложи сверху Triple Sec.",
-      "Не перемешивай — слои должны оставаться разделёнными."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "bellini",
-    "name": "Беллини",
-    "category": "Классика",
-    "yield": "160 мл",
-    "ingredients": [
-      {
-        "name": "Пюре Персик “Richeza”",
-        "amount": 25,
-        "unit": "мл",
-        "ingredientId": "richeza"
-      },
-      {
-        "name": "Сироп Персик “Richeza”",
+        "name": "Сироп Ваниль “Richeza”",
         "amount": 10,
         "unit": "мл",
         "ingredientId": "richeza"
       },
       {
-        "name": "Ликер Персик “Volare”",
-        "amount": 5,
-        "unit": "мл",
-        "ingredientId": "volare"
-      },
-      {
-        "name": "Игристое “Барон д`Арньяк”",
-        "amount": 120,
-        "unit": "мл",
-        "ingredientId": "item-1087961559091119526"
-      }
-    ],
-    "glass": "Флюте",
-    "ice": "Без льда",
-    "method": "Build",
-    "taste": "персиковый · игристый · мягкий · сладковатый",
-    "steps": [
-      "Охлади флюте.",
-      "На дно положи персиковое пюре, сироп и персиковый ликёр.",
-      "Добавь небольшую часть игристого и аккуратно размешай основу.",
-      "Долей остальное игристое по стенке.",
-      "Не взбалтывай."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "white_russian",
-    "name": "Белый русский",
-    "category": "Классика",
-    "yield": "90 мл",
-    "ingredients": [
-      {
-        "name": "Водка “Сябры”",
+        "name": "Кофе Эспрессо",
         "amount": 30,
         "unit": "мл",
-        "ingredientId": "item-550479881196021692"
-      },
-      {
-        "name": "Ликер кофейный “Volare”",
-        "amount": 30,
-        "unit": "мл",
-        "ingredientId": "volare"
-      },
-      {
-        "name": "Сливки 20% “Milkavita”",
-        "amount": 30,
-        "unit": "мл",
-        "ingredientId": "20-milkavita"
-      }
-    ],
-    "glass": "Рокс",
-    "ice": "Кубиковый лёд",
-    "method": "Build",
-    "taste": "кофейный · сливочный · сладкий",
-    "steps": [
-      "Наполни рокс льдом.",
-      "Налей водку и кофейный ликёр.",
-      "Слегка перемешай.",
-      "Аккуратно добавь сливки сверху.",
-      "По стандарту бара можно оставить слой сливок или сделать 1–2 мягких оборота ложкой."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "boulevardier",
-    "name": "Бульвардье",
-    "category": "Классика",
-    "yield": "90 мл",
-    "ingredients": [
-      {
-        "name": "Виски “Jim Beam”",
-        "amount": 30,
-        "unit": "мл",
-        "ingredientId": "jim-beam"
-      },
-      {
-        "name": "Вермут Rosso “Martini”",
-        "amount": 30,
-        "unit": "мл",
-        "ingredientId": "rosso-martini"
-      },
-      {
-        "name": "Ликер “Campari”",
-        "amount": 30,
-        "unit": "мл",
-        "ingredientId": "campari"
-      }
-    ],
-    "glass": "Рокс",
-    "ice": "Крупный куб / кубиковый лёд",
-    "method": "Stir",
-    "taste": "горько-сладкий · виски · травяной",
-    "steps": [
-      "Наполни смесительный стакан льдом.",
-      "Налей виски, красный вермут и Campari.",
-      "Перемешивай барной ложкой 15–20 секунд.",
-      "Процеди в рокс на свежий крупный лёд."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "basil_smash",
-    "name": "Бэзил Смэш",
-    "category": "Классика",
-    "yield": "85 мл",
-    "ingredients": [
-      {
-        "name": "Джин “Bickens”",
-        "amount": 40,
-        "unit": "мл",
-        "ingredientId": "bickens"
-      },
-      {
-        "name": "Базилик",
-        "amount": 5,
-        "unit": "г",
-        "ingredientId": "item-2583973214022561171"
-      },
-      {
-        "name": "Сахарный сироп",
-        "amount": 15,
-        "unit": "мл",
-        "ingredientId": "item-4020456252462178681"
-      },
-      {
-        "name": "Супер Джус Лимон “Napitki”",
-        "amount": 25,
-        "unit": "мл",
-        "ingredientId": "napitki"
-      }
-    ],
-    "glass": "Рокс",
-    "ice": "Кубиковый лёд",
-    "method": "Shake + double strain",
-    "taste": "базилик · цитрус · свежий · кисло-сладкий",
-    "steps": [
-      "Положи базилик в шейкер и мягко прижми мадлером без сильного разрыва листьев.",
-      "Добавь джин, сахарный сироп и лимонный super juice.",
-      "Заполни шейкер льдом и хорошо встряхни.",
-      "Двойная фильтрация в рокс на свежий лёд."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "daiquiri",
-    "name": "Дайкири",
-    "category": "Классика",
-    "yield": "80 мл",
-    "ingredients": [
-      {
-        "name": "Ром “Negrita”",
-        "amount": 40,
-        "unit": "мл",
-        "ingredientId": "negrita"
-      },
-      {
-        "name": "Сахарный сироп",
-        "amount": 15,
-        "unit": "мл",
-        "ingredientId": "item-4020456252462178681"
-      },
-      {
-        "name": "Супер Джус Лимон “Napitki”",
-        "amount": 25,
-        "unit": "мл",
-        "ingredientId": "napitki"
-      }
-    ],
-    "glass": "Купе",
-    "ice": "В шейкер — кубиковый; в подаче — без льда",
-    "method": "Shake + double strain",
-    "taste": "чистый цитрус · ром · кисло-сладкий",
-    "steps": [
-      "Охлади купе.",
-      "Налей ром, сахарный сироп и лимонный super juice в шейкер.",
-      "Добавь лёд и встряхивай 10–12 секунд.",
-      "Двойная фильтрация в охлаждённый бокал."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "clover_club",
-    "name": "Кловер Клаб",
-    "category": "Классика",
-    "yield": "105 мл",
-    "ingredients": [
-      {
-        "name": "Джин “Bickens”",
-        "amount": 40,
-        "unit": "мл",
-        "ingredientId": "bickens"
-      },
-      {
-        "name": "Пюре Малина “Richeza”",
-        "amount": 30,
-        "unit": "мл",
-        "ingredientId": "richeza"
-      },
-      {
-        "name": "Сахарный сироп",
-        "amount": 15,
-        "unit": "мл",
-        "ingredientId": "item-4020456252462178681"
-      },
-      {
-        "name": "Супер Джус Лимон “Napitki”",
-        "amount": 20,
-        "unit": "мл",
-        "ingredientId": "napitki"
-      }
-    ],
-    "glass": "Купе",
-    "ice": "В шейкер — кубиковый; в подаче — без льда",
-    "method": "Shake + double strain",
-    "taste": "малиновый · цитрусовый · кисло-сладкий",
-    "steps": [
-      "Охлади купе.",
-      "Налей джин, малиновое пюре, сахарный сироп и лимонный super juice в шейкер.",
-      "Добавь лёд.",
-      "Интенсивно встряхивай 10–12 секунд.",
-      "Двойная фильтрация в охлаждённый бокал."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "cosmopolitan",
-    "name": "Космополитен",
-    "category": "Классика",
-    "yield": "125 мл",
-    "ingredients": [
-      {
-        "name": "Водка “Сябры”",
-        "amount": 35,
-        "unit": "мл",
-        "ingredientId": "item-550479881196021692"
-      },
-      {
-        "name": "Ликер Triple Sec “Volare”",
-        "amount": 15,
-        "unit": "мл",
-        "ingredientId": "triple-sec-volare"
-      },
-      {
-        "name": "Морс клюквенный “Сочный”",
-        "amount": 40,
-        "unit": "мл",
-        "ingredientId": "item-791201347993421369"
-      },
-      {
-        "name": "Сахарный сироп",
-        "amount": 20,
-        "unit": "мл",
-        "ingredientId": "item-4020456252462178681"
-      },
-      {
-        "name": "Супер Джус Лимон “Napitki”",
-        "amount": 15,
-        "unit": "мл",
-        "ingredientId": "napitki"
+        "ingredientId": "item-4830221076390273291"
       }
     ],
     "glass": "Купе / Martini",
-    "ice": "В шейкер — кубиковый; в подаче — без льда",
-    "method": "Shake + double strain",
-    "taste": "клюква · цитрус · кисло-сладкий",
-    "steps": [
-      "Охлади бокал.",
-      "Налей в шейкер водку, Triple Sec, клюквенный морс, сахарный сироп и лимонный super juice.",
-      "Добавь лёд и энергично встряхивай 10–12 секунд.",
-      "Двойная фильтрация в охлаждённый бокал."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "godfather",
-    "name": "Крёстный отец",
-    "category": "Классика",
-    "yield": "80 мл",
-    "ingredients": [
-      {
-        "name": "Виски “Jim Beam”",
-        "amount": 50,
-        "unit": "мл",
-        "ingredientId": "jim-beam"
-      },
-      {
-        "name": "Ликер Амаретто “Ramazotti”",
-        "amount": 30,
-        "unit": "мл",
-        "ingredientId": "ramazotti"
-      }
-    ],
-    "glass": "Рокс",
-    "ice": "Крупный куб / кубиковый лёд",
-    "method": "Stir / Build",
-    "taste": "виски · миндаль · мягкий · сладковатый",
-    "steps": [
-      "Наполни рокс свежим крупным льдом.",
-      "Налей виски и амаретто.",
-      "Перемешай барной ложкой 10–15 секунд прямо в бокале."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "bloody_mary",
-    "name": "Кровавая Мэри",
-    "category": "Классика",
-    "yield": "145 мл",
-    "ingredients": [
-      {
-        "name": "Водка “Сябры”",
-        "amount": 50,
-        "unit": "мл",
-        "ingredientId": "item-550479881196021692"
-      },
-      {
-        "name": "Сок томатный “Villa Dina”",
-        "amount": 50,
-        "unit": "мл",
-        "ingredientId": "villa-dina"
-      },
-      {
-        "name": "Соус Кимчи",
-        "amount": 5,
-        "unit": "г",
-        "ingredientId": "item-3645362827299557583"
-      },
-      {
-        "name": "Сахарный сироп",
-        "amount": 10,
-        "unit": "мл",
-        "ingredientId": "item-4020456252462178681"
-      },
-      {
-        "name": "Супер Джус Лимон “Napitki”",
-        "amount": 15,
-        "unit": "мл",
-        "ingredientId": "napitki"
-      },
-      {
-        "name": "Сок Апельсин “Villa Dina”",
-        "amount": 10,
-        "unit": "мл",
-        "ingredientId": "villa-dina"
-      },
-      {
-        "name": "Соус соевый",
-        "amount": 5,
-        "unit": "г",
-        "ingredientId": "item-2751805162961066529"
-      }
-    ],
-    "glass": "Хайбол",
-    "ice": "Кубиковый лёд",
-    "method": "Build / Roll",
-    "taste": "томат · пряный · умами · кисло-сладкий",
-    "steps": [
-      "Наполни хайбол кубиковым льдом.",
-      "В отдельной ёмкости соедини все жидкие компоненты и соусы.",
-      "Перелей смесь между двумя ёмкостями 3–4 раза (roll), чтобы смешать без лишней пены.",
-      "Налей в хайбол со льдом.",
-      "Не шейкуй агрессивно."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "manhattan",
-    "name": "Манхэттен",
-    "category": "Классика",
-    "yield": "81 мл",
-    "ingredients": [
-      {
-        "name": "Виски “Jim Beam”",
-        "amount": 40,
-        "unit": "мл",
-        "ingredientId": "jim-beam"
-      },
-      {
-        "name": "Вермут Rosso “Martini”",
-        "amount": 40,
-        "unit": "мл",
-        "ingredientId": "rosso-martini"
-      },
-      {
-        "name": "Биттер Ангостура",
-        "amount": 1,
-        "unit": "мл",
-        "ingredientId": "item-2801670206194608693"
-      }
-    ],
-    "glass": "Купе / Nick & Nora",
-    "ice": "В смесительный стакан; в подаче — без льда",
-    "method": "Stir + strain",
-    "taste": "виски · травяной · пряный · суховатый",
-    "steps": [
-      "Охлади бокал.",
-      "Наполни смесительный стакан льдом.",
-      "Налей виски, красный вермут и Ангостуру.",
-      "Перемешивай 15–20 секунд.",
-      "Процеди в охлаждённый бокал."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "margarita",
-    "name": "Маргарита",
-    "category": "Классика",
-    "yield": "80 мл",
-    "ingredients": [
-      {
-        "name": "Текила “Siera”",
-        "amount": 35,
-        "unit": "мл",
-        "ingredientId": "siera"
-      },
-      {
-        "name": "Ликер Triple Sec “Volare”",
-        "amount": 15,
-        "unit": "мл",
-        "ingredientId": "triple-sec-volare"
-      },
-      {
-        "name": "Супер Джус Лимон “Napitki”",
-        "amount": 20,
-        "unit": "мл",
-        "ingredientId": "napitki"
-      },
-      {
-        "name": "Сахарный сироп",
-        "amount": 10,
-        "unit": "мл",
-        "ingredientId": "item-4020456252462178681"
-      }
-    ],
-    "glass": "Купе / Margarita",
     "ice": "В шейкер; в подаче — без льда",
-    "method": "Shake + double strain",
-    "taste": "текила · цитрус · кисло-сладкий",
+    "method": "Hard shake + double strain",
+    "taste": "кофе · ваниль · насыщенный · сладковатый",
     "steps": [
-      "Охлади бокал; при стандарте бара подготовь солёный край.",
-      "Налей текилу, Triple Sec, лимонный super juice и сахарный сироп в шейкер.",
-      "Добавь лёд и энергично встряхивай 10–12 секунд.",
+      "Охлади бокал.",
+      "Приготовь свежий эспрессо.",
+      "Налей в шейкер водку, кофейный ликёр, ванильный сироп и эспрессо.",
+      "Заполни шейкер льдом и встряхивай максимально энергично 12–15 секунд для плотной пены.",
       "Двойная фильтрация в охлаждённый бокал."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "mojito",
-    "name": "Мохито",
-    "category": "Классика",
-    "yield": "255 мл",
-    "ingredients": [
-      {
-        "name": "Ром “Negrita”",
-        "amount": 50,
-        "unit": "мл",
-        "ingredientId": "negrita"
-      },
-      {
-        "name": "Содовая сильный газ “Bonaqua”",
-        "amount": 150,
-        "unit": "мл",
-        "ingredientId": "bonaqua"
-      },
-      {
-        "name": "Мята",
-        "amount": 5,
-        "unit": "г",
-        "ingredientId": "item-2108679991956257856"
-      },
-      {
-        "name": "Сахарный сироп",
-        "amount": 20,
-        "unit": "мл",
-        "ingredientId": "item-4020456252462178681"
-      },
-      {
-        "name": "Супер Джус Лимон “Napitki”",
-        "amount": 30,
-        "unit": "мл",
-        "ingredientId": "napitki"
-      }
-    ],
-    "glass": "Хайбол",
-    "ice": "Дроблёный / кубиковый лёд",
-    "method": "Build + churn",
-    "taste": "мята · лайм/лимон · ром · очень освежающий",
-    "steps": [
-      "Положи мяту в хайбол, добавь сахарный сироп и лимонный super juice.",
-      "Легко прижми мяту, не разрывая её в кашу.",
-      "Налей ром и заполни бокал льдом.",
-      "Перемешай барной ложкой снизу вверх (churn).",
-      "Долей содовую и сделай ещё 1–2 мягких оборота."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "negroni",
-    "name": "Негрони",
-    "category": "Классика",
-    "yield": "90 мл",
-    "ingredients": [
-      {
-        "name": "Джин “Bickens”",
-        "amount": 30,
-        "unit": "мл",
-        "ingredientId": "bickens"
-      },
-      {
-        "name": "Вермут “Martini Rosso”",
-        "amount": 30,
-        "unit": "мл",
-        "ingredientId": "martini-rosso"
-      },
-      {
-        "name": "Ликер “Campari”",
-        "amount": 30,
-        "unit": "мл",
-        "ingredientId": "campari"
-      }
-    ],
-    "glass": "Рокс",
-    "ice": "Крупный куб / кубиковый лёд",
-    "method": "Stir",
-    "taste": "горько-сладкий · травяной · цитрусовый",
-    "steps": [
-      "Наполни смесительный стакан льдом.",
-      "Налей джин, красный вермут и Campari.",
-      "Перемешивай 15–20 секунд.",
-      "Процеди в рокс на свежий крупный лёд."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "old_fashioned",
-    "name": "Олд Фэшн",
-    "category": "Классика",
-    "yield": "67 мл",
-    "ingredients": [
-      {
-        "name": "Виски “Jim Beam”",
-        "amount": 60,
-        "unit": "мл",
-        "ingredientId": "jim-beam"
-      },
-      {
-        "name": "Сахар тростниковый",
-        "amount": 1,
-        "unit": "г",
-        "ingredientId": "item-6015883883595337781"
-      },
-      {
-        "name": "Биттер Ангостура",
-        "amount": 1,
-        "unit": "мл",
-        "ingredientId": "item-2801670206194608693"
-      },
-      {
-        "name": "Содовая сильный газ “Bonaqua”",
-        "amount": 5,
-        "unit": "мл",
-        "ingredientId": "bonaqua"
-      }
-    ],
-    "glass": "Рокс",
-    "ice": "Крупный куб",
-    "method": "Build / Stir",
-    "taste": "виски · пряный · насыщенный · слегка сладкий",
-    "steps": [
-      "В рокс положи тростниковый сахар, добавь Ангостуру и 5 мл содовой.",
-      "Размешай до максимального растворения сахара.",
-      "Добавь виски.",
-      "Положи крупный куб льда.",
-      "Перемешивай барной ложкой 15–20 секунд."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "pina_colada",
-    "name": "Пина Колада",
-    "category": "Классика",
-    "yield": "230 мл",
-    "ingredients": [
-      {
-        "name": "Ром “Negrita”",
-        "amount": 50,
-        "unit": "мл",
-        "ingredientId": "negrita"
-      },
-      {
-        "name": "Сок Ананас “Villa Dina”",
-        "amount": 50,
-        "unit": "мл",
-        "ingredientId": "villa-dina"
-      },
-      {
-        "name": "Сироп Кокос “Richeza”",
-        "amount": 20,
-        "unit": "мл",
-        "ingredientId": "richeza"
-      },
-      {
-        "name": "Сахарный сироп",
-        "amount": 10,
-        "unit": "мл",
-        "ingredientId": "item-4020456252462178681"
-      },
-      {
-        "name": "Сливки 20% “Milkavita”",
-        "amount": 100,
-        "unit": "мл",
-        "ingredientId": "20-milkavita"
-      }
-    ],
-    "glass": "Харрикейн / большой хайбол",
-    "ice": "Дроблёный лёд",
-    "method": "Shake",
-    "taste": "кокос · ананас · сливочный · сладкий",
-    "steps": [
-      "Подготовь бокал с дроблёным льдом.",
-      "Налей ром, ананасовый сок, кокосовый и сахарный сиропы, затем сливки в шейкер.",
-      "Добавь лёд и интенсивно встряхивай 12–15 секунд.",
-      "Процеди в бокал на дроблёный лёд.",
-      "При необходимости досыпь дроблёный лёд сверху."
     ],
     "officialImage": null
   },
@@ -1583,143 +1721,5 @@
       "50 мл игристого подай отдельно рядом."
     ],
     "officialImage": null
-  },
-  {
-    "id": "french75",
-    "name": "Френч 75",
-    "category": "Классика",
-    "yield": "145 мл",
-    "ingredients": [
-      {
-        "name": "Джин “Bickens”",
-        "amount": 30,
-        "unit": "мл",
-        "ingredientId": "bickens"
-      },
-      {
-        "name": "Супер Джус Лимон “Napitki”",
-        "amount": 20,
-        "unit": "мл",
-        "ingredientId": "napitki"
-      },
-      {
-        "name": "Сахарный сироп",
-        "amount": 10,
-        "unit": "мл",
-        "ingredientId": "item-4020456252462178681"
-      },
-      {
-        "name": "Ликер “Maraschino”",
-        "amount": 5,
-        "unit": "мл",
-        "ingredientId": "maraschino"
-      },
-      {
-        "name": "Игристое “Барон д`Арньяк”",
-        "amount": 80,
-        "unit": "мл",
-        "ingredientId": "item-1087961559091119526"
-      }
-    ],
-    "glass": "Флюте",
-    "ice": "В шейкер для основы; в подаче — без льда",
-    "method": "Shake + top",
-    "taste": "цитрус · можжевельник · сухой игристый · свежий",
-    "steps": [
-      "Охлади флюте.",
-      "В шейкер налей джин, лимонный super juice, сахарный сироп и Maraschino.",
-      "Добавь лёд и встряхивай 8–10 секунд.",
-      "Процеди в охлаждённый флюте.",
-      "Долей игристое и один раз очень мягко перемешай."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "espresso_martini",
-    "name": "Эспрессо Мартини",
-    "category": "Классика",
-    "yield": "100 мл",
-    "ingredients": [
-      {
-        "name": "Водка “Сябры”",
-        "amount": 40,
-        "unit": "мл",
-        "ingredientId": "item-550479881196021692"
-      },
-      {
-        "name": "Ликер кофейный “Volare”",
-        "amount": 20,
-        "unit": "мл",
-        "ingredientId": "volare"
-      },
-      {
-        "name": "Сироп Ваниль “Richeza”",
-        "amount": 10,
-        "unit": "мл",
-        "ingredientId": "richeza"
-      },
-      {
-        "name": "Кофе Эспрессо",
-        "amount": 30,
-        "unit": "мл",
-        "ingredientId": "item-4830221076390273291"
-      }
-    ],
-    "glass": "Купе / Martini",
-    "ice": "В шейкер; в подаче — без льда",
-    "method": "Hard shake + double strain",
-    "taste": "кофе · ваниль · насыщенный · сладковатый",
-    "steps": [
-      "Охлади бокал.",
-      "Приготовь свежий эспрессо.",
-      "Налей в шейкер водку, кофейный ликёр, ванильный сироп и эспрессо.",
-      "Заполни шейкер льдом и встряхивай максимально энергично 12–15 секунд для плотной пены.",
-      "Двойная фильтрация в охлаждённый бокал."
-    ],
-    "officialImage": null
-  },
-  {
-    "id": "whiskey_sour",
-    "name": "Виски Сауэр",
-    "category": "Классика",
-    "yield": "86 мл",
-    "ingredients": [
-      {
-        "name": "Виски “Jim Beam”",
-        "amount": 40,
-        "unit": "мл",
-        "ingredientId": "jim-beam"
-      },
-      {
-        "name": "Сахарный сироп",
-        "amount": 15,
-        "unit": "мл",
-        "ingredientId": "item-4020456252462178681"
-      },
-      {
-        "name": "Ангостура Биттер",
-        "amount": 1,
-        "unit": "мл",
-        "ingredientId": "item-539852004450158089"
-      },
-      {
-        "name": "Супер Джус Лимон “Napitki”",
-        "amount": 30,
-        "unit": "мл",
-        "ingredientId": "napitki"
-      }
-    ],
-    "glass": "Рокс",
-    "ice": "Кубиковый лёд",
-    "method": "Shake",
-    "taste": "виски · цитрус · кисло-сладкий · пряный",
-    "steps": [
-      "Наполни рокс свежим льдом.",
-      "Налей виски, сахарный сироп, Ангостуру и лимонный super juice в шейкер.",
-      "Добавь лёд.",
-      "Интенсивно встряхивай 10–12 секунд.",
-      "Процеди в рокс со свежим льдом."
-    ],
-    "officialImage": "media/cocktails/whiskey_sour-1786974240913.png"
   }
 ]
