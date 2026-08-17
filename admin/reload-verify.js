@@ -32,23 +32,29 @@
   async function mediaDataUrl(path) {
     if (!path) return '';
     const pending = pendingFiles?.get(path);
-    if (pending) return `data:${mimeFor(path)};base64,${pending}`;
+    if (pending) {
+      const data=`data:${mimeFor(path)};base64,${pending}`;
+      window.BALI_cacheMediaDataUrl?.(path,data,manifest?.catalogVersion||0).catch?.(()=>{});
+      return data;
+    }
     if (mediaCache.has(path)) return mediaCache.get(path);
+    if(typeof window.BALI_getOfflineMedia==='function'){
+      try{const cached=await window.BALI_getOfflineMedia(path);if(cached){mediaCache.set(path,cached);return cached}}catch{}
+    }
     const x = await ghNoCache(`/repos/${OWNER}/${REPO}/contents/${pathUrl(path)}?ref=${encodeURIComponent(BRANCH)}`);
     if (!x?.content) throw new Error('GitHub не вернул содержимое изображения');
     const url = `data:${mimeFor(path)};base64,${String(x.content).replace(/\n/g,'')}`;
     mediaCache.set(path,url);
+    window.BALI_cacheMediaDataUrl?.(path,url,manifest?.catalogVersion||0).catch?.(()=>{});
     return url;
   }
 
   async function hydrate(img,path) {
     if (!img || !path) return;
     img.dataset.adminMediaPath = path;
-    try { img.src = await mediaDataUrl(path); }
+    try { img.src = await mediaDataUrl(path); img.title=''; }
     catch (e) {
-      const v = Number(manifest?.catalogVersion||0);
-      img.src = `https://raw.githubusercontent.com/${OWNER}/${REPO}/${BRANCH}/${path}?v=${v}&ts=${Date.now()}`;
-      img.title = 'Фото есть в каталоге, но GitHub API временно не отдал предпросмотр';
+      img.title = navigator.onLine ? 'Не удалось загрузить фото' : 'Офлайн: фото ещё не было сохранено на этом компьютере';
     }
   }
 
@@ -81,13 +87,36 @@
       products: Array.isArray(window.barProducts) ? window.barProducts : [],
       savedAt: new Date().toISOString()
     }));
+    window.BALI_cacheCatalogMedia?.().catch(()=>{});
     if (selectedCocktail) window.renderCocktailEditor?.();
     if (selectedIngredient) window.renderIngredientEditor?.();
     return true;
   };
 
+  function loadLocalSnapshot(){
+    const cached = localStorage.getItem('baliAdminLastServerCatalog');
+    if(!cached) return false;
+    try{
+      const x=JSON.parse(cached);
+      manifest=x.manifest||manifest;cocktails=x.cocktails||cocktails;ingredients=x.ingredients||ingredients;
+      if(Array.isArray(x.products))window.barProducts=x.products;
+      renderAll();
+      if(selectedCocktail)window.renderCocktailEditor?.();
+      if(selectedIngredient)window.renderIngredientEditor?.();
+      if(document.getElementById('versionText')) document.getElementById('versionText').textContent=`Каталог v${manifest?.catalogVersion||'?'} · офлайн`;
+      window.BALI_hydratePrintMedia?.().catch?.(()=>{});
+      return true;
+    }catch{return false}
+  }
+  window.BALI_loadLocalSnapshot=loadLocalSnapshot;
+
   async function forceServerReload(showToast=false) {
     if (reloadRunning || !token) return false;
+    if(!navigator.onLine){
+      const ok=loadLocalSnapshot();
+      if(showToast) toast(ok?'Офлайн · используется сохранённый каталог':'Офлайн · локальный каталог ещё не сохранён',!ok);
+      return ok;
+    }
     reloadRunning = true;
     try {
       await window.loadAll();
@@ -96,20 +125,9 @@
       if (showToast) toast(`Загружена серверная версия каталога ${manifest.catalogVersion}`);
       return true;
     } catch(e) {
-      const cached = localStorage.getItem('baliAdminLastServerCatalog');
-      if (cached) {
-        try {
-          const x=JSON.parse(cached);
-          manifest=x.manifest||manifest;cocktails=x.cocktails||cocktails;ingredients=x.ingredients||ingredients;
-          if(Array.isArray(x.products))window.barProducts=x.products;
-          renderAll();
-          if(selectedCocktail)window.renderCocktailEditor?.();
-          if(selectedIngredient)window.renderIngredientEditor?.();
-          document.getElementById('versionText').textContent=`Каталог v${manifest?.catalogVersion||'?'} · локальная копия`;
-        } catch {}
-      }
-      if (showToast) toast('Не удалось перечитать сервер: '+(e?.message||e),true);
-      return false;
+      const ok=loadLocalSnapshot();
+      if (showToast) toast(ok?'Сервер недоступен · используется сохранённый каталог':'Не удалось перечитать сервер: '+(e?.message||e),!ok);
+      return ok;
     } finally { reloadRunning=false; }
   }
   window.BALI_forceServerReload = forceServerReload;
@@ -141,9 +159,9 @@
     e.stopImmediatePropagation();
     publishGuard=true;
     try {
+      if(!navigator.onLine) throw new Error('Нет интернета. Изменения сохранены локально; публикация будет доступна после подключения.');
       const expectedVersion = Number(manifest?.catalogVersion||0)+1;
       const uploadedPaths = Array.from(pendingFiles?.keys?.()||[]);
-      // publishFixed сортирует массивы перед записью — делаем то же до формирования эталона.
       cocktails.sort((a,b)=>String(a?.name||'').localeCompare(String(b?.name||''),'ru',{sensitivity:'base'}));
       ingredients.sort((a,b)=>String(a?.name||'').localeCompare(String(b?.name||''),'ru',{sensitivity:'base'}));
       if(Array.isArray(window.barProducts)) window.barProducts.sort((a,b)=>String(a?.name||'').localeCompare(String(b?.name||''),'ru',{sensitivity:'base'}));
@@ -157,6 +175,7 @@
       await verifyServer(expectedVersion,expectedCocktails,expectedIngredients,expectedProducts,uploadedPaths);
       mediaCache.clear();
       await forceServerReload(false);
+      await window.BALI_cacheCatalogMedia?.().catch(()=>{});
       toast(`Опубликовано и ПРОВЕРЕНО на сервере · каталог v${expectedVersion}${uploadedPaths.length?' · фото '+uploadedPaths.length:''}`);
     } catch(e2) {
       toast('Публикация не подтверждена сервером: '+(e2?.message||e2),true);
@@ -172,13 +191,19 @@
   }
   ensureReloadButton();
 
-  // После того как все модули Electron загружены, обязательно перечитываем сервер заново.
   setTimeout(async()=>{
     ensureReloadButton();
     const saved=localStorage.getItem('baliAdminToken');
     if(saved){
       token=saved;
       const input=document.getElementById('token');if(input)input.value=saved;
+      if(!navigator.onLine){
+        if(loadLocalSnapshot()){
+          document.getElementById('login')?.classList.add('hidden');
+          document.getElementById('app')?.classList.remove('hidden');
+        }
+        return;
+      }
       try{
         await forceServerReload(false);
         document.getElementById('login')?.classList.add('hidden');
@@ -187,7 +212,13 @@
     }
   },350);
 
+  window.addEventListener('online',()=>{
+    mediaCache.clear();
+    window.BALI_cacheCatalogMedia?.().catch(()=>{});
+    if(token)forceServerReload(false);
+  });
+  window.addEventListener('offline',()=>loadLocalSnapshot());
   window.addEventListener('focus',()=>{
-    if(token && Date.now()-lastReloadAt>15000) forceServerReload(false);
+    if(token && navigator.onLine && Date.now()-lastReloadAt>15000) forceServerReload(false);
   });
 })();
