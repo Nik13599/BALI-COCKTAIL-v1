@@ -1,4 +1,4 @@
-name: Build BALI COCKTAIL iPhone OFFLINE Profile
+name: Build BALI COCKTAIL iPhone FIXED Profile
 
 on:
   push:
@@ -19,52 +19,49 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Verify iPhone launcher is served as HTML
+      - name: Verify iPhone launcher renders as HTML
         shell: bash
-        env:
-          WEB_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
-          APP_URL="https://cdn.statically.io/gh/Nik13599/BALI-COCKTAIL-v1@${WEB_SHA}/web-template/iphone-offline.html"
+          APP_URL="https://bali-cocktail-iphone-kolyaselekh-9471s-projects.vercel.app/"
           echo "Checking ${APP_URL}"
           ok=0
-          for i in 1 2 3 4 5 6; do
+          for i in 1 2 3 4 5 6 7 8 9 10 11 12; do
             headers="$(curl -fsSIL --max-time 20 "$APP_URL" || true)"
+            body="$(curl -fsSL --max-time 20 "$APP_URL" || true)"
             printf '%s\n' "$headers"
-            if printf '%s\n' "$headers" | tr -d '\r' | grep -Eiq '^content-type:[[:space:]]*text/html([;[:space:]]|$)'; then
+            if printf '%s\n' "$headers" | tr -d '\r' | grep -Eiq '^content-type:[[:space:]]*text/html([;[:space:]]|$)' \
+              && printf '%s' "$body" | grep -Fq 'BALI COCKTAIL' \
+              && printf '%s' "$body" | grep -Eiq '<!doctype html'; then
               ok=1
               break
             fi
+            echo "Launcher not ready yet, retry ${i}/12"
             sleep 5
           done
           if [ "$ok" -ne 1 ]; then
-            echo "Launcher is not being served with Content-Type: text/html"
+            echo "iPhone launcher is unavailable or is not being served as text/html"
             exit 1
           fi
 
       - name: Build iPhone installation profile with exact BALI icon
         shell: bash
-        env:
-          WEB_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
           mkdir -p out
           sips -z 180 180 branding/app-icon.png --out /tmp/bali-180.png >/dev/null
           python3 - <<'PY'
-          import plistlib,uuid,os
+          import plistlib,uuid
           from pathlib import Path
-          sha=os.environ['WEB_SHA']
-          # IMPORTANT: raw GitHub/jsDelivr launch URLs can be delivered to iOS as plain text.
-          # Statically serves repository HTML with the correct text/html Content-Type.
-          app_url=f'https://cdn.statically.io/gh/Nik13599/BALI-COCKTAIL-v1@{sha}/web-template/iphone-offline.html'
+          app_url='https://bali-cocktail-iphone-kolyaselekh-9471s-projects.vercel.app/'
           icon=Path('/tmp/bali-180.png').read_bytes()
           clip={
               'PayloadType':'com.apple.webClip.managed',
               'PayloadVersion':1,
-              'PayloadIdentifier':'by.bali.cocktail.v1.webclip.offline.v13',
+              'PayloadIdentifier':'by.bali.cocktail.v1.webclip.offline.v15',
               'PayloadUUID':str(uuid.uuid4()).upper(),
               'PayloadDisplayName':'BALI COCKTAIL',
-              'PayloadDescription':'BALI COCKTAIL offline-first',
+              'PayloadDescription':'BALI COCKTAIL iPhone offline-first',
               'Label':'BALI COCKTAIL',
               'URL':app_url,
               'IsRemovable':True,
@@ -76,22 +73,22 @@ jobs:
           profile={
               'PayloadType':'Configuration',
               'PayloadVersion':1,
-              'PayloadIdentifier':'by.bali.cocktail.v1.profile.offline.v13',
+              'PayloadIdentifier':'by.bali.cocktail.v1.profile.offline.v15',
               'PayloadUUID':str(uuid.uuid4()).upper(),
               'PayloadDisplayName':'BALI COCKTAIL',
-              'PayloadDescription':'Устанавливает BALI COCKTAIL на iPhone. Каталог и фотографии сохраняются локально после первой синхронизации.',
+              'PayloadDescription':'Исправленная iPhone-версия BALI COCKTAIL. HTML запускается как приложение, каталог и фотографии сохраняются локально после первой синхронизации.',
               'PayloadOrganization':'BALI',
               'PayloadRemovalDisallowed':False,
               'PayloadContent':[clip],
           }
-          with open('out/BALI-COCKTAIL-iPhone-OFFLINE-v13.mobileconfig','wb') as f:
+          with open('out/BALI-COCKTAIL-iPhone-FIXED-v15.mobileconfig','wb') as f:
               plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
           PY
-          plutil -lint out/BALI-COCKTAIL-iPhone-OFFLINE-v13.mobileconfig
+          plutil -lint out/BALI-COCKTAIL-iPhone-FIXED-v15.mobileconfig
 
       - uses: actions/upload-artifact@v4
         with:
-          name: BALI-COCKTAIL-iPhone-OFFLINE-v13
-          path: out/BALI-COCKTAIL-iPhone-OFFLINE-v13.mobileconfig
+          name: BALI-COCKTAIL-iPhone-FIXED-v15
+          path: out/BALI-COCKTAIL-iPhone-FIXED-v15.mobileconfig
           if-no-files-found: error
           retention-days: 30
