@@ -7,6 +7,7 @@ on:
       - 'mobile-admin/admin-v3.html'
       - 'mobile-admin/admin-runtime-fix.js'
       - 'mobile-admin/offline-first.js'
+      - 'mobile-admin/iphone-offline.html'
       - 'mobile-admin/sw.js'
       - 'branding/app-icon.png'
       - '.github/workflows/mobile-admin-iphone-final.yml'
@@ -20,19 +21,22 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build profile with canonical BALI icon and stable HTTPS app URL
+      - name: Build profile with canonical BALI icon and pinned HTTPS app URL
         shell: bash
+        env:
+          WEB_SHA: ${{ github.sha }}
         run: |
           set -euo pipefail
           mkdir -p out
           sips -z 180 180 branding/app-icon.png --out /tmp/bali-admin-180.png >/dev/null
           python3 - <<'PY'
-          import plistlib,uuid
+          import plistlib,uuid,os
           from pathlib import Path
+          sha=os.environ['WEB_SHA']
           icon=Path('/tmp/bali-admin-180.png').read_bytes()
-          url='https://nik13599.github.io/BALI-COCKTAIL-v1/admin/'
+          url=f'https://cdn.jsdelivr.net/gh/Nik13599/BALI-COCKTAIL-v1@{sha}/mobile-admin/iphone-offline.html'
           clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.webclip.offline.v5','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'BALI COCKTAIL ADMIN offline-first','Label':'BALI COCKTAIL ADMIN','URL':url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
-          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.profile.offline.v5','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'Устанавливает BALI COCKTAIL ADMIN на iPhone. Каталог и фотографии сохраняются локально после первой синхронизации.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
+          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.profile.offline.v5','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'Устанавливает BALI COCKTAIL ADMIN на iPhone. Каталог, фотографии и черновики сохраняются локально после первой синхронизации.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
           with open('out/BALI-COCKTAIL-ADMIN-iPhone-OFFLINE-v5.mobileconfig','wb') as f: plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
           PY
           plutil -lint out/BALI-COCKTAIL-ADMIN-iPhone-OFFLINE-v5.mobileconfig
