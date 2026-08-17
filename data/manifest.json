@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "catalogVersion": 8,
-  "updatedAt": "2026-08-17T14:01:50.584466Z",
+  "catalogVersion": 9,
+  "updatedAt": "2026-08-17T14:26:04.808Z",
   "cocktails": "data/cocktails.json",
   "ingredients": "data/ingredients.json",
   "mediaBase": "media/"
