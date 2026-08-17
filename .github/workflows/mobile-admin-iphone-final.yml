@@ -35,14 +35,14 @@ jobs:
           sha=os.environ['WEB_SHA']
           icon=Path('/tmp/bali-admin-180.png').read_bytes()
           url=f'https://cdn.jsdelivr.net/gh/Nik13599/BALI-COCKTAIL-v1@{sha}/mobile-admin/iphone-offline.html'
-          clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.webclip.offline.v5','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'BALI COCKTAIL ADMIN offline-first','Label':'BALI COCKTAIL ADMIN','URL':url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
-          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.profile.offline.v5','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'Устанавливает BALI COCKTAIL ADMIN на iPhone. Каталог, фотографии и черновики сохраняются локально после первой синхронизации.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
-          with open('out/BALI-COCKTAIL-ADMIN-iPhone-OFFLINE-v5.mobileconfig','wb') as f: plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
+          clip={'PayloadType':'com.apple.webClip.managed','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.webclip.offline.v6','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'BALI COCKTAIL ADMIN offline-first','Label':'BALI COCKTAIL ADMIN','URL':url,'IsRemovable':True,'Precomposed':True,'FullScreen':True,'IgnoreManifestScope':True,'Icon':icon}
+          profile={'PayloadType':'Configuration','PayloadVersion':1,'PayloadIdentifier':'by.bali.cocktails.admin.mobile.profile.offline.v6','PayloadUUID':str(uuid.uuid4()).upper(),'PayloadDisplayName':'BALI COCKTAIL ADMIN','PayloadDescription':'Устанавливает BALI COCKTAIL ADMIN на iPhone. Каталог, фотографии и черновики сохраняются локально после первой синхронизации.','PayloadOrganization':'BALI','PayloadRemovalDisallowed':False,'PayloadContent':[clip]}
+          with open('out/BALI-COCKTAIL-ADMIN-iPhone-OFFLINE-v6.mobileconfig','wb') as f: plistlib.dump(profile,f,fmt=plistlib.FMT_XML,sort_keys=False)
           PY
-          plutil -lint out/BALI-COCKTAIL-ADMIN-iPhone-OFFLINE-v5.mobileconfig
+          plutil -lint out/BALI-COCKTAIL-ADMIN-iPhone-OFFLINE-v6.mobileconfig
       - uses: actions/upload-artifact@v4
         with:
-          name: BALI-COCKTAIL-ADMIN-iPhone-OFFLINE-v5
-          path: out/BALI-COCKTAIL-ADMIN-iPhone-OFFLINE-v5.mobileconfig
+          name: BALI-COCKTAIL-ADMIN-iPhone-OFFLINE-v6
+          path: out/BALI-COCKTAIL-ADMIN-iPhone-OFFLINE-v6.mobileconfig
           if-no-files-found: error
           retention-days: 30
